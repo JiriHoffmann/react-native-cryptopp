@@ -1,7 +1,30 @@
-#include "react-native-cryptopp.h"
+#import "react-native-cryptopp.h"
 
-namespace example {
-	int multiply(float a, float b) {
-		return a * b;
-	}
+#include <iostream>
+#include <sstream>
+
+using namespace facebook;
+
+
+void installCryptopp(jsi::Runtime& jsiRuntime) {
+
+  auto multiply = jsi::Function::createFromHostFunction(
+      jsiRuntime,
+      jsi::PropNameID::forAscii(jsiRuntime, "multiply"),
+      2, 
+      [](jsi::Runtime& runtime, const jsi::Value& thisValue, const jsi::Value* args, size_t count) -> jsi::Value {
+        double a = args[0].asNumber();
+		double b = args[1].asNumber();
+
+        return jsi::Value(a*b);
+      }
+  );
+
+  jsi::Object module = jsi::Object(jsiRuntime);
+  module.setProperty(jsiRuntime, "multiply", std::move(multiply));
+
+  jsiRuntime.global().setProperty(jsiRuntime, "cryptoppModule", std::move(module));
+}
+
+void cleanupCryptopp() {
 }

@@ -1,8 +1,5 @@
-#ifndef EXAMPLE_H
-#define EXAMPLE_H
+#include <jsi/jsilib.h>
+#include <jsi/jsi.h>
 
-namespace example {
-  int multiply(float a, float b);
-}
-
-#endif /* EXAMPLE_H */
+void installCryptopp(facebook::jsi::Runtime& jsiRuntime);
+void cleanupCryptopp();
