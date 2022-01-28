@@ -44,11 +44,7 @@ static def findNodeModules(baseDir) {
   }
   throw new GradleException("react-native-cryptopp: Failed to find node_modules/ path!")
 }
-def bp = projectDir.toPath().normalize()
-def exampleNodeModules = Paths.get(bp.getParent().toString(), "example/node_modules")
 
-logger.warn("basePath at: ${bp}");
-logger.warn("basePath at: ${exampleNodeModules}")
 def nodeModules = findNodeModules(projectDir);
 logger.warn("react-native-cryptopp: node_modules/ found at: ${nodeModules}");
 
