@@ -23,7 +23,7 @@ public class CryptoppModule extends ReactContextBaseJavaModule {
   @ReactMethod(isBlockingSynchronousMethod = true)
   public boolean install() {
     try {
-      System.loadLibrary("cryptopp");
+      System.loadLibrary("rncryptopp");
 
       ReactApplicationContext context = getReactApplicationContext();
       initialize(
