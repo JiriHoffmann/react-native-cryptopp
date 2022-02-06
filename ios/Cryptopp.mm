@@ -53,11 +53,11 @@ RCT_EXPORT_MODULE()
         return;
     }
     
-    cryptopp::install(*(facebook::jsi::Runtime *)cxxBridge.runtime);
+    rncryptopp::install(*(facebook::jsi::Runtime *)cxxBridge.runtime);
 }
 
 - (void)invalidate {
-   cryptopp::cleanup();
+   rncryptopp::cleanup();
 }
 
 @end

@@ -4,7 +4,7 @@
 #include <jsi/jsilib.h>
 #include <jsi/jsi.h>
 
-namespace cryptopp
+namespace rncryptopp
 {
 
   void install(facebook::jsi::Runtime &jsiRuntime);

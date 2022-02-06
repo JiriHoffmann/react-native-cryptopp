@@ -5,7 +5,7 @@
 
 using namespace facebook;
 
-namespace cryptopp
+namespace rncryptopp
 {
   void install(jsi::Runtime& jsiRuntime) {
 
