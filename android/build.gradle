@@ -25,7 +25,7 @@ def getExtOrIntegerDefault(name) {
 
 static def findNodeModules(baseDir) {
   def basePath = baseDir.toPath().normalize()
-  
+
   // Find node_modules inside the example project
   def exampleNodeModules = Paths.get(basePath.getParent().toString(), "example/node_modules")
   if(exampleNodeModules.toFile().exists()) {
@@ -61,7 +61,7 @@ android {
 
     externalNativeBuild {
         cmake {
-            cppFlags "-O2 -frtti -fexceptions -Wall -fstack-protector-all"
+            cppFlags "-O3 -frtti -fexceptions -Wall -fstack-protector-all"
             abiFilters 'x86', 'x86_64', 'armeabi-v7a', 'arm64-v8a'
             arguments "-DNODE_MODULES_DIR=${nodeModules}"
         }
