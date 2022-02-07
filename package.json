@@ -19,7 +19,9 @@
     "!ios/build",
     "!**/__tests__",
     "!**/__fixtures__",
-    "!**/__mocks__"
+    "!**/__mocks__",
+    "!android/.cxx",
+    "!android/.gradle"
   ],
   "scripts": {
     "test": "jest",
