@@ -166,7 +166,7 @@ always free to help exapand the list.
 | x25519                             | ❌         |
 | ECDH                               | ❌         |
 | ECMQV                              | ❌         |
-### `Insecure or obsolescent algorithms retained for backwards compatibility and historical value`	
+### Insecure or obsolescent algorithms retained for backwards compatibility and historical value	
 | Name                               | Supported |
 |------------------------------------|-----------|
 | MD2                                | ❌         |
