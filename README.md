@@ -24,7 +24,7 @@ architecture and iOS uses a fat binary that is created before the pod is install
 
 
 # Supported Alghorithms
-Here is the list of all Crypto++ algorithm supported by this library. You are 
+Here is the list of all Crypto++ algorithms supported by this library. You are 
 always free to help exapand the list.
 
 ## Authenticated encryption schemes
