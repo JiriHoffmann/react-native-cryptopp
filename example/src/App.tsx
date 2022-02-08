@@ -7,7 +7,7 @@ export default function App() {
   const [result, setResult] = React.useState<number | undefined>();
 
   React.useEffect(() => {
-    setResult(Cryptopp.multiply(2, 3))
+    setResult(Cryptopp.multiply(2, 3));
   }, []);
 
   return (
