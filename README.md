@@ -15,7 +15,7 @@ npx pod install
 ```
 
 The Crypto++ library is precompiled for each architecture and static binaries are contained `android` and `ios` folders respectively. Android builds per 
-architecture `android` and `ios` uses a fat binary that is created before the pod is installed. You are more than welcome to complile the Crypto++ library locally using the `build_cryptopp.sh` script.
+architecture and iOS uses a fat binary that is created before the pod is installed. You are more than welcome to complile the Crypto++ library locally using the `build_cryptopp.sh` script.
 
 ## Usage
 
