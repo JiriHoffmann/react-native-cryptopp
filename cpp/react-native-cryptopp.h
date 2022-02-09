@@ -4,11 +4,13 @@
 #include <jsi/jsilib.h>
 #include <jsi/jsi.h>
 
-namespace rncryptopp
-{
+using namespace facebook;
 
-  void install(facebook::jsi::Runtime &jsiRuntime);
-  void cleanup();
+namespace rncryptopp {
+
+    void install(jsi::Runtime &jsiRuntime);
+
+    void cleanup();
 }
 
 #endif /* REACT_NATIVE_CRYPTOPP_H */

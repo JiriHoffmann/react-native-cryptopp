@@ -1,47 +1,59 @@
-#import "react-native-cryptopp.h"
 #include <iostream>
 #include <sstream>
-#include "cryptopp/osrng.h"
-using CryptoPP::AutoSeededRandomPool;
 
-#include "cryptopp/cryptlib.h"
-using CryptoPP::Exception;
+#include "react-native-cryptopp.h"
+#include "hash-functions.h"
 
-using namespace facebook;
+namespace rncryptopp {
+    void install(jsi::Runtime &jsiRuntime) {
+        /*
+        Hash functions
+        */
+        auto sha1 = jsi::Function::createFromHostFunction(
+                jsiRuntime,
+                jsi::PropNameID::forAscii(jsiRuntime, "sha1"),
+                2,
+                [](jsi::Runtime &rt, const jsi::Value &thisValue, const jsi::Value *args,
+                   size_t count) -> jsi::Value {
+                    std::string result;
+                    rncryptopp::sha1(rt, result, args);
+                    return jsi::Value(jsi::String::createFromUtf8(rt, result));
+                }
+        );
+        auto sha2 = jsi::Function::createFromHostFunction(
+                jsiRuntime,
+                jsi::PropNameID::forAscii(jsiRuntime, "sha1"),
+                2,
+                [](jsi::Runtime &rt, const jsi::Value &thisValue, const jsi::Value *args,
+                   size_t count) -> jsi::Value {
+                    std::string result;
+                    rncryptopp::sha2(rt, result, args);
+                    return jsi::Value(jsi::String::createFromUtf8(rt, result));
+                }
+        );
+        auto sha3 = jsi::Function::createFromHostFunction(
+                jsiRuntime,
+                jsi::PropNameID::forAscii(jsiRuntime, "sha1"),
+                2,
+                [](jsi::Runtime &rt, const jsi::Value &thisValue, const jsi::Value *args,
+                   size_t count) -> jsi::Value {
+                    std::string result;
+                    rncryptopp::sha3(rt, result, args);
+                    return jsi::Value(jsi::String::createFromUtf8(rt, result));
+                }
+        );
 
-static AutoSeededRandomPool& GetPRNG() {
-    static AutoSeededRandomPool prng;
-    return prng;
-}
+        jsi::Object SHA = jsi::Object(jsiRuntime);
+        SHA.setProperty(jsiRuntime, "sha1", std::move(sha1));
+        SHA.setProperty(jsiRuntime, "sha2", std::move(sha2));
+        SHA.setProperty(jsiRuntime, "sha3", std::move(sha3));
 
+        jsi::Object module = jsi::Object(jsiRuntime);
+        module.setProperty(jsiRuntime, "SHA", std::move(SHA));
 
-namespace rncryptopp
-{
-  void install(jsi::Runtime& jsiRuntime) {
+        jsiRuntime.global().setProperty(jsiRuntime, "cryptoppModule", std::move(module));
+    }
 
-    auto multiply = jsi::Function::createFromHostFunction(
-        jsiRuntime,
-        jsi::PropNameID::forAscii(jsiRuntime, "multiply"),
-        2,
-        [](jsi::Runtime& runtime, const jsi::Value& thisValue, const jsi::Value* args, size_t count) -> jsi::Value {
-          double a = args[0].asNumber();
-  		  double b = args[1].asNumber();
-
-          CryptoPP::byte buff[16];
-
-          AutoSeededRandomPool& prng = GetPRNG();
-          prng.IncorporateEntropy(buff, sizeof(buff));
-
-          return jsi::Value(a*b);
-        }
-    );
-
-    jsi::Object module = jsi::Object(jsiRuntime);
-    module.setProperty(jsiRuntime, "multiply", std::move(multiply));
-
-    jsiRuntime.global().setProperty(jsiRuntime, "cryptoppModule", std::move(module));
-  }
-
-  void cleanup() {
-  }
+    void cleanup() {
+    }
 }

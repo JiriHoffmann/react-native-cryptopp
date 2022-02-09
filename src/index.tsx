@@ -1,4 +1,5 @@
 import { NativeModules, Platform } from 'react-native';
+import type { Cryptopp } from './types';
 
 const cppinstall = NativeModules.Cryptopp;
 
@@ -6,9 +7,9 @@ if (cppinstall && typeof cppinstall.install === 'function') {
   cppinstall.install();
 }
 
-const Cryptopp = (global as any).cryptoppModule;
+const CryptoppModule: Cryptopp = (global as any).cryptoppModule;
 
-if (!Cryptopp) {
+if (!CryptoppModule) {
   const LINKING_ERROR =
     `The package 'react-native-cryptopp' doesn't seem to be linked. Make sure: \n\n` +
     Platform.select({ ios: "- You have run 'pod install'\n", default: '' }) +
@@ -17,4 +18,4 @@ if (!Cryptopp) {
   throw new Error(LINKING_ERROR);
 }
 
-export { Cryptopp };
+export default CryptoppModule;
