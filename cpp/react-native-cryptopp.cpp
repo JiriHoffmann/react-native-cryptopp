@@ -48,8 +48,33 @@ namespace rncryptopp {
         SHA.setProperty(jsiRuntime, "sha2", std::move(sha2));
         SHA.setProperty(jsiRuntime, "sha3", std::move(sha3));
 
+
+        /*
+        AES and AES candidates
+        */
+        auto aes = jsi::Function::createFromHostFunction(
+                jsiRuntime,
+                jsi::PropNameID::forAscii(jsiRuntime, "sha1"),
+                2,
+                [](jsi::Runtime &rt, const jsi::Value &thisValue, const jsi::Value *args,
+                   size_t count) -> jsi::Value {
+                    std::string result;
+                    rncryptopp::sha3(rt, result, args);
+                    return jsi::Value(jsi::String::createFromUtf8(rt, result));
+                }
+        );
+
+        jsi::Object AES = jsi::Object(jsiRuntime);
+        AES.setProperty(jsiRuntime, "aes", std::move(aes));
+
+
+        /*
+        Cryptopp module
+        */
         jsi::Object module = jsi::Object(jsiRuntime);
         module.setProperty(jsiRuntime, "SHA", std::move(SHA));
+        module.setProperty(jsiRuntime, "AES", std::move(AES));
+
 
         jsiRuntime.global().setProperty(jsiRuntime, "cryptoppModule", std::move(module));
     }

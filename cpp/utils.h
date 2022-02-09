@@ -1,5 +1,5 @@
 #ifndef REACT_NATIVE_CRYPTOPP_UTILS_H
-#define REACT_NATIVE_CRYPTOPPE_UTILS_H
+#define REACT_NATIVE_CRYPTOPP_UTILS_H
 
 #include <jsi/jsilib.h>
 #include <jsi/jsi.h>
