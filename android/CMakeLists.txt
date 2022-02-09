@@ -4,20 +4,28 @@ set (PACKAGE_NAME "rncryptopp")
 set (CMAKE_VERBOSE_MAKEFILE ON)
 set (CMAKE_CXX_STANDARD 11)
 
+file(GLOB RN_CRYPTOPP_FILES "../cpp/*.cpp")
+file(GLOB RN_CRYPTOPP_HEADERS "../cpp/*.h")
+
 include_directories(
   ../cpp
-  ${CRYPTOPP_HEADERS}
   "${NODE_MODULES_DIR}/react-native/React"
   "${NODE_MODULES_DIR}/react-native/React/Base"
   "${NODE_MODULES_DIR}/react-native/ReactCommon/jsi"
+
+  # rncryptopp headers
+  ${RN_CRYPTOPP_HEADERS}
+
+  # Crypto++ headers
+  ../cpp/android/${CMAKE_ANDROID_ARCH_ABI}/include
+
 )
 
 add_library(
   ${PACKAGE_NAME}
   SHARED
   "${NODE_MODULES_DIR}/react-native/ReactCommon/jsi/jsi/jsi.cpp"
-  ../cpp/react-native-cryptopp.cpp
-  ../cpp/react-native-cryptopp.h
+  ${RN_CRYPTOPP_FILES}
   cpp-adapter.cpp
 )
 
@@ -32,11 +40,7 @@ set_target_properties(
   ${PROJECT_SOURCE_DIR}/../cpp/android/${CMAKE_ANDROID_ARCH_ABI}/libcryptopp.a
 )
 
-# Location of the headers for the library
-include_directories(
-  ../cpp/android/${CMAKE_ANDROID_ARCH_ABI}/include
-)
 
-set_target_properties(cryptopp PROPERTIES LINKER_LANGUAGE CXX)
+#set_target_properties(cryptopp PROPERTIES LINKER_LANGUAGE CXX)
 
 target_link_libraries(${PACKAGE_NAME} cryptopp)
