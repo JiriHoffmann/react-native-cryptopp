@@ -1,10 +1,4 @@
-#include <cryptopp/sha.h>
-#include <cryptopp/sha3.h>
-#include <cryptopp/filters.h>
-#include <cryptopp/hex.h>
-
 #include "hash-functions.h"
-#include "utils.h"
 
 namespace rncryptopp {
     void sha1(jsi::Runtime &rt, std::string &result, const jsi::Value *args) {

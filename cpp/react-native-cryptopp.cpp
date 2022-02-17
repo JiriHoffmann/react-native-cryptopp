@@ -2,7 +2,7 @@
 #include <sstream>
 
 #include "react-native-cryptopp.h"
-#include "hash-functions.h"
+
 
 namespace rncryptopp {
     void install(jsi::Runtime &jsiRuntime) {
@@ -12,7 +12,7 @@ namespace rncryptopp {
         auto sha1 = jsi::Function::createFromHostFunction(
                 jsiRuntime,
                 jsi::PropNameID::forAscii(jsiRuntime, "sha1"),
-                2,
+                1,
                 [](jsi::Runtime &rt, const jsi::Value &thisValue, const jsi::Value *args,
                    size_t count) -> jsi::Value {
                     std::string result;
@@ -22,7 +22,7 @@ namespace rncryptopp {
         );
         auto sha2 = jsi::Function::createFromHostFunction(
                 jsiRuntime,
-                jsi::PropNameID::forAscii(jsiRuntime, "sha1"),
+                jsi::PropNameID::forAscii(jsiRuntime, "sha2"),
                 2,
                 [](jsi::Runtime &rt, const jsi::Value &thisValue, const jsi::Value *args,
                    size_t count) -> jsi::Value {
@@ -33,7 +33,7 @@ namespace rncryptopp {
         );
         auto sha3 = jsi::Function::createFromHostFunction(
                 jsiRuntime,
-                jsi::PropNameID::forAscii(jsiRuntime, "sha1"),
+                jsi::PropNameID::forAscii(jsiRuntime, "sha3"),
                 2,
                 [](jsi::Runtime &rt, const jsi::Value &thisValue, const jsi::Value *args,
                    size_t count) -> jsi::Value {

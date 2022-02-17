@@ -4,6 +4,7 @@
 #include <jsi/jsilib.h>
 #include <jsi/jsi.h>
 
+#include "hash-functions.h"
 using namespace facebook;
 
 namespace rncryptopp {
