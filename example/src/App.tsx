@@ -8,8 +8,6 @@ export default function App() {
 
   React.useEffect(() => {
     setResult(Cryptopp.SHA.sha1('Hello World'));
-    console.log(Cryptopp.SHA.sha2('Hello World', '256'));
-    console.log(Cryptopp.SHA.sha3('Hello World', '256'));
   }, []);
 
   return (

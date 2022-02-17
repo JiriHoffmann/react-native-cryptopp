@@ -8,9 +8,9 @@ namespace rncryptopp {
         }
         CryptoPP::SHA1 sha1;
         CryptoPP::StringSource(data, true, new CryptoPP::HashFilter(sha1,
-                                                                      new CryptoPP::HexEncoder(
-                                                                              new CryptoPP::StringSink(
-                                                                                      result))));
+                                                                    new CryptoPP::HexEncoder(
+                                                                            new CryptoPP::StringSink(
+                                                                                    result))));
     }
 
     void sha2(jsi::Runtime &rt, std::string &result, const jsi::Value *args) {
@@ -25,25 +25,32 @@ namespace rncryptopp {
 
         if (size == "224") {
             CryptoPP::SHA224 sha;
-            CryptoPP::StringSource(data, true, new CryptoPP::HashFilter(sha,
-                                                                          new CryptoPP::HexEncoder(
-                                                                                  new CryptoPP::StringSink(
-                                                                                          result))));
+            CryptoPP::StringSource(data, true,
+                                   new CryptoPP::HashFilter(sha,
+                                                            new CryptoPP::HexEncoder(
+                                                                    new CryptoPP::StringSink(
+                                                                            result))));
         } else if (size == "256") {
             CryptoPP::SHA256 sha;
             CryptoPP::StringSource(data, true,
-                                   new CryptoPP::HashFilter(sha, new CryptoPP::HexEncoder(
-                                           new CryptoPP::StringSink(result))));
+                                   new CryptoPP::HashFilter(sha,
+                                                            new CryptoPP::HexEncoder(
+                                                                    new CryptoPP::StringSink(
+                                                                            result))));
         } else if (size == "384") {
             CryptoPP::SHA384 sha;
             CryptoPP::StringSource(data, true,
-                                   new CryptoPP::HashFilter(sha, new CryptoPP::HexEncoder(
-                                           new CryptoPP::StringSink(result))));
+                                   new CryptoPP::HashFilter(sha,
+                                                            new CryptoPP::HexEncoder(
+                                                                    new CryptoPP::StringSink(
+                                                                            result))));
         } else if (size == "512") {
             CryptoPP::SHA512 sha;
             CryptoPP::StringSource(data, true,
-                                   new CryptoPP::HashFilter(sha, new CryptoPP::HexEncoder(
-                                           new CryptoPP::StringSink(result))));
+                                   new CryptoPP::HashFilter(sha,
+                                                            new CryptoPP::HexEncoder(
+                                                                    new CryptoPP::StringSink(
+                                                                            result))));
         } else {
             jsi::detail::throwJSError(rt, "RNCryptopp: Not a valid size");
         }
@@ -62,9 +69,9 @@ namespace rncryptopp {
         if (size == "224") {
             CryptoPP::SHA3_224 sha;
             CryptoPP::StringSource(data, true, new CryptoPP::HashFilter(sha,
-                                                                          new CryptoPP::HexEncoder(
-                                                                                  new CryptoPP::StringSink(
-                                                                                          result))));
+                                                                        new CryptoPP::HexEncoder(
+                                                                                new CryptoPP::StringSink(
+                                                                                        result))));
         } else if (size == "256") {
             CryptoPP::SHA3_256 sha;
             CryptoPP::StringSource(data, true,

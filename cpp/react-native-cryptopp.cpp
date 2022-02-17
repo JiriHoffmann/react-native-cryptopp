@@ -52,20 +52,32 @@ namespace rncryptopp {
         /*
         AES and AES candidates
         */
-        auto aes = jsi::Function::createFromHostFunction(
+        auto aes_encrypt = jsi::Function::createFromHostFunction(
                 jsiRuntime,
                 jsi::PropNameID::forAscii(jsiRuntime, "sha1"),
                 2,
                 [](jsi::Runtime &rt, const jsi::Value &thisValue, const jsi::Value *args,
                    size_t count) -> jsi::Value {
                     std::string result;
-                    rncryptopp::sha3(rt, result, args);
+                    rncryptopp::aes_encrypt(rt, result, args);
                     return jsi::Value(jsi::String::createFromUtf8(rt, result));
                 }
         );
+            auto aes_decrypt = jsi::Function::createFromHostFunction(
+                    jsiRuntime,
+                    jsi::PropNameID::forAscii(jsiRuntime, "sha1"),
+                    2,
+                    [](jsi::Runtime &rt, const jsi::Value &thisValue, const jsi::Value *args,
+                       size_t count) -> jsi::Value {
+                        std::string result;
+                        rncryptopp::aes_decrypt(rt, result, args);
+                        return jsi::Value(jsi::String::createFromUtf8(rt, result));
+                    }
+            );
 
         jsi::Object AES = jsi::Object(jsiRuntime);
-        AES.setProperty(jsiRuntime, "aes", std::move(aes));
+        AES.setProperty(jsiRuntime, "encrypt", std::move(aes_encrypt));
+        AES.setProperty(jsiRuntime, "decrypt", std::move(aes_decrypt));
 
 
         /*

@@ -5,6 +5,8 @@
 #include <jsi/jsi.h>
 
 #include "hash-functions.h"
+#include "aes-candidates.h"
+
 using namespace facebook;
 
 namespace rncryptopp {

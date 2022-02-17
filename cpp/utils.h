@@ -6,10 +6,15 @@
 
 using namespace facebook;
 
-bool valueToString(jsi::Runtime &runtime, const jsi::Value &value, std::string *str);
+namespace rncryptopp {
 
-bool valueToInt(jsi::Runtime &runtime, const jsi::Value &value, int *res);
+    bool valueToString(jsi::Runtime &runtime, const jsi::Value &value, std::string *str);
 
-bool valueToDouble(jsi::Runtime &runtime, const jsi::Value &value, double *res);
+    bool valueToInt(const jsi::Value &value, int *res);
 
+    void hexEncode(std::string *str, std::string *res);
+
+    void hexDecode(std::string *str, std::string *res);
+
+}
 #endif //REACT_NATIVE_CRYPTOPP_UTILS_H
