@@ -11,4 +11,8 @@ export interface Cryptopp {
     encrypt: (data: string, key: string, iv: string, mode: AES_Modes) => string;
     decrypt: (data: string, key: string, iv: string, mode: AES_Modes) => string;
   };
+  utilsJS: {
+    stringToArrayBuffer: (str: string) => ArrayBuffer;
+    arrayBufferToString: (buf: ArrayBuffer) => string;
+  };
 }

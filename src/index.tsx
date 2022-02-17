@@ -1,4 +1,5 @@
 import { NativeModules, Platform } from 'react-native';
+import utilsJS from './utils';
 import type { Cryptopp } from './types';
 
 const cppinstall = NativeModules.Cryptopp;
@@ -17,5 +18,7 @@ if (!CryptoppModule) {
     '- You are not using Expo managed workflow\n';
   throw new Error(LINKING_ERROR);
 }
+
+CryptoppModule.utilsJS = utilsJS;
 
 export default CryptoppModule;
