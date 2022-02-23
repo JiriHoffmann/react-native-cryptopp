@@ -21,6 +21,11 @@ export interface Cryptopp {
       mode: AES_Modes
     ) => string;
   };
+  insecure: {
+    md2: (data: string | ArrayBuffer) => string;
+    md4: (data: string | ArrayBuffer) => string;
+    md5: (data: string | ArrayBuffer) => string;
+  };
   utils: {
     toBase64: (data: string | ArrayBuffer) => string;
     fromBase64: (data: string | ArrayBuffer) => string;

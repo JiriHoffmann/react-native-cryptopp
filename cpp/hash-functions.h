@@ -1,16 +1,15 @@
 #ifndef CRYPTOPPEXAMPLE_HASH_FUNCTIONS_H
 #define CRYPTOPPEXAMPLE_HASH_FUNCTIONS_H
 
+#include <jsi/jsilib.h>
+#include <jsi/jsi.h>
+
 #include "cryptopp/sha.h"
 #include "cryptopp/sha3.h"
 #include "cryptopp/filters.h"
 #include "cryptopp/hex.h"
 
-#include <jsi/jsilib.h>
-#include <jsi/jsi.h>
-
 #include "helpers.h"
-
 
 using namespace facebook;
 

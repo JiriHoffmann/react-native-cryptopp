@@ -79,6 +79,49 @@ namespace rncryptopp {
         AES.setProperty(jsiRuntime, "encrypt", std::move(aes_encrypt));
         AES.setProperty(jsiRuntime, "decrypt", std::move(aes_decrypt));
 
+
+        /*
+        Insecure
+        */
+       auto md2 = jsi::Function::createFromHostFunction(
+                jsiRuntime,
+                jsi::PropNameID::forAscii(jsiRuntime, "md2"),
+                1,
+                [](jsi::Runtime &rt, const jsi::Value &thisValue, const jsi::Value *args,
+                   size_t count) -> jsi::Value {
+                    std::string result;
+                    rncryptopp::md2(rt, result, args);
+                    return jsi::Value(jsi::String::createFromUtf8(rt, result));
+                }
+        );
+        auto md4 = jsi::Function::createFromHostFunction(
+                jsiRuntime,
+                jsi::PropNameID::forAscii(jsiRuntime, "md4"),
+                1,
+                [](jsi::Runtime &rt, const jsi::Value &thisValue, const jsi::Value *args,
+                   size_t count) -> jsi::Value {
+                    std::string result;
+                    rncryptopp::md4(rt, result, args);
+                    return jsi::Value(jsi::String::createFromUtf8(rt, result));
+                }
+        );
+        auto md5 = jsi::Function::createFromHostFunction(
+                jsiRuntime,
+                jsi::PropNameID::forAscii(jsiRuntime, "md5"),
+                1,
+                [](jsi::Runtime &rt, const jsi::Value &thisValue, const jsi::Value *args,
+                   size_t count) -> jsi::Value {
+                    std::string result;
+                    rncryptopp::md5(rt, result, args);
+                    return jsi::Value(jsi::String::createFromUtf8(rt, result));
+                }
+        );
+
+        jsi::Object insecure = jsi::Object(jsiRuntime);
+        insecure.setProperty(jsiRuntime, "md2", std::move(md2));
+        insecure.setProperty(jsiRuntime, "md4", std::move(md4));
+        insecure.setProperty(jsiRuntime, "md5", std::move(md5));
+
         
         /*
         Utils
@@ -145,7 +188,7 @@ namespace rncryptopp {
         module.setProperty(jsiRuntime, "SHA", std::move(SHA));
         module.setProperty(jsiRuntime, "AES", std::move(AES));
         module.setProperty(jsiRuntime, "utils", std::move(utils));
-
+        module.setProperty(jsiRuntime, "insecure", std::move(insecure));
 
         jsiRuntime.global().setProperty(jsiRuntime, "cryptoppModule", std::move(module));
     }
