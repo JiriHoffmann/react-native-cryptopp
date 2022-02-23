@@ -1,6 +1,3 @@
-#include "cryptopp/base64.h"
-#include "cryptopp/hex.h"
-
 #include "utils.h"
 
 namespace rncryptopp {
@@ -25,16 +22,25 @@ namespace rncryptopp {
         return false;
     }
 
-    void hexDecode(std::string *str, std::string *res) {
-        CryptoPP::StringSource(*str, true, new CryptoPP::HexDecoder(
-                new CryptoPP::StringSink(*res)));// NOLINT(bugprone-unused-raii)
-    }
-
     void hexEncode(std::string *str, std::string *res) {
         CryptoPP::StringSource(*str, true, new CryptoPP::HexEncoder(
                 new CryptoPP::StringSink(*res))); // NOLINT(bugprone-unused-raii)
     }
 
+    void hexDecode(std::string *str, std::string *res) {
+        CryptoPP::StringSource(*str, true, new CryptoPP::HexDecoder(
+                new CryptoPP::StringSink(*res)));// NOLINT(bugprone-unused-raii)
+    }
+
+    void base64Encode(std::string *str, std::string *res) {
+        CryptoPP::StringSource(*str, true, new CryptoPP::Base64Encoder(
+                new CryptoPP::StringSink(*res))); // NOLINT(bugprone-unused-raii)
+    }
+
+    void base64Decode(std::string *str, std::string *res) {
+        CryptoPP::StringSource(*str, true, new CryptoPP::Base64Decoder(
+                new CryptoPP::StringSink(*res)));// NOLINT(bugprone-unused-raii)
+    }
 
     bool valueToInt(const jsi::Value &value, int *res) {
         if (!value.isNumber())

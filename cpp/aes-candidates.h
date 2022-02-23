@@ -6,10 +6,10 @@
 #include <jsi/jsi.h>
 
 #include "cryptopp/filters.h"
-#include "cryptopp/hex.h"
 #include "cryptopp/osrng.h"
 #include "cryptopp/modes.h"
 #include "cryptopp/cryptlib.h"
+#include "cryptopp/base64.h"
 
 #include "utils.h"
 

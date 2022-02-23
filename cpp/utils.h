@@ -4,6 +4,9 @@
 #include <jsi/jsilib.h>
 #include <jsi/jsi.h>
 
+#include "cryptopp/base64.h"
+#include "cryptopp/hex.h"
+
 using namespace facebook;
 
 namespace rncryptopp {
@@ -15,6 +18,10 @@ namespace rncryptopp {
     void hexEncode(std::string *str, std::string *res);
 
     void hexDecode(std::string *str, std::string *res);
+
+    void base64Decode(std::string *str, std::string *res);
+
+    void base64Encode(std::string *str, std::string *res);
 
 }
 #endif //REACT_NATIVE_CRYPTOPP_UTILS_H
