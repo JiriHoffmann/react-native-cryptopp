@@ -54,8 +54,8 @@ namespace rncryptopp {
         */
         auto aes_encrypt = jsi::Function::createFromHostFunction(
                 jsiRuntime,
-                jsi::PropNameID::forAscii(jsiRuntime, "sha1"),
-                2,
+                jsi::PropNameID::forAscii(jsiRuntime, "aes_encrypt"),
+                4,
                 [](jsi::Runtime &rt, const jsi::Value &thisValue, const jsi::Value *args,
                    size_t count) -> jsi::Value {
                     std::string result;
@@ -65,8 +65,8 @@ namespace rncryptopp {
         );
             auto aes_decrypt = jsi::Function::createFromHostFunction(
                     jsiRuntime,
-                    jsi::PropNameID::forAscii(jsiRuntime, "sha1"),
-                    2,
+                    jsi::PropNameID::forAscii(jsiRuntime, "aes_decrypt"),
+                    4,
                     [](jsi::Runtime &rt, const jsi::Value &thisValue, const jsi::Value *args,
                        size_t count) -> jsi::Value {
                         std::string result;
@@ -79,6 +79,64 @@ namespace rncryptopp {
         AES.setProperty(jsiRuntime, "encrypt", std::move(aes_encrypt));
         AES.setProperty(jsiRuntime, "decrypt", std::move(aes_decrypt));
 
+        
+        /*
+        Utils
+        */
+        auto toBase64 = jsi::Function::createFromHostFunction(
+                jsiRuntime,
+                jsi::PropNameID::forAscii(jsiRuntime, "toBase64"),
+                1,
+                [](jsi::Runtime &rt, const jsi::Value &thisValue, const jsi::Value *args,
+                   size_t count) -> jsi::Value {
+                    std::string result;
+                    rncryptopp::toBase64(rt, result, args);
+                    return jsi::Value(jsi::String::createFromUtf8(rt, result));
+                }
+        );
+
+        auto fromBase64 = jsi::Function::createFromHostFunction(
+                jsiRuntime,
+                jsi::PropNameID::forAscii(jsiRuntime, "fromBase64"),
+                1,
+                [](jsi::Runtime &rt, const jsi::Value &thisValue, const jsi::Value *args,
+                   size_t count) -> jsi::Value {
+                    std::string result;
+                    rncryptopp::fromBase64(rt, result, args);
+                    return jsi::Value(jsi::String::createFromUtf8(rt, result));
+                }
+        );
+
+        auto toHex = jsi::Function::createFromHostFunction(
+                jsiRuntime,
+                jsi::PropNameID::forAscii(jsiRuntime, "toHex"),
+                1,
+                [](jsi::Runtime &rt, const jsi::Value &thisValue, const jsi::Value *args,
+                   size_t count) -> jsi::Value {
+                    std::string result;
+                    rncryptopp::toHex(rt, result, args);
+                    return jsi::Value(jsi::String::createFromUtf8(rt, result));
+                }
+        );
+
+        auto fromHex = jsi::Function::createFromHostFunction(
+                jsiRuntime,
+                jsi::PropNameID::forAscii(jsiRuntime, "fromHex"),
+                1,
+                [](jsi::Runtime &rt, const jsi::Value &thisValue, const jsi::Value *args,
+                   size_t count) -> jsi::Value {
+                    std::string result;
+                    rncryptopp::fromHex(rt, result, args);
+                    return jsi::Value(jsi::String::createFromUtf8(rt, result));
+                }
+        );
+
+        jsi::Object utils = jsi::Object(jsiRuntime);
+        utils.setProperty(jsiRuntime, "toBase64", std::move(toBase64));
+        utils.setProperty(jsiRuntime, "fromBase64", std::move(fromBase64));
+        utils.setProperty(jsiRuntime, "toHex", std::move(toHex));
+        utils.setProperty(jsiRuntime, "fromHex", std::move(fromHex));
+
 
         /*
         Cryptopp module
@@ -86,6 +144,7 @@ namespace rncryptopp {
         jsi::Object module = jsi::Object(jsiRuntime);
         module.setProperty(jsiRuntime, "SHA", std::move(SHA));
         module.setProperty(jsiRuntime, "AES", std::move(AES));
+        module.setProperty(jsiRuntime, "utils", std::move(utils));
 
 
         jsiRuntime.global().setProperty(jsiRuntime, "cryptoppModule", std::move(module));

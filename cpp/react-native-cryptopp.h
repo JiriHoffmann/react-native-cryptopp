@@ -6,6 +6,7 @@
 
 #include "hash-functions.h"
 #include "aes-candidates.h"
+#include "utils.h"
 
 using namespace facebook;
 
