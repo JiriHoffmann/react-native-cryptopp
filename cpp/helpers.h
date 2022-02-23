@@ -1,5 +1,5 @@
-#ifndef REACT_NATIVE_CRYPTOPP_UTILS_H
-#define REACT_NATIVE_CRYPTOPP_UTILS_H
+#ifndef CRYPTOPPEXAMPLE_HELPERS_H
+#define CRYPTOPPEXAMPLE_HELPERS_H
 
 #include <jsi/jsilib.h>
 #include <jsi/jsi.h>
@@ -24,4 +24,5 @@ namespace rncryptopp {
     void base64Encode(std::string *str, std::string *res);
 
 }
-#endif //REACT_NATIVE_CRYPTOPP_UTILS_H
+
+#endif //CRYPTOPPEXAMPLE_HELPERS_H

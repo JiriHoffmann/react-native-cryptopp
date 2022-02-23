@@ -11,7 +11,7 @@
 #include "cryptopp/cryptlib.h"
 #include "cryptopp/base64.h"
 
-#include "utils.h"
+#include "helpers.h"
 
 using namespace facebook;
 using namespace facebook::jsi::detail;
