@@ -1,44 +1,58 @@
-import * as React from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 
 import {
   StyleSheet,
+  SafeAreaView,
   View,
   Text,
-  Button,
   TextInput,
   TouchableOpacity,
 } from 'react-native';
 import Cryptopp from 'react-native-cryptopp';
 import ImagePicker from 'react-native-image-crop-picker';
 import ReactNativeBlobUtil from 'react-native-blob-util';
-import { useEffect } from 'react';
-import { useState } from 'react';
 
 export default function App() {
   const [textInput, setTextInput] = useState('');
-  const [result, setResult] = useState({
-    aes: '',
-    sha: '',
-    sha2: '',
-    sha3: '',
-  });
+  const [result, setResult] = useState<any>({});
+
+  const aes_key = useMemo(() => Cryptopp.utils.randomBytes(32), []);
+  const aes_iv = useMemo(() => Cryptopp.utils.randomBytes(16), []);
 
   useEffect(() => {
-    const key = '12345678901234561234567890123456';
-    const iv = '12345678901234561234567890123456';
+    if (textInput.length > 0) {
+      const aes = Cryptopp.AES.encrypt(
+        textInput,
+        aes_key.buffer,
+        aes_iv.buffer,
+        'cbc'
+      );
+      const sha = Cryptopp.SHA.sha1(textInput);
+      const sha2 = Cryptopp.SHA.sha2(textInput, '512');
+      const sha3 = Cryptopp.SHA.sha3(textInput, '512');
+      const md2 = Cryptopp.insecure.md2(textInput);
+      const md4 = Cryptopp.insecure.md4(textInput);
+      const md5 = Cryptopp.insecure.md5(textInput);
+      const base64 = Cryptopp.utils.utf8ToBase64(textInput);
+      const base64Url = Cryptopp.utils.utf8ToBase64Url(textInput);
+      const hex = Cryptopp.utils.utf8ToHex(textInput);
 
-    const aes = Cryptopp.AES.encrypt(textInput, key, iv, 'cbc');
-    const sha = Cryptopp.SHA.sha1(textInput);
-    const sha2 = Cryptopp.SHA.sha2(textInput, '512');
-    const sha3 = Cryptopp.SHA.sha3(textInput, '512');
-
-    setResult({
-      aes,
-      sha,
-      sha2,
-      sha3,
-    });
-  }, [textInput]);
+      setResult({
+        aes_key,
+        aes_iv,
+        aes,
+        sha,
+        sha2,
+        sha3,
+        md2,
+        md4,
+        md5,
+        base64,
+        base64Url,
+        hex,
+      });
+    }
+  }, [textInput, aes_key, aes_iv]);
 
   const _openImagePicker = () => {
     ImagePicker.openPicker({
@@ -46,14 +60,17 @@ export default function App() {
       height: 400,
       cropping: true,
     }).then((image) => {
-      ReactNativeBlobUtil.fs.readFile(image.path, 'base64').then((data) => {
-        setTextInput(data);
-      });
+      ReactNativeBlobUtil.fs
+        .readFile(image.path, 'base64')
+        .then((data) => {
+          setTextInput(data);
+        })
+        .catch(() => {});
     });
   };
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <Text style={styles.header}>Input value:</Text>
       <TextInput
         value={textInput}
@@ -80,7 +97,7 @@ export default function App() {
           {key}: {result[key]}
         </Text>
       ))}
-    </View>
+    </SafeAreaView>
   );
 }
 
@@ -89,8 +106,6 @@ const styles = StyleSheet.create({
     flex: 1,
     marginHorizontal: '5%',
     marginVertical: 20,
-    // alignItems: 'center',
-    // justifyContent: 'center',
   },
   box: {
     width: 60,

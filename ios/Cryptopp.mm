@@ -35,14 +35,14 @@ RCT_EXPORT_BLOCKING_SYNCHRONOUS_METHOD(install)
         return @false;
     }
 
-    rncryptopp::install(*(facebook::jsi::Runtime *)jsiRuntime);
+    rncryptopp_install(*(facebook::jsi::Runtime *)jsiRuntime);
 
     return @true;
 }
 
 
 - (void)invalidate {
-   rncryptopp::cleanup();
+   rncryptopp_cleanup();
 }
 
 @end

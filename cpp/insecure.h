@@ -4,17 +4,17 @@
 #include <jsi/jsilib.h>
 #include <jsi/jsi.h>
 
-#include "cryptlib.h"
 
 #define CRYPTOPP_ENABLE_NAMESPACE_WEAK 1
-#include "md2.h"
-#include "md4.h"
-#include "md5.h"
-#include "des.h"
+#include "cryptopp/md2.h"
+#include "cryptopp/md4.h"
+#include "cryptopp/md5.h"
 
 #include "helpers.h"
 
 using namespace facebook;
+using namespace facebook::jsi::detail;
+using namespace CryptoPP;
 
 namespace rncryptopp
 {

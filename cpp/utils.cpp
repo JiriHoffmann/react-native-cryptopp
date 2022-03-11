@@ -1,36 +1,108 @@
 #include "utils.h"
+namespace rncryptopp
+{
 
-namespace rncryptopp {
+    void randomBytesNative(jsi::Runtime &rt, std::string &result, const jsi::Value *args)
+    {
+        int length;
+        if(!valueToInt(args[0], &length))
+            throwJSError(rt, "RNCryptopp: randomBytes length in not a number");
 
-    void toBase64(jsi::Runtime &rt, std::string &result, const jsi::Value *args) {
-        std::string str;
-        if (!valueToString(rt, args[0], &str)) {
-            return;
-        }
-        base64Encode(&str, &result);
+        AutoSeededRandomPool prng;
+        SecByteBlock random(length);
+        prng.GenerateBlock(random, random.size());
+
+        std::string bytes = std::string((const char*)random.data(), random.size());
+        base64Encode(&bytes, &result);
     }
 
-    void fromBase64(jsi::Runtime &rt, std::string &result, const jsi::Value *args) {
-        std::string str;
-        if (!valueToString(rt, args[0], &str)) {
+    void hexToBase64(jsi::Runtime &rt, std::string &result, const jsi::Value *args)
+    {
+        std::string bytes ;
+        if (!binaryLikeValueToString(rt, args[0], &bytes, 1, 1))
             return;
-        }
-        base64Decode(&str, &result);
+
+        StringSource(bytes, true, new Base64Encoder(new StringSink(result)));
     }
 
-    void toHex(jsi::Runtime &rt, std::string &result, const jsi::Value *args) {
-        std::string str;
-        if (!valueToString(rt, args[0], &str)) {
+    void base64ToHex(jsi::Runtime &rt, std::string &result, const jsi::Value *args)
+    {
+        std::string bytes;
+        if (!binaryLikeValueToString(rt, args[0], &bytes, 2, 2))
             return;
-        }
-        hexEncode(&str, &result);
+
+        StringSource(bytes, true, new HexEncoder(new StringSink(result)));
     }
 
-    void fromHex(jsi::Runtime &rt, std::string &result, const jsi::Value *args) {
-        std::string str;
-        if (!valueToString(rt, args[0], &str)) {
+    void hexToBase64Url(jsi::Runtime &rt, std::string &result, const jsi::Value *args)
+    {
+        std::string bytes;
+        if (!binaryLikeValueToString(rt, args[0], &bytes, 1, 1))
             return;
-        }
-        hexDecode(&str, &result);
+
+        StringSource(bytes, true, new Base64URLEncoder(new StringSink(result)));
+    }
+
+    void base64UrlToHex(jsi::Runtime &rt, std::string &result, const jsi::Value *args)
+    {
+        std::string bytes;
+        if (!binaryLikeValueToString(rt, args[0], &bytes, 2,2))
+            return;
+
+        StringSource(bytes, true, new HexEncoder(new StringSink(result)));
+    }
+
+    void utf8ToBase64(jsi::Runtime &rt, std::string &result, const jsi::Value *args)
+    {
+        std::string bytes;
+        if (!binaryLikeValueToString(rt, args[0], &bytes, 0,0))
+            return;
+
+        StringSource(bytes, true, new Base64Encoder(new StringSink(result)));
+    }
+
+    void base64ToUtf8(jsi::Runtime &rt, std::string &result, const jsi::Value *args)
+    {
+        std::string bytes;
+        if (!binaryLikeValueToString(rt, args[0], &bytes, 2,2))
+            return;
+
+        StringSource(bytes, true, new Base64Decoder(new StringSink(result)));
+    }
+
+    void utf8ToBase64Url(jsi::Runtime &rt, std::string &result, const jsi::Value *args)
+    {
+        std::string bytes;
+        if (!binaryLikeValueToString(rt, args[0], &bytes, 0 ,0))
+            return;
+
+        StringSource(bytes, true, new Base64URLEncoder(new StringSink(result)));
+    }
+
+    void base64UrlToUtf8(jsi::Runtime &rt, std::string &result, const jsi::Value *args)
+    {
+        std::string bytes;
+        if (!binaryLikeValueToString(rt, args[0], &bytes, 2,2))
+            return;
+
+        StringSource(bytes, true, new Base64URLDecoder(new StringSink(result)));
+    }
+
+    void utf8ToHex(jsi::Runtime &rt, std::string &result, const jsi::Value *args)
+    {
+        std::string bytes;
+        if (!binaryLikeValueToString(rt, args[0], &bytes, 0,0))
+            return;
+
+        StringSource(bytes, true, new HexEncoder(new StringSink(result)));
+    }
+
+    void hexToUtf8(jsi::Runtime &rt, std::string &result, const jsi::Value *args)
+    {
+        std::string bytes;
+        if (!binaryLikeValueToString(rt, args[0], &bytes, 1,1))
+            return;
+
+        StringSource(bytes, true, new HexDecoder(new StringSink(result)));
     }
 }

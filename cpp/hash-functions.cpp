@@ -1,94 +1,115 @@
 #include "hash-functions.h"
 
-namespace rncryptopp {
-    void sha1(jsi::Runtime &rt, std::string &result, const jsi::Value *args) {
+namespace rncryptopp
+{
+    void sha1(jsi::Runtime &rt, std::string &result, const jsi::Value *args)
+    {
         std::string data;
-        if (!valueToString(rt, args[0], &data)) {
-            jsi::detail::throwJSError(rt, "RNCryptopp: Data in not a string");
+        if (!binaryLikeValueToString(rt, args[0], &data, 0, 0))
+        {
+            throwJSError(rt, "RNCryptopp: Data in not a string");
         }
-        CryptoPP::SHA1 sha1;
-        CryptoPP::StringSource(data, true, new CryptoPP::HashFilter(sha1,
-                                                                    new CryptoPP::HexEncoder(
-                                                                            new CryptoPP::StringSink(
-                                                                                    result))));
+        SHA1 sha1;
+        StringSource(data, true, new HashFilter(sha1, new HexEncoder(new StringSink(result))));
     }
 
-    void sha2(jsi::Runtime &rt, std::string &result, const jsi::Value *args) {
+    void sha2(jsi::Runtime &rt, std::string &result, const jsi::Value *args)
+    {
         std::string data;
-        if (!valueToString(rt, args[0], &data)) {
-            jsi::detail::throwJSError(rt, "RNCryptopp: Data in not a string");
+        if (!binaryLikeValueToString(rt, args[0], &data, 0, 0))
+        {
+            throwJSError(rt, "RNCryptopp: Data in not a string");
         }
         std::string size;
-        if (!valueToString(rt, args[1], &size)) {
-            jsi::detail::throwJSError(rt, "RNCryptopp: Size in not a string");
+        if (!stringValueToString(rt, args[1], &size))
+        {
+            throwJSError(rt, "RNCryptopp: Size in not a string");
         }
 
-        if (size == "224") {
-            CryptoPP::SHA224 sha;
-            CryptoPP::StringSource(data, true,
-                                   new CryptoPP::HashFilter(sha,
-                                                            new CryptoPP::HexEncoder(
-                                                                    new CryptoPP::StringSink(
-                                                                            result))));
-        } else if (size == "256") {
-            CryptoPP::SHA256 sha;
-            CryptoPP::StringSource(data, true,
-                                   new CryptoPP::HashFilter(sha,
-                                                            new CryptoPP::HexEncoder(
-                                                                    new CryptoPP::StringSink(
-                                                                            result))));
-        } else if (size == "384") {
-            CryptoPP::SHA384 sha;
-            CryptoPP::StringSource(data, true,
-                                   new CryptoPP::HashFilter(sha,
-                                                            new CryptoPP::HexEncoder(
-                                                                    new CryptoPP::StringSink(
-                                                                            result))));
-        } else if (size == "512") {
-            CryptoPP::SHA512 sha;
-            CryptoPP::StringSource(data, true,
-                                   new CryptoPP::HashFilter(sha,
-                                                            new CryptoPP::HexEncoder(
-                                                                    new CryptoPP::StringSink(
-                                                                            result))));
-        } else {
-            jsi::detail::throwJSError(rt, "RNCryptopp: Not a valid size");
+        if (size == "224")
+        {
+            SHA224 sha;
+            StringSource(data, true,
+                                   new HashFilter(sha,
+                                                            new HexEncoder(
+                                                                new StringSink(
+                                                                    result))));
+        }
+        else if (size == "256")
+        {
+            SHA256 sha;
+            StringSource(data, true,
+                                   new HashFilter(sha,
+                                                            new HexEncoder(
+                                                                new StringSink(
+                                                                    result))));
+        }
+        else if (size == "384")
+        {
+            SHA384 sha;
+            StringSource(data, true,
+                                   new HashFilter(sha,
+                                                            new HexEncoder(
+                                                                new StringSink(
+                                                                    result))));
+        }
+        else if (size == "512")
+        {
+            SHA512 sha;
+            StringSource(data, true,
+                                   new HashFilter(sha,
+                                                            new HexEncoder(
+                                                                new StringSink(
+                                                                    result))));
+        }
+        else
+        {
+            throwJSError(rt, "RNCryptopp: Not a valid size");
         }
     }
 
-    void sha3(jsi::Runtime &rt, std::string &result, const jsi::Value *args) {
+    void sha3(jsi::Runtime &rt, std::string &result, const jsi::Value *args)
+    {
         std::string data;
-        if (!valueToString(rt, args[0], &data)) {
-            jsi::detail::throwJSError(rt, "RNCryptopp: Data in not a string");
+        if (!binaryLikeValueToString(rt, args[0], &data, 0, 0))
+        {
+            throwJSError(rt, "RNCryptopp: Data in not a string");
         }
         std::string size;
-        if (!valueToString(rt, args[1], &size)) {
-            jsi::detail::throwJSError(rt, "RNCryptopp: Size in not a string");
+        if (!stringValueToString(rt, args[1], &size))
+        {
+            throwJSError(rt, "RNCryptopp: Size in not a string");
         }
 
-        if (size == "224") {
-            CryptoPP::SHA3_224 sha;
-            CryptoPP::StringSource(data, true, new CryptoPP::HashFilter(sha,
-                                                                        new CryptoPP::HexEncoder(
-                                                                                new CryptoPP::StringSink(
-                                                                                        result))));
-        } else if (size == "256") {
-            CryptoPP::SHA3_256 sha;
-            CryptoPP::StringSource(data, true,
-                                   new CryptoPP::HashFilter(sha, new CryptoPP::HexEncoder(
-                                           new CryptoPP::StringSink(result))));
-        } else if (size == "384") {
-            CryptoPP::SHA3_384 sha;
-            CryptoPP::StringSource(data, true,
-                                   new CryptoPP::HashFilter(sha, new CryptoPP::HexEncoder(
-                                           new CryptoPP::StringSink(result))));
-        } else if (size == "512") {
-            CryptoPP::SHA3_512 sha;
-            CryptoPP::StringSource(data, true,
-                                   new CryptoPP::HashFilter(sha, new CryptoPP::HexEncoder(
-                                           new CryptoPP::StringSink(result))));
-        } else {
-            jsi::detail::throwJSError(rt, "RNCryptopp: Not a valid size");
+        if (size == "224")
+        {
+            SHA3_224 sha;
+            StringSource(data, true, new HashFilter(sha, new HexEncoder(new StringSink(result))));
+        }
+        else if (size == "256")
+        {
+            SHA3_256 sha;
+            StringSource(data, true,
+                                   new HashFilter(sha, new HexEncoder(
+                                                                     new StringSink(result))));
+        }
+        else if (size == "384")
+        {
+            SHA3_384 sha;
+            StringSource(data, true,
+                                   new HashFilter(sha, new HexEncoder(
+                                                                     new StringSink(result))));
+        }
+        else if (size == "512")
+        {
+            SHA3_512 sha;
+            StringSource(data, true,
+                                   new HashFilter(sha, new HexEncoder(
+                                                                     new StringSink(result))));
+        }
+        else
+        {
+            throwJSError(rt, "RNCryptopp: Not a valid size");
         }
     }
 }

@@ -8,10 +8,13 @@
 #include "cryptopp/hex.h"
 
 using namespace facebook;
+using namespace CryptoPP;
 
 namespace rncryptopp {
 
-    bool valueToString(jsi::Runtime &runtime, const jsi::Value &value, std::string *str);
+    bool stringValueToString(jsi::Runtime &runtime, const jsi::Value &value, std::string *str);
+
+    bool binaryLikeValueToString(jsi::Runtime &rt, const jsi::Value &value, std::string *str, int stringEncoding, int bufferEncoding);
 
     bool valueToInt(const jsi::Value &value, int *res);
 
@@ -22,6 +25,10 @@ namespace rncryptopp {
     void base64Decode(std::string *str, std::string *res);
 
     void base64Encode(std::string *str, std::string *res);
+
+    void base64UrlDecode(std::string *str, std::string *res);
+
+    void base64UrlEncode(std::string *str, std::string *res);
 
 }
 

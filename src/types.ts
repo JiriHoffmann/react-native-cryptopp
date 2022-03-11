@@ -1,36 +1,44 @@
 type SHA_Standarts = '224' | '256' | '384' | '512';
 type AES_Modes = 'ecb' | 'cbc' | 'cfb' | 'ofb' | 'ctr';
+type BinaryLike = string | ArrayBuffer;
 
 export interface Cryptopp {
   SHA: {
-    sha1: (data: string | ArrayBuffer) => string;
-    sha2: (data: string | ArrayBuffer, hashSize: SHA_Standarts) => string;
-    sha3: (data: string | ArrayBuffer, hashSize: SHA_Standarts) => string;
+    sha1: (data: string) => string;
+    sha2: (data: string, hashSize: SHA_Standarts) => string;
+    sha3: (data: string, hashSize: SHA_Standarts) => string;
   };
   AES: {
     encrypt: (
-      data: string | ArrayBuffer,
-      key: string | ArrayBuffer,
-      iv: string | ArrayBuffer,
+      data: string,
+      key: BinaryLike,
+      iv: BinaryLike,
       mode: AES_Modes
     ) => string;
     decrypt: (
-      data: string | ArrayBuffer,
-      key: string | ArrayBuffer,
-      iv: string | ArrayBuffer,
+      data: string,
+      key: BinaryLike,
+      iv: BinaryLike,
       mode: AES_Modes
     ) => string;
   };
   insecure: {
-    md2: (data: string | ArrayBuffer) => string;
-    md4: (data: string | ArrayBuffer) => string;
-    md5: (data: string | ArrayBuffer) => string;
+    md2: (data: string) => string;
+    md4: (data: string) => string;
+    md5: (data: string) => string;
   };
   utils: {
-    toBase64: (data: string | ArrayBuffer) => string;
-    fromBase64: (data: string | ArrayBuffer) => string;
-    toHex: (data: string | ArrayBuffer) => string;
-    fromHex: (data: string | ArrayBuffer) => string;
+    randomBytes: (length: number) => Buffer;
+    hexToBase64: (data: BinaryLike) => string;
+    base64ToHex: (data: BinaryLike) => string;
+    hexToBase64Url: (data: BinaryLike) => string;
+    base64UrlToHex: (data: BinaryLike) => string;
+    utf8ToBase64: (data: BinaryLike) => string;
+    base64ToUtf8: (data: BinaryLike) => string;
+    utf8ToBase64Url: (data: BinaryLike) => string;
+    base64UrlToUtf8: (data: BinaryLike) => string;
+    utf8ToHex: (data: BinaryLike) => string;
+    hexToUtf8: (data: BinaryLike) => string;
   };
   utilsJS: {
     stringToArrayBuffer: (str: string) => ArrayBuffer;

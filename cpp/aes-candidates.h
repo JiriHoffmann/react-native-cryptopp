@@ -15,6 +15,7 @@
 
 using namespace facebook;
 using namespace facebook::jsi::detail;
+using namespace CryptoPP;
 
 namespace rncryptopp {
     void aes_encrypt(jsi::Runtime &rt, std::string &result, const jsi::Value *args);

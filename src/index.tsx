@@ -19,6 +19,13 @@ if (!CryptoppModule) {
   throw new Error(LINKING_ERROR);
 }
 
+CryptoppModule.utils.randomBytes = (length: number) => {
+  const Buffer = global.Buffer ?? require('buffer').Buffer;
+  // @ts-ignore
+  const bytes = CryptoppModule.utils.randomBytesNative(length);
+  return Buffer.from(bytes, 'base64');
+};
+
 CryptoppModule.utilsJS = utilsJS;
 
 export default CryptoppModule;

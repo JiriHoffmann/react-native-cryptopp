@@ -12,6 +12,8 @@
 #include "helpers.h"
 
 using namespace facebook;
+using namespace facebook::jsi::detail;
+using namespace CryptoPP;
 
 namespace rncryptopp {
     void sha1(jsi::Runtime &rt, std::string &result, const jsi::Value *args);

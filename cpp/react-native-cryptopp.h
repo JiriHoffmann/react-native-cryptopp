@@ -11,11 +11,9 @@
 
 using namespace facebook;
 
-namespace rncryptopp {
 
-    void install(jsi::Runtime &jsiRuntime);
+void rncryptopp_install(jsi::Runtime &jsiRuntime);
 
-    void cleanup();
-}
+void rncryptopp_cleanup();
 
 #endif /* REACT_NATIVE_CRYPTOPP_H */
