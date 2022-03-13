@@ -1,6 +1,14 @@
 type SHA_Standarts = '224' | '256' | '384' | '512';
 type AES_Modes = 'ecb' | 'cbc' | 'cfb' | 'ofb' | 'ctr';
 type BinaryLike = string | ArrayBuffer;
+type KeyDerivationHash =
+  | 'SHA1'
+  | 'SHA256'
+  | 'SHA512'
+  | 'SHA3_256'
+  | 'SHA3_512'
+  | 'BLAKE2b'
+  | 'BLAKE2s';
 
 export interface Cryptopp {
   SHA: {
@@ -20,6 +28,32 @@ export interface Cryptopp {
       key: BinaryLike,
       iv: BinaryLike,
       mode: AES_Modes
+    ) => string;
+  };
+  keyDerivation: {
+    pbkdf12: (
+      password: BinaryLike,
+      salt: BinaryLike,
+      hash: KeyDerivationHash,
+      iterations: number
+    ) => string;
+    pkcs5_pbkdf1: (
+      password: BinaryLike,
+      salt: BinaryLike,
+      hash: KeyDerivationHash,
+      iterations: number
+    ) => string;
+    pkcs5_pbkdf2: (
+      password: BinaryLike,
+      salf: BinaryLike,
+      hash: KeyDerivationHash,
+      iterations: number
+    ) => string;
+    hkdf: (
+      password: BinaryLike,
+      salt: BinaryLike,
+      info: BinaryLike,
+      hash: KeyDerivationHash
     ) => string;
   };
   insecure: {

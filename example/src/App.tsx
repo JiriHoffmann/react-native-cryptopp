@@ -27,6 +27,7 @@ export default function App() {
         aes_iv.buffer,
         'cbc'
       );
+
       const sha = Cryptopp.SHA.sha1(textInput);
       const sha2 = Cryptopp.SHA.sha2(textInput, '512');
       const sha3 = Cryptopp.SHA.sha3(textInput, '512');
@@ -36,7 +37,30 @@ export default function App() {
       const base64 = Cryptopp.utils.utf8ToBase64(textInput);
       const base64Url = Cryptopp.utils.utf8ToBase64Url(textInput);
       const hex = Cryptopp.utils.utf8ToHex(textInput);
-
+      const pbkdf12 = Cryptopp.keyDerivation.pbkdf12(
+        textInput,
+        'salt',
+        'SHA256',
+        1024
+      );
+      const pkbdf1 = Cryptopp.keyDerivation.pkcs5_pbkdf1(
+        textInput,
+        'salt',
+        'SHA256',
+        1024
+      );
+      const pkbdf2 = Cryptopp.keyDerivation.pkcs5_pbkdf2(
+        textInput,
+        'salt',
+        'SHA256',
+        1024
+      );
+      const hkdf = Cryptopp.keyDerivation.hkdf(
+        textInput,
+        'salt',
+        'HKDF key derivation',
+        'SHA1'
+      );
       setResult({
         aes_key,
         aes_iv,
@@ -50,6 +74,10 @@ export default function App() {
         base64,
         base64Url,
         hex,
+        pbkdf12,
+        pkbdf1,
+        pkbdf2,
+        hkdf,
       });
     }
   }, [textInput, aes_key, aes_iv]);

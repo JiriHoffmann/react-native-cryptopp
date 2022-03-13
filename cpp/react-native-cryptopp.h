@@ -7,10 +7,10 @@
 #include "hash-functions.h"
 #include "aes-candidates.h"
 #include "insecure.h"
+#include "key-derivation.h"
 #include "utils.h"
 
 using namespace facebook;
-
 
 void rncryptopp_install(jsi::Runtime &jsiRuntime);
 

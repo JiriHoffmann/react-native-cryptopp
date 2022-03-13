@@ -120,6 +120,63 @@ void rncryptopp_install(jsi::Runtime &jsiRuntime)
         insecure.setProperty(jsiRuntime, "md5", std::move(md5));
 
         /*
+        Key Derivation Functions
+        */
+        auto pkcs5_pbkdf1 = jsi::Function::createFromHostFunction(
+            jsiRuntime,
+            jsi::PropNameID::forAscii(jsiRuntime, "pkcs5_pbkdf1"),
+            4,
+            [](jsi::Runtime &rt, const jsi::Value &thisValue, const jsi::Value *args,
+               size_t count) -> jsi::Value
+            {
+                    std::string result;
+                    rncryptopp::pkcs5_pbkdf1(rt, result, args);
+                    return jsi::String::createFromUtf8(rt, result);
+            });
+
+        auto pkcs5_pbkdf2 = jsi::Function::createFromHostFunction(
+            jsiRuntime,
+            jsi::PropNameID::forAscii(jsiRuntime, "pkcs5_pbkdf2"),
+            4,
+            [](jsi::Runtime &rt, const jsi::Value &thisValue, const jsi::Value *args,
+               size_t count) -> jsi::Value
+            {
+                    std::string result;
+                    rncryptopp::pkcs5_pbkdf2(rt, result, args);
+                    return jsi::String::createFromUtf8(rt, result);
+            });
+
+        auto pbkdf12 = jsi::Function::createFromHostFunction(
+                jsiRuntime,
+                jsi::PropNameID::forAscii(jsiRuntime, "pbkdf12"),
+                4,
+                [](jsi::Runtime &rt, const jsi::Value &thisValue, const jsi::Value *args,
+                   size_t count) -> jsi::Value
+                {
+                        std::string result;
+                        rncryptopp::pbkdf12(rt, result, args);
+                        return jsi::String::createFromUtf8(rt, result);
+                });
+
+        auto hkdf = jsi::Function::createFromHostFunction(
+            jsiRuntime,
+            jsi::PropNameID::forAscii(jsiRuntime, "hkdf"),
+            4,
+            [](jsi::Runtime &rt, const jsi::Value &thisValue, const jsi::Value *args,
+               size_t count) -> jsi::Value
+            {
+                    std::string result;
+                    rncryptopp::hkdf(rt, result, args);
+                    return jsi::String::createFromUtf8(rt, result);
+            });
+
+        jsi::Object keyDerivation = jsi::Object(jsiRuntime);
+        keyDerivation.setProperty(jsiRuntime, "pkcs5_pbkdf1", std::move(pkcs5_pbkdf1));
+        keyDerivation.setProperty(jsiRuntime, "pkcs5_pbkdf2", std::move(pkcs5_pbkdf2));
+        keyDerivation.setProperty(jsiRuntime, "pbkdf12", std::move(pbkdf12));
+        keyDerivation.setProperty(jsiRuntime, "hkdf", std::move(hkdf));
+
+        /*
         Utils
         */
        auto randomBytesNative = jsi::Function::createFromHostFunction(
@@ -274,8 +331,9 @@ void rncryptopp_install(jsi::Runtime &jsiRuntime)
         jsi::Object module = jsi::Object(jsiRuntime);
         module.setProperty(jsiRuntime, "SHA", std::move(SHA));
         module.setProperty(jsiRuntime, "AES", std::move(AES));
-        module.setProperty(jsiRuntime, "utils", std::move(utils));
         module.setProperty(jsiRuntime, "insecure", std::move(insecure));
+        module.setProperty(jsiRuntime, "keyDerivation", std::move(keyDerivation));
+        module.setProperty(jsiRuntime, "utils", std::move(utils));
 
         jsiRuntime.global().setProperty(jsiRuntime, "cryptoppModule", std::move(module));
 }

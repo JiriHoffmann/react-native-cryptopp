@@ -18,6 +18,8 @@ namespace rncryptopp {
 
     bool valueToInt(const jsi::Value &value, int *res);
 
+    bool valueToDouble(const jsi::Value &value, double *res);
+
     void hexEncode(std::string *str, std::string *res);
 
     void hexDecode(std::string *str, std::string *res);
