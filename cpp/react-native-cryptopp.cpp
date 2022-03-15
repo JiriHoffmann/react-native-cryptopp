@@ -147,16 +147,16 @@ void rncryptopp_install(jsi::Runtime &jsiRuntime)
             });
 
         auto pbkdf12 = jsi::Function::createFromHostFunction(
-                jsiRuntime,
-                jsi::PropNameID::forAscii(jsiRuntime, "pbkdf12"),
-                4,
-                [](jsi::Runtime &rt, const jsi::Value &thisValue, const jsi::Value *args,
-                   size_t count) -> jsi::Value
-                {
-                        std::string result;
-                        rncryptopp::pbkdf12(rt, result, args);
-                        return jsi::String::createFromUtf8(rt, result);
-                });
+            jsiRuntime,
+            jsi::PropNameID::forAscii(jsiRuntime, "pbkdf12"),
+            4,
+            [](jsi::Runtime &rt, const jsi::Value &thisValue, const jsi::Value *args,
+               size_t count) -> jsi::Value
+            {
+                    std::string result;
+                    rncryptopp::pbkdf12(rt, result, args);
+                    return jsi::String::createFromUtf8(rt, result);
+            });
 
         auto hkdf = jsi::Function::createFromHostFunction(
             jsiRuntime,
@@ -179,7 +179,7 @@ void rncryptopp_install(jsi::Runtime &jsiRuntime)
         /*
         Utils
         */
-       auto randomBytesNative = jsi::Function::createFromHostFunction(
+        auto randomBytesNative = jsi::Function::createFromHostFunction(
             jsiRuntime,
             jsi::PropNameID::forAscii(jsiRuntime, "randomBytesNative"),
             1,
@@ -288,29 +288,28 @@ void rncryptopp_install(jsi::Runtime &jsiRuntime)
             });
 
         auto utf8ToHex = jsi::Function::createFromHostFunction(
-                jsiRuntime,
-                jsi::PropNameID::forAscii(jsiRuntime, "utf8ToHex"),
-                1,
-                [](jsi::Runtime &rt, const jsi::Value &thisValue, const jsi::Value *args,
-                   size_t count) -> jsi::Value
-                {
-                        std::string result;
-                        rncryptopp::utf8ToHex(rt, result, args);
-                        return jsi::String::createFromUtf8(rt, result);
-                });
+            jsiRuntime,
+            jsi::PropNameID::forAscii(jsiRuntime, "utf8ToHex"),
+            1,
+            [](jsi::Runtime &rt, const jsi::Value &thisValue, const jsi::Value *args,
+               size_t count) -> jsi::Value
+            {
+                    std::string result;
+                    rncryptopp::utf8ToHex(rt, result, args);
+                    return jsi::String::createFromUtf8(rt, result);
+            });
 
         auto hexToUtf8 = jsi::Function::createFromHostFunction(
-                jsiRuntime,
-                jsi::PropNameID::forAscii(jsiRuntime, "hexToUtf8"),
-                1,
-                [](jsi::Runtime &rt, const jsi::Value &thisValue, const jsi::Value *args,
-                   size_t count) -> jsi::Value
-                {
-                        std::string result;
-                        rncryptopp::hexToUtf8(rt, result, args);
-                        return jsi::String::createFromUtf8(rt, result);
-                });
-
+            jsiRuntime,
+            jsi::PropNameID::forAscii(jsiRuntime, "hexToUtf8"),
+            1,
+            [](jsi::Runtime &rt, const jsi::Value &thisValue, const jsi::Value *args,
+               size_t count) -> jsi::Value
+            {
+                    std::string result;
+                    rncryptopp::hexToUtf8(rt, result, args);
+                    return jsi::String::createFromUtf8(rt, result);
+            });
 
         jsi::Object utils = jsi::Object(jsiRuntime);
         utils.setProperty(jsiRuntime, "randomBytesNative", std::move(randomBytesNative));

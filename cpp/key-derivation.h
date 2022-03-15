@@ -9,9 +9,11 @@
 #include "cryptopp/sha3.h"
 #include "cryptopp/blake2.h"
 #include "cryptopp/pwdbased.h"
+#include <cryptopp/shake.h>
+#include <cryptopp/sm3.h>
+#include <cryptopp/lsh.h>
 
 #include "helpers.h"
-
 
 using namespace facebook;
 using namespace facebook::jsi::detail;
@@ -28,4 +30,4 @@ namespace rncryptopp
     void pkcs5_pbkdf2(jsi::Runtime &rt, std::string &result, const jsi::Value *args);
 }
 
-#endif //CRYPTOPPEXAMPLE_KEY_DERIVATION_H
+#endif // CRYPTOPPEXAMPLE_KEY_DERIVATION_H

@@ -17,6 +17,9 @@ include_directories(
   "${NODE_MODULES_DIR}/react-native/ReactCommon/jsi"
 
   # rncryptopp headers
+  # Import manually to make sure the order is correct
+  "../cpp/helpers.h"
+  "../cpp/utils.h"
   ${RN_CRYPTOPP_HEADERS}
 
   # Crypto++ headers

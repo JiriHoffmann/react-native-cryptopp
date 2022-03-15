@@ -6,7 +6,7 @@ namespace rncryptopp
     void md2(jsi::Runtime &rt, std::string &result, const jsi::Value *args)
     {
         std::string data;
-        if (!binaryLikeValueToString(rt, args[0], &data, 0,0))
+        if (!binaryLikeValueToString(rt, args[0], &data, 0, 0))
         {
             throwJSError(rt, "RNCryptopp: Data in not a string");
         }
@@ -17,7 +17,7 @@ namespace rncryptopp
     void md4(jsi::Runtime &rt, std::string &result, const jsi::Value *args)
     {
         std::string data;
-        if (!binaryLikeValueToString(rt, args[0], &data, 0,0))
+        if (!binaryLikeValueToString(rt, args[0], &data, 0, 0))
         {
             throwJSError(rt, "RNCryptopp: Data in not a string");
         }
@@ -28,7 +28,7 @@ namespace rncryptopp
     void md5(jsi::Runtime &rt, std::string &result, const jsi::Value *args)
     {
         std::string data;
-        if (!binaryLikeValueToString(rt, args[0], &data,0,0))
+        if (!binaryLikeValueToString(rt, args[0], &data, 0, 0))
         {
             throwJSError(rt, "RNCryptopp: Data in not a string");
         }

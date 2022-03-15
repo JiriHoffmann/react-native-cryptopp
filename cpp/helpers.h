@@ -10,7 +10,8 @@
 using namespace facebook;
 using namespace CryptoPP;
 
-namespace rncryptopp {
+namespace rncryptopp
+{
 
     bool stringValueToString(jsi::Runtime &runtime, const jsi::Value &value, std::string *str);
 
@@ -31,7 +32,6 @@ namespace rncryptopp {
     void base64UrlDecode(std::string *str, std::string *res);
 
     void base64UrlEncode(std::string *str, std::string *res);
-
 }
 
-#endif //CRYPTOPPEXAMPLE_HELPERS_H
+#endif // CRYPTOPPEXAMPLE_HELPERS_H

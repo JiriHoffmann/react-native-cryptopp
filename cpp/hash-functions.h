@@ -15,7 +15,8 @@ using namespace facebook;
 using namespace facebook::jsi::detail;
 using namespace CryptoPP;
 
-namespace rncryptopp {
+namespace rncryptopp
+{
     void sha1(jsi::Runtime &rt, std::string &result, const jsi::Value *args);
 
     void sha2(jsi::Runtime &rt, std::string &result, const jsi::Value *args);
@@ -23,5 +24,4 @@ namespace rncryptopp {
     void sha3(jsi::Runtime &rt, std::string &result, const jsi::Value *args);
 }
 
-
-#endif //CRYPTOPPEXAMPLE_HASH_FUNCTIONS_H
+#endif // CRYPTOPPEXAMPLE_HASH_FUNCTIONS_H

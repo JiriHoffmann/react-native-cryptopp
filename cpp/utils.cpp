@@ -5,20 +5,20 @@ namespace rncryptopp
     void randomBytesNative(jsi::Runtime &rt, std::string &result, const jsi::Value *args)
     {
         int length;
-        if(!valueToInt(args[0], &length))
+        if (!valueToInt(args[0], &length))
             throwJSError(rt, "RNCryptopp: randomBytes length in not a number");
 
         AutoSeededRandomPool prng;
         SecByteBlock random(length);
         prng.GenerateBlock(random, random.size());
 
-        std::string bytes = std::string((const char*)random.data(), random.size());
+        std::string bytes = std::string((const char *)random.data(), random.size());
         base64Encode(&bytes, &result);
     }
 
     void hexToBase64(jsi::Runtime &rt, std::string &result, const jsi::Value *args)
     {
-        std::string bytes ;
+        std::string bytes;
         if (!binaryLikeValueToString(rt, args[0], &bytes, 1, 1))
             return;
 
@@ -46,7 +46,7 @@ namespace rncryptopp
     void base64UrlToHex(jsi::Runtime &rt, std::string &result, const jsi::Value *args)
     {
         std::string bytes;
-        if (!binaryLikeValueToString(rt, args[0], &bytes, 2,2))
+        if (!binaryLikeValueToString(rt, args[0], &bytes, 2, 2))
             return;
 
         StringSource(bytes, true, new HexEncoder(new StringSink(result)));
@@ -55,7 +55,7 @@ namespace rncryptopp
     void utf8ToBase64(jsi::Runtime &rt, std::string &result, const jsi::Value *args)
     {
         std::string bytes;
-        if (!binaryLikeValueToString(rt, args[0], &bytes, 0,0))
+        if (!binaryLikeValueToString(rt, args[0], &bytes, 0, 0))
             return;
 
         StringSource(bytes, true, new Base64Encoder(new StringSink(result)));
@@ -64,7 +64,7 @@ namespace rncryptopp
     void base64ToUtf8(jsi::Runtime &rt, std::string &result, const jsi::Value *args)
     {
         std::string bytes;
-        if (!binaryLikeValueToString(rt, args[0], &bytes, 2,2))
+        if (!binaryLikeValueToString(rt, args[0], &bytes, 2, 2))
             return;
 
         StringSource(bytes, true, new Base64Decoder(new StringSink(result)));
@@ -73,7 +73,7 @@ namespace rncryptopp
     void utf8ToBase64Url(jsi::Runtime &rt, std::string &result, const jsi::Value *args)
     {
         std::string bytes;
-        if (!binaryLikeValueToString(rt, args[0], &bytes, 0 ,0))
+        if (!binaryLikeValueToString(rt, args[0], &bytes, 0, 0))
             return;
 
         StringSource(bytes, true, new Base64URLEncoder(new StringSink(result)));
@@ -82,7 +82,7 @@ namespace rncryptopp
     void base64UrlToUtf8(jsi::Runtime &rt, std::string &result, const jsi::Value *args)
     {
         std::string bytes;
-        if (!binaryLikeValueToString(rt, args[0], &bytes, 2,2))
+        if (!binaryLikeValueToString(rt, args[0], &bytes, 2, 2))
             return;
 
         StringSource(bytes, true, new Base64URLDecoder(new StringSink(result)));
@@ -91,7 +91,7 @@ namespace rncryptopp
     void utf8ToHex(jsi::Runtime &rt, std::string &result, const jsi::Value *args)
     {
         std::string bytes;
-        if (!binaryLikeValueToString(rt, args[0], &bytes, 0,0))
+        if (!binaryLikeValueToString(rt, args[0], &bytes, 0, 0))
             return;
 
         StringSource(bytes, true, new HexEncoder(new StringSink(result)));
@@ -100,7 +100,7 @@ namespace rncryptopp
     void hexToUtf8(jsi::Runtime &rt, std::string &result, const jsi::Value *args)
     {
         std::string bytes;
-        if (!binaryLikeValueToString(rt, args[0], &bytes, 1,1))
+        if (!binaryLikeValueToString(rt, args[0], &bytes, 1, 1))
             return;
 
         StringSource(bytes, true, new HexDecoder(new StringSink(result)));

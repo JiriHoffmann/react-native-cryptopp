@@ -27,6 +27,12 @@ export default function App() {
         aes_iv.buffer,
         'cbc'
       );
+      const aes_decrypted = Cryptopp.AES.decrypt(
+        aes,
+        aes_key.buffer,
+        aes_iv.buffer,
+        'cbc'
+      );
 
       const sha = Cryptopp.SHA.sha1(textInput);
       const sha2 = Cryptopp.SHA.sha2(textInput, '512');
@@ -61,10 +67,12 @@ export default function App() {
         'HKDF key derivation',
         'SHA1'
       );
+
       setResult({
         aes_key,
         aes_iv,
         aes,
+        aes_decrypted,
         sha,
         sha2,
         sha3,
