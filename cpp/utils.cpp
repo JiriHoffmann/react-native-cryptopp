@@ -2,7 +2,7 @@
 namespace rncryptopp
 {
 
-    void randomBytesNative(jsi::Runtime &rt, std::string &result, const jsi::Value *args)
+    void randomBytesNative(jsi::Runtime &rt, jsi::Object &o, const jsi::Value *args)
     {
         int length;
         if (!valueToInt(args[0], &length))
@@ -12,8 +12,19 @@ namespace rncryptopp
         SecByteBlock random(length);
         prng.GenerateBlock(random, random.size());
 
-        std::string bytes = std::string((const char *)random.data(), random.size());
-        base64Encode(&bytes, &result);
+        auto size1 = random.size();
+        auto size2 = length;
+
+
+
+        int buffSize = random.size();
+        jsi::Function array_buffer_ctor = rt.global().getPropertyAsFunction(rt, "ArrayBuffer");
+        jsi::Object o = array_buffer_ctor.callAsConstructor(rt, buffSize).getObject(rt);
+        jsi::ArrayBuffer buf = o.getArrayBuffer(rt);
+
+        // FIXME: see https://github.com/facebook/hermes/issues/564.
+        memcpy(buf.data(rt), random.data(), buffSize);
+        entry.setProperty(rt, column_name.c_str(), o);
     }
 
     void hexToBase64(jsi::Runtime &rt, std::string &result, const jsi::Value *args)
