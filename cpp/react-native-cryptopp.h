@@ -9,6 +9,7 @@
 #include "insecure.h"
 #include "key-derivation.h"
 #include "utils.h"
+#include "helpers.h"
 
 using namespace facebook;
 

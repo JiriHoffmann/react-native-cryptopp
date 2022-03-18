@@ -179,150 +179,111 @@ void rncryptopp_install(jsi::Runtime &jsiRuntime)
         /*
         Utils
         */
-        auto randomBytesNative = jsi::Function::createFromHostFunction(
+        auto toBase64 = jsi::Function::createFromHostFunction(
             jsiRuntime,
-            jsi::PropNameID::forAscii(jsiRuntime, "randomBytesNative"),
-            1,
+            jsi::PropNameID::forAscii(jsiRuntime, "toBase64"),
+            2,
             [](jsi::Runtime &rt, const jsi::Value &thisValue, const jsi::Value *args,
                size_t count) -> jsi::Value
             {
                     std::string result;
-                    rncryptopp::randomBytesNative(rt, result, args);
+                    rncryptopp::toBase64(rt, &result, args);
                     return jsi::String::createFromUtf8(rt, result);
             });
 
-        auto hexToBase64 = jsi::Function::createFromHostFunction(
+        auto toBase64Url = jsi::Function::createFromHostFunction(
             jsiRuntime,
-            jsi::PropNameID::forAscii(jsiRuntime, "hexToBase64"),
-            1,
+            jsi::PropNameID::forAscii(jsiRuntime, "toBase64Url"),
+            2,
             [](jsi::Runtime &rt, const jsi::Value &thisValue, const jsi::Value *args,
                size_t count) -> jsi::Value
             {
                     std::string result;
-                    rncryptopp::hexToBase64(rt, result, args);
+                    rncryptopp::toBase64Url(rt, &result, args);
                     return jsi::String::createFromUtf8(rt, result);
             });
 
-        auto base64ToHex = jsi::Function::createFromHostFunction(
+        auto toHex = jsi::Function::createFromHostFunction(
             jsiRuntime,
-            jsi::PropNameID::forAscii(jsiRuntime, "base64ToHex"),
-            1,
+            jsi::PropNameID::forAscii(jsiRuntime, "toHex"),
+            2,
             [](jsi::Runtime &rt, const jsi::Value &thisValue, const jsi::Value *args,
                size_t count) -> jsi::Value
             {
                     std::string result;
-                    rncryptopp::base64ToHex(rt, result, args);
+                    rncryptopp::toHex(rt, &result, args);
                     return jsi::String::createFromUtf8(rt, result);
             });
 
-        auto hexToBase64Url = jsi::Function::createFromHostFunction(
+        auto toUtf8 = jsi::Function::createFromHostFunction(
             jsiRuntime,
-            jsi::PropNameID::forAscii(jsiRuntime, "hexToBase64Url"),
-            1,
+            jsi::PropNameID::forAscii(jsiRuntime, "toUtf8"),
+            2,
             [](jsi::Runtime &rt, const jsi::Value &thisValue, const jsi::Value *args,
                size_t count) -> jsi::Value
             {
                     std::string result;
-                    rncryptopp::hexToBase64Url(rt, result, args);
+                    rncryptopp::toUtf8(rt, &result, args);
                     return jsi::String::createFromUtf8(rt, result);
             });
 
-        auto base64UrlToHex = jsi::Function::createFromHostFunction(
+        auto randomBytes = jsi::Function::createFromHostFunction(
             jsiRuntime,
-            jsi::PropNameID::forAscii(jsiRuntime, "base64UrlToHex"),
+            jsi::PropNameID::forAscii(jsiRuntime, "randomBytes"),
             1,
             [](jsi::Runtime &rt, const jsi::Value &thisValue, const jsi::Value *args,
                size_t count) -> jsi::Value
             {
-                    std::string result;
-                    rncryptopp::base64UrlToHex(rt, result, args);
-                    return jsi::String::createFromUtf8(rt, result);
+                    int size;
+                    if (!rncryptopp::valueToInt(args[0], &size))
+                            throwJSError(rt, "RNCryptopp: randomBytes size is not a number");
+
+                    jsi::Function array_buffer_ctor = rt.global().getPropertyAsFunction(rt, "ArrayBuffer");
+                    jsi::Object obj = array_buffer_ctor.callAsConstructor(rt, size).getObject(rt);
+                    jsi::ArrayBuffer buff = obj.getArrayBuffer(rt);
+
+                    AutoSeededRandomPool prng;
+                    SecByteBlock random(size);
+                    prng.GenerateBlock(random, random.size());
+
+                    // FIXME: see https://github.com/facebook/hermes/issues/564.
+                    memcpy(buff.data(rt), random.data(), size);
+                    return obj;
             });
 
-        auto utf8ToBase64 = jsi::Function::createFromHostFunction(
+        auto stringToBytes = jsi::Function::createFromHostFunction(
             jsiRuntime,
-            jsi::PropNameID::forAscii(jsiRuntime, "utf8ToBase64"),
-            1,
+            jsi::PropNameID::forAscii(jsiRuntime, "stringToBytes"),
+            2,
             [](jsi::Runtime &rt, const jsi::Value &thisValue, const jsi::Value *args,
                size_t count) -> jsi::Value
             {
-                    std::string result;
-                    rncryptopp::utf8ToBase64(rt, result, args);
-                    return jsi::String::createFromUtf8(rt, result);
-            });
+                    int encoding = rncryptopp::getEncodingFromArgs(rt, args, 1);
+                    if (encoding == -1)
+                            throw jsi::JSError(rt, "RNCryptopp: stringToBytes invalid dataEncoding");
 
-        auto base64ToUtf8 = jsi::Function::createFromHostFunction(
-            jsiRuntime,
-            jsi::PropNameID::forAscii(jsiRuntime, "base64ToUtf8"),
-            1,
-            [](jsi::Runtime &rt, const jsi::Value &thisValue, const jsi::Value *args,
-               size_t count) -> jsi::Value
-            {
-                    std::string result;
-                    rncryptopp::base64ToUtf8(rt, result, args);
-                    return jsi::String::createFromUtf8(rt, result);
-            });
+                    std::string bytes;
+                    if (!rncryptopp::binaryLikeValueToString(rt, args[0], &bytes, encoding, encoding))
+                            throw jsi::JSError(rt, "RNCryptopp: stringToBytes data is not a string");
 
-        auto utf8ToBase64Url = jsi::Function::createFromHostFunction(
-            jsiRuntime,
-            jsi::PropNameID::forAscii(jsiRuntime, "utf8ToBase64Url"),
-            1,
-            [](jsi::Runtime &rt, const jsi::Value &thisValue, const jsi::Value *args,
-               size_t count) -> jsi::Value
-            {
-                    std::string result;
-                    rncryptopp::utf8ToBase64Url(rt, result, args);
-                    return jsi::String::createFromUtf8(rt, result);
-            });
+                    int size = (int)bytes.size();
 
-        auto base64UrlToUtf8 = jsi::Function::createFromHostFunction(
-            jsiRuntime,
-            jsi::PropNameID::forAscii(jsiRuntime, "base64UrlToUtf8"),
-            1,
-            [](jsi::Runtime &rt, const jsi::Value &thisValue, const jsi::Value *args,
-               size_t count) -> jsi::Value
-            {
-                    std::string result;
-                    rncryptopp::base64UrlToUtf8(rt, result, args);
-                    return jsi::String::createFromUtf8(rt, result);
-            });
+                    jsi::Function array_buffer_ctor = rt.global().getPropertyAsFunction(rt, "ArrayBuffer");
+                    jsi::Object obj = array_buffer_ctor.callAsConstructor(rt, size).getObject(rt);
+                    jsi::ArrayBuffer buff = obj.getArrayBuffer(rt);
 
-        auto utf8ToHex = jsi::Function::createFromHostFunction(
-            jsiRuntime,
-            jsi::PropNameID::forAscii(jsiRuntime, "utf8ToHex"),
-            1,
-            [](jsi::Runtime &rt, const jsi::Value &thisValue, const jsi::Value *args,
-               size_t count) -> jsi::Value
-            {
-                    std::string result;
-                    rncryptopp::utf8ToHex(rt, result, args);
-                    return jsi::String::createFromUtf8(rt, result);
-            });
-
-        auto hexToUtf8 = jsi::Function::createFromHostFunction(
-            jsiRuntime,
-            jsi::PropNameID::forAscii(jsiRuntime, "hexToUtf8"),
-            1,
-            [](jsi::Runtime &rt, const jsi::Value &thisValue, const jsi::Value *args,
-               size_t count) -> jsi::Value
-            {
-                    std::string result;
-                    rncryptopp::hexToUtf8(rt, result, args);
-                    return jsi::String::createFromUtf8(rt, result);
+                    // FIXME: see https://github.com/facebook/hermes/issues/564.
+                    memcpy(buff.data(rt), bytes.data(), size);
+                    return obj;
             });
 
         jsi::Object utils = jsi::Object(jsiRuntime);
-        utils.setProperty(jsiRuntime, "randomBytesNative", std::move(randomBytesNative));
-        utils.setProperty(jsiRuntime, "hexToBase64", std::move(hexToBase64));
-        utils.setProperty(jsiRuntime, "base64ToHex", std::move(base64ToHex));
-        utils.setProperty(jsiRuntime, "hexToBase64Url", std::move(hexToBase64Url));
-        utils.setProperty(jsiRuntime, "base64UrlToHex", std::move(base64UrlToHex));
-        utils.setProperty(jsiRuntime, "utf8ToBase64", std::move(utf8ToBase64));
-        utils.setProperty(jsiRuntime, "base64ToUtf8", std::move(base64ToUtf8));
-        utils.setProperty(jsiRuntime, "utf8ToBase64Url", std::move(utf8ToBase64Url));
-        utils.setProperty(jsiRuntime, "base64UrlToUtf8", std::move(base64UrlToUtf8));
-        utils.setProperty(jsiRuntime, "utf8ToHex", std::move(utf8ToHex));
-        utils.setProperty(jsiRuntime, "hexToUtf8", std::move(hexToUtf8));
+        utils.setProperty(jsiRuntime, "toBase64", std::move(toBase64));
+        utils.setProperty(jsiRuntime, "toBase64Url", std::move(toBase64Url));
+        utils.setProperty(jsiRuntime, "toHex", std::move(toHex));
+        utils.setProperty(jsiRuntime, "toUtf8", std::move(toUtf8));
+        utils.setProperty(jsiRuntime, "randomBytes", std::move(randomBytes));
+        utils.setProperty(jsiRuntime, "stringToBytes", std::move(stringToBytes));
 
         /*
         Cryptopp module

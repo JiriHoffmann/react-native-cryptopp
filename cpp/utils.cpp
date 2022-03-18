@@ -1,119 +1,52 @@
 #include "utils.h"
 namespace rncryptopp
 {
-
-    void randomBytesNative(jsi::Runtime &rt, jsi::Object &o, const jsi::Value *args)
+    void toBase64(jsi::Runtime &rt, std::string *result, const jsi::Value *args)
     {
-        int length;
-        if (!valueToInt(args[0], &length))
-            throwJSError(rt, "RNCryptopp: randomBytes length in not a number");
+        int encoding = getEncodingFromArgs(rt, args, 1);
+        if (encoding == -1)
+            throw jsi::JSError(rt, "RNCryptopp: toBase64 invalid dataEncoding");
 
-        AutoSeededRandomPool prng;
-        SecByteBlock random(length);
-        prng.GenerateBlock(random, random.size());
+        std::string bytes;
+        if (!binaryLikeValueToString(rt, args[0], &bytes, encoding, encoding))
+            throw jsi::JSError(rt, "RNCryptopp: toBase64 data is not a string or ArrayBuffer");
 
-        auto size1 = random.size();
-        auto size2 = length;
-
-
-
-        int buffSize = random.size();
-        jsi::Function array_buffer_ctor = rt.global().getPropertyAsFunction(rt, "ArrayBuffer");
-        jsi::Object o = array_buffer_ctor.callAsConstructor(rt, buffSize).getObject(rt);
-        jsi::ArrayBuffer buf = o.getArrayBuffer(rt);
-
-        // FIXME: see https://github.com/facebook/hermes/issues/564.
-        memcpy(buf.data(rt), random.data(), buffSize);
-        entry.setProperty(rt, column_name.c_str(), o);
+        base64Encode(&bytes, result);
     }
 
-    void hexToBase64(jsi::Runtime &rt, std::string &result, const jsi::Value *args)
+    void toBase64Url(jsi::Runtime &rt, std::string *result, const jsi::Value *args)
     {
-        std::string bytes;
-        if (!binaryLikeValueToString(rt, args[0], &bytes, 1, 1))
-            return;
+        int encoding = getEncodingFromArgs(rt, args, 1);
+        if (encoding == -1)
+            throw jsi::JSError(rt, "RNCryptopp: toBase64Url invalid dataEncoding");
 
-        StringSource(bytes, true, new Base64Encoder(new StringSink(result)));
+        std::string bytes;
+        if (!binaryLikeValueToString(rt, args[0], &bytes, encoding, encoding))
+            throw jsi::JSError(rt, "RNCryptopp: toBase64Url data is not a string or ArrayBuffer");
+
+        base64UrlEncode(&bytes, result);
     }
 
-    void base64ToHex(jsi::Runtime &rt, std::string &result, const jsi::Value *args)
+    void toHex(jsi::Runtime &rt, std::string *result, const jsi::Value *args)
     {
-        std::string bytes;
-        if (!binaryLikeValueToString(rt, args[0], &bytes, 2, 2))
-            return;
+        int encoding = getEncodingFromArgs(rt, args, 1);
+        if (encoding == -1)
+            throw jsi::JSError(rt, "RNCryptopp: toHex invalid dataEncoding");
 
-        StringSource(bytes, true, new HexEncoder(new StringSink(result)));
+        std::string bytes;
+        if (!binaryLikeValueToString(rt, args[0], &bytes, encoding, encoding))
+            throw jsi::JSError(rt, "RNCryptopp: toHex data is not a string or ArrayBuffer");
+
+        hexEncode(&bytes, result);
     }
 
-    void hexToBase64Url(jsi::Runtime &rt, std::string &result, const jsi::Value *args)
+    void toUtf8(jsi::Runtime &rt, std::string *result, const jsi::Value *args)
     {
-        std::string bytes;
-        if (!binaryLikeValueToString(rt, args[0], &bytes, 1, 1))
-            return;
+        int encoding = getEncodingFromArgs(rt, args, 1);
+        if (encoding == -1)
+            throw jsi::JSError(rt, "RNCryptopp: toUtf8 invalid dataEncoding");
 
-        StringSource(bytes, true, new Base64URLEncoder(new StringSink(result)));
-    }
-
-    void base64UrlToHex(jsi::Runtime &rt, std::string &result, const jsi::Value *args)
-    {
-        std::string bytes;
-        if (!binaryLikeValueToString(rt, args[0], &bytes, 2, 2))
-            return;
-
-        StringSource(bytes, true, new HexEncoder(new StringSink(result)));
-    }
-
-    void utf8ToBase64(jsi::Runtime &rt, std::string &result, const jsi::Value *args)
-    {
-        std::string bytes;
-        if (!binaryLikeValueToString(rt, args[0], &bytes, 0, 0))
-            return;
-
-        StringSource(bytes, true, new Base64Encoder(new StringSink(result)));
-    }
-
-    void base64ToUtf8(jsi::Runtime &rt, std::string &result, const jsi::Value *args)
-    {
-        std::string bytes;
-        if (!binaryLikeValueToString(rt, args[0], &bytes, 2, 2))
-            return;
-
-        StringSource(bytes, true, new Base64Decoder(new StringSink(result)));
-    }
-
-    void utf8ToBase64Url(jsi::Runtime &rt, std::string &result, const jsi::Value *args)
-    {
-        std::string bytes;
-        if (!binaryLikeValueToString(rt, args[0], &bytes, 0, 0))
-            return;
-
-        StringSource(bytes, true, new Base64URLEncoder(new StringSink(result)));
-    }
-
-    void base64UrlToUtf8(jsi::Runtime &rt, std::string &result, const jsi::Value *args)
-    {
-        std::string bytes;
-        if (!binaryLikeValueToString(rt, args[0], &bytes, 2, 2))
-            return;
-
-        StringSource(bytes, true, new Base64URLDecoder(new StringSink(result)));
-    }
-
-    void utf8ToHex(jsi::Runtime &rt, std::string &result, const jsi::Value *args)
-    {
-        std::string bytes;
-        if (!binaryLikeValueToString(rt, args[0], &bytes, 0, 0))
-            return;
-
-        StringSource(bytes, true, new HexEncoder(new StringSink(result)));
-    }
-
-    void hexToUtf8(jsi::Runtime &rt, std::string &result, const jsi::Value *args)
-    {
-        std::string bytes;
-        if (!binaryLikeValueToString(rt, args[0], &bytes, 1, 1))
-            return;
-
-        StringSource(bytes, true, new HexDecoder(new StringSink(result)));
+        if (!binaryLikeValueToString(rt, args[0], result, encoding, encoding))
+            throw jsi::JSError(rt, "RNCryptopp: toUtf8 data is not a string or ArrayBuffer");
     }
 }

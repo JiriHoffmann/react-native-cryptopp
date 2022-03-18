@@ -32,6 +32,8 @@ namespace rncryptopp
     void base64UrlDecode(std::string *str, std::string *res);
 
     void base64UrlEncode(std::string *str, std::string *res);
+
+    int getEncodingFromArgs(jsi::Runtime &rt, const jsi::Value *args, int index);
 }
 
 #endif // CRYPTOPPEXAMPLE_HELPERS_H

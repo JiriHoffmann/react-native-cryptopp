@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect, useMemo } from 'react';
 
 import {
@@ -11,99 +12,102 @@ import {
 import Cryptopp from 'react-native-cryptopp';
 import ImagePicker from 'react-native-image-crop-picker';
 import ReactNativeBlobUtil from 'react-native-blob-util';
+import { PerformanceNow, timeDelta } from './utils';
+import { useCallback } from 'react';
 
 export default function App() {
   const [textInput, setTextInput] = useState('');
   const [result, setResult] = useState<any>({});
-
+  const [textInputTime, setTextInputTime] = useState('0');
+  const [imageInputTime, setImageInputTime] = useState('0');
   const aes_key = useMemo(() => Cryptopp.utils.randomBytes(32), []);
   const aes_iv = useMemo(() => Cryptopp.utils.randomBytes(16), []);
 
   useEffect(() => {
     if (textInput.length > 0) {
-      const aes = Cryptopp.AES.encrypt(
-        textInput,
-        aes_key.buffer,
-        aes_iv.buffer,
-        'cbc'
-      );
-      const aes_decrypted = Cryptopp.AES.decrypt(
-        aes,
-        aes_key.buffer,
-        aes_iv.buffer,
-        'cbc'
-      );
+      const results = _processData(textInput, aes_key, aes_iv);
+      setResult(results.data);
+      setTextInputTime(results.time);
+    }
+  }, [textInput, aes_key, aes_iv]);
 
-      const sha = Cryptopp.SHA.sha1(textInput);
-      const sha2 = Cryptopp.SHA.sha2(textInput, '512');
-      const sha3 = Cryptopp.SHA.sha3(textInput, '512');
-      const md2 = Cryptopp.insecure.md2(textInput);
-      const md4 = Cryptopp.insecure.md4(textInput);
-      const md5 = Cryptopp.insecure.md5(textInput);
-      const base64 = Cryptopp.utils.utf8ToBase64(textInput);
-      const base64Url = Cryptopp.utils.utf8ToBase64Url(textInput);
-      const hex = Cryptopp.utils.utf8ToHex(textInput);
+  const _openImagePicker = useCallback(() => {
+    ImagePicker.openPicker({}).then((image) => {
+      ReactNativeBlobUtil.fs
+        .readFile(image.path, 'base64')
+        .then((data) => {
+          setImageInputTime(_processData(data, aes_key, aes_iv).time);
+        })
+        .catch(() => {});
+    });
+  }, [aes_key, aes_iv]);
+
+  const _processData = useCallback(
+    (str: string, key: ArrayBuffer, iv: ArrayBuffer) => {
+      const start = PerformanceNow();
+      const aes = Cryptopp.AES.encrypt(str, key, iv, 'cbc');
+      const aes_decrypted = Cryptopp.AES.decrypt(aes, key, iv, 'cbc');
+      const aes_key_hex = Cryptopp.utils.toHex(aes_key);
+
+      const sha = Cryptopp.SHA.sha1(str);
+      const sha2 = Cryptopp.SHA.sha2(str, '512');
+      const sha3 = Cryptopp.SHA.sha3(str, '512');
+      const md2 = Cryptopp.insecure.md2(str);
+      const md4 = Cryptopp.insecure.md4(str);
+      const md5 = Cryptopp.insecure.md5(str);
+      const base64 = Cryptopp.utils.toBase64(str);
+      const base64Url = Cryptopp.utils.toBase64Url(str);
+      const hex = Cryptopp.utils.toBase64Url(str);
       const pbkdf12 = Cryptopp.keyDerivation.pbkdf12(
-        textInput,
+        str,
         'salt',
         'SHA256',
         1024
       );
       const pkbdf1 = Cryptopp.keyDerivation.pkcs5_pbkdf1(
-        textInput,
+        str,
         'salt',
         'SHA256',
         1024
       );
       const pkbdf2 = Cryptopp.keyDerivation.pkcs5_pbkdf2(
-        textInput,
+        str,
         'salt',
         'SHA256',
         1024
       );
       const hkdf = Cryptopp.keyDerivation.hkdf(
-        textInput,
+        str,
         'salt',
         'HKDF key derivation',
         'SHA1'
       );
 
-      setResult({
-        aes_key,
-        aes_iv,
-        aes,
-        aes_decrypted,
-        sha,
-        sha2,
-        sha3,
-        md2,
-        md4,
-        md5,
-        base64,
-        base64Url,
-        hex,
-        pbkdf12,
-        pkbdf1,
-        pkbdf2,
-        hkdf,
-      });
-    }
-  }, [textInput, aes_key, aes_iv]);
-
-  const _openImagePicker = () => {
-    ImagePicker.openPicker({
-      width: 300,
-      height: 400,
-      cropping: true,
-    }).then((image) => {
-      ReactNativeBlobUtil.fs
-        .readFile(image.path, 'base64')
-        .then((data) => {
-          setTextInput(data);
-        })
-        .catch(() => {});
-    });
-  };
+      const end = PerformanceNow();
+      return {
+        data: {
+          aes,
+          aes_decrypted,
+          aes_key_hex,
+          sha,
+          sha2,
+          sha3,
+          md2,
+          md4,
+          md5,
+          base64,
+          base64Url,
+          hex,
+          pbkdf12,
+          pkbdf1,
+          pkbdf2,
+          hkdf,
+        },
+        time: timeDelta(start, end),
+      };
+    },
+    []
+  );
 
   return (
     <SafeAreaView style={styles.container}>
@@ -113,6 +117,10 @@ export default function App() {
         onChangeText={setTextInput}
         style={styles.textInput}
       />
+      <Text style={styles.noteText}>
+        Note: Only text input results are diplayed since rendering is slow for
+        extremely long texts.
+      </Text>
 
       <View style={styles.inputButtonsContainer}>
         <TouchableOpacity
@@ -126,7 +134,12 @@ export default function App() {
         </TouchableOpacity>
       </View>
 
-      <Text style={styles.header}>Result:</Text>
+      <View style={styles.inputButtonsContainer}>
+        <Text style={styles.timeText}>Input time: {textInputTime}ms</Text>
+        <Text style={styles.timeText}>Image time: {imageInputTime}ms</Text>
+      </View>
+
+      <Text style={styles.header}>All results:</Text>
       {Object.keys(result).map((key) => (
         <Text key={key} style={styles.result} numberOfLines={1}>
           {/* @ts-ignore */}
@@ -158,6 +171,10 @@ const styles = StyleSheet.create({
     height: 50,
     padding: 10,
   },
+  noteText: {
+    textAlign: 'center',
+    fontSize: 13,
+  },
   inputButtonsContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -170,6 +187,11 @@ const styles = StyleSheet.create({
     marginHorizontal: 5,
     height: 50,
     justifyContent: 'center',
+  },
+  timeText: {
+    textAlign: 'center',
+    fontSize: 15,
+    flex: 1,
   },
   buttonText: {
     textAlign: 'center',

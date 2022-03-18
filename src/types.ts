@@ -1,6 +1,7 @@
 type SHA_Standarts = '224' | '256' | '384' | '512';
 type AES_Modes = 'ecb' | 'cbc' | 'cfb' | 'ofb' | 'ctr';
 type BinaryLike = string | ArrayBuffer;
+type BinaryLikeEncoding = 'base64' | 'base64Url' | 'hex';
 type KeyDerivationHash =
   | 'SHA1'
   | 'SHA256'
@@ -62,20 +63,20 @@ export interface Cryptopp {
     md5: (data: string) => string;
   };
   utils: {
-    randomBytes: (length: number) => Buffer;
-    hexToBase64: (data: BinaryLike) => string;
-    base64ToHex: (data: BinaryLike) => string;
-    hexToBase64Url: (data: BinaryLike) => string;
-    base64UrlToHex: (data: BinaryLike) => string;
-    utf8ToBase64: (data: BinaryLike) => string;
-    base64ToUtf8: (data: BinaryLike) => string;
-    utf8ToBase64Url: (data: BinaryLike) => string;
-    base64UrlToUtf8: (data: BinaryLike) => string;
-    utf8ToHex: (data: BinaryLike) => string;
-    hexToUtf8: (data: BinaryLike) => string;
-  };
-  utilsJS: {
-    stringToArrayBuffer: (str: string) => ArrayBuffer;
-    arrayBufferToString: (buf: ArrayBuffer) => string;
+    // ArrayBuffer generation
+    randomBytes: (size: number) => ArrayBuffer;
+    stringToBytes: (
+      data: string,
+      dataEncoding?: BinaryLikeEncoding
+    ) => ArrayBuffer;
+
+    // Encoding manipulation
+    toBase64: (data: BinaryLike, dataEncoding?: BinaryLikeEncoding) => string;
+    toBase64Url: (
+      data: BinaryLike,
+      dataEncoding?: BinaryLikeEncoding
+    ) => string;
+    toHex: (data: BinaryLike, dataEncoding?: BinaryLikeEncoding) => string;
+    toUtf8: (data: BinaryLike, dataEncoding?: BinaryLikeEncoding) => string;
   };
 }

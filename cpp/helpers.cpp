@@ -19,6 +19,7 @@ namespace rncryptopp
     // 0: No encoding
     // 1: Hex encoding
     // 2: Base64 encoding
+    // 3: Base64Url encoding
     bool binaryLikeValueToString(jsi::Runtime &rt, const jsi::Value &value, std::string *str, int stringEncoding, int bufferEncoding)
     {
         if (value.isString())
@@ -31,6 +32,9 @@ namespace rncryptopp
                 break;
             case 2:
                 base64Decode(&utf8, str);
+                break;
+            case 3:
+                base64UrlDecode(&utf8, str);
                 break;
             default:
                 *str = utf8;
@@ -54,6 +58,8 @@ namespace rncryptopp
             case 2:
                 base64Decode(&utf8, str);
                 break;
+            case 3:
+                base64UrlDecode(&utf8, str);
             default:
                 *str = utf8;
             }
@@ -109,5 +115,24 @@ namespace rncryptopp
 
         *res = value.asNumber();
         return true;
+    }
+
+    //
+    int getEncodingFromArgs(jsi::Runtime &rt, const jsi::Value *args, int index)
+    {
+        try
+        {
+            std::string encoding = args[index].asString(rt).utf8(rt);
+            if (encoding == "hex")
+                return 1;
+            if (encoding == "base64")
+                return 2;
+            if (encoding == "base64url")
+                return 3;
+        }
+        catch (const jsi::JSError &)
+        {
+        }
+        return 0;
     }
 }
