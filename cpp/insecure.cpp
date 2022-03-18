@@ -3,7 +3,7 @@
 namespace rncryptopp
 {
 
-    void md2(jsi::Runtime &rt, std::string &result, const jsi::Value *args)
+    void md2(jsi::Runtime &rt, const jsi::Value *args, std::string &result)
     {
         std::string data;
         if (!binaryLikeValueToString(rt, args[0], &data, 0, 0))
@@ -14,7 +14,7 @@ namespace rncryptopp
         StringSource(data, true, new HashFilter(hash, new HexEncoder(new StringSink(result))));
     }
 
-    void md4(jsi::Runtime &rt, std::string &result, const jsi::Value *args)
+    void md4(jsi::Runtime &rt, const jsi::Value *args, std::string &result)
     {
         std::string data;
         if (!binaryLikeValueToString(rt, args[0], &data, 0, 0))
@@ -25,7 +25,7 @@ namespace rncryptopp
         StringSource(data, true, new HashFilter(hash, new HexEncoder(new StringSink(result))));
     }
 
-    void md5(jsi::Runtime &rt, std::string &result, const jsi::Value *args)
+    void md5(jsi::Runtime &rt, const jsi::Value *args, std::string &result)
     {
         std::string data;
         if (!binaryLikeValueToString(rt, args[0], &data, 0, 0))

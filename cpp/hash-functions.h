@@ -17,11 +17,11 @@ using namespace CryptoPP;
 
 namespace rncryptopp
 {
-    void sha1(jsi::Runtime &rt, std::string &result, const jsi::Value *args);
+    void sha1(jsi::Runtime &rt, const jsi::Value *args, std::string &result);
 
-    void sha2(jsi::Runtime &rt, std::string &result, const jsi::Value *args);
+    void sha2(jsi::Runtime &rt, const jsi::Value *args, std::string &result);
 
-    void sha3(jsi::Runtime &rt, std::string &result, const jsi::Value *args);
+    void sha3(jsi::Runtime &rt, const jsi::Value *args, std::string &result);
 }
 
 #endif // CRYPTOPPEXAMPLE_HASH_FUNCTIONS_H

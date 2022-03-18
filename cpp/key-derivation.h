@@ -21,13 +21,13 @@ using namespace CryptoPP;
 
 namespace rncryptopp
 {
-    void hkdf(jsi::Runtime &rt, std::string &result, const jsi::Value *args);
+    void hkdf(jsi::Runtime &rt, const jsi::Value *args, std::string &result);
 
-    void pbkdf12(jsi::Runtime &rt, std::string &result, const jsi::Value *args);
+    void pbkdf12(jsi::Runtime &rt, const jsi::Value *args, std::string &result);
 
-    void pkcs5_pbkdf1(jsi::Runtime &rt, std::string &result, const jsi::Value *args);
+    void pkcs5_pbkdf1(jsi::Runtime &rt, const jsi::Value *args, std::string &result);
 
-    void pkcs5_pbkdf2(jsi::Runtime &rt, std::string &result, const jsi::Value *args);
+    void pkcs5_pbkdf2(jsi::Runtime &rt, const jsi::Value *args, std::string &result);
 }
 
 #endif // CRYPTOPPEXAMPLE_KEY_DERIVATION_H

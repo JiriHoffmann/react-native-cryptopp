@@ -2,7 +2,7 @@
 
 namespace rncryptopp
 {
-    void sha1(jsi::Runtime &rt, std::string &result, const jsi::Value *args)
+    void sha1(jsi::Runtime &rt, const jsi::Value *args, std::string &result)
     {
         std::string data;
         if (!binaryLikeValueToString(rt, args[0], &data, 0, 0))
@@ -27,7 +27,7 @@ namespace rncryptopp
                        std::string &result) =
         {&getSHA2<SHA224>, &getSHA2<SHA256>, &getSHA2<SHA384>, &getSHA2<SHA512>};
 
-    void sha2(jsi::Runtime &rt, std::string &result, const jsi::Value *args)
+    void sha2(jsi::Runtime &rt, const jsi::Value *args, std::string &result)
     {
         std::string data;
         if (!binaryLikeValueToString(rt, args[0], &data, 0, 0))
@@ -68,7 +68,7 @@ namespace rncryptopp
                        std::string &result) =
         {&getSHA3<SHA3_224>, &getSHA3<SHA3_256>, &getSHA3<SHA3_384>, &getSHA3<SHA3_512>};
 
-    void sha3(jsi::Runtime &rt, std::string &result, const jsi::Value *args)
+    void sha3(jsi::Runtime &rt, const jsi::Value *args, std::string &result)
     {
         std::string data;
         if (!binaryLikeValueToString(rt, args[0], &data, 0, 0))

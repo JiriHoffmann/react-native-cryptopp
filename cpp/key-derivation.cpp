@@ -58,7 +58,7 @@ namespace rncryptopp
          &getHDKF<SHA512>, &getHDKF<SHA3_256>, &getHDKF<SHA3_512>, &getHDKF<SHAKE128>, &getHDKF<SHAKE256>, &getHDKF<BLAKE2b>,
          &getHDKF<BLAKE2s>, &getHDKF<LSH256>, &getHDKF<LSH512>, &getHDKF<SM3>};
 
-    void hkdf(jsi::Runtime &rt, std::string &result, const jsi::Value *args)
+    void hkdf(jsi::Runtime &rt, const jsi::Value *args, std::string &result)
     {
         std::string password;
         if (!binaryLikeValueToString(rt, args[0], &password, 0, 0))
@@ -118,7 +118,7 @@ namespace rncryptopp
          &getPBKDF12<SHA512>, &getPBKDF12<SHA3_256>, &getPBKDF12<SHA3_512>, &getPBKDF12<SHAKE128>, &getPBKDF12<SHAKE256>, &getPBKDF12<BLAKE2b>,
          &getPBKDF12<BLAKE2s>, &getPBKDF12<LSH256>, &getPBKDF12<LSH512>, &getPBKDF12<SM3>};
 
-    void pbkdf12(jsi::Runtime &rt, std::string &result, const jsi::Value *args)
+    void pbkdf12(jsi::Runtime &rt, const jsi::Value *args, std::string &result)
     {
         std::string password;
         if (!binaryLikeValueToString(rt, args[0], &password, 0, 0))
@@ -177,7 +177,7 @@ namespace rncryptopp
          &getPKCS5_PBKDF1<SHA512>, &getPKCS5_PBKDF1<SHA3_256>, &getPKCS5_PBKDF1<SHA3_512>, &getPKCS5_PBKDF1<SHAKE128>, &getPKCS5_PBKDF1<SHAKE256>, &getPKCS5_PBKDF1<BLAKE2b>,
          &getPKCS5_PBKDF1<BLAKE2s>, &getPKCS5_PBKDF1<LSH256>, &getPKCS5_PBKDF1<LSH512>, &getPKCS5_PBKDF1<SM3>};
 
-    void pkcs5_pbkdf1(jsi::Runtime &rt, std::string &result, const jsi::Value *args)
+    void pkcs5_pbkdf1(jsi::Runtime &rt, const jsi::Value *args, std::string &result)
     {
         std::string password;
         if (!binaryLikeValueToString(rt, args[0], &password, 0, 0))
@@ -236,7 +236,7 @@ namespace rncryptopp
          &getPKCS5_PBKDF2_HMAC<SHA512>, &getPKCS5_PBKDF2_HMAC<SHA3_256>, &getPKCS5_PBKDF2_HMAC<SHA3_512>, &getPKCS5_PBKDF2_HMAC<SHAKE128>, &getPKCS5_PBKDF2_HMAC<SHAKE256>, &getPKCS5_PBKDF2_HMAC<BLAKE2b>,
          &getPKCS5_PBKDF2_HMAC<BLAKE2s>, &getPKCS5_PBKDF2_HMAC<LSH256>, &getPKCS5_PBKDF2_HMAC<LSH512>, &getPKCS5_PBKDF2_HMAC<SM3>};
 
-    void pkcs5_pbkdf2(jsi::Runtime &rt, std::string &result, const jsi::Value *args)
+    void pkcs5_pbkdf2(jsi::Runtime &rt, const jsi::Value *args, std::string &result)
     {
         std::string password;
         if (!binaryLikeValueToString(rt, args[0], &password, 0, 0))

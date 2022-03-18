@@ -58,7 +58,7 @@ namespace rncryptopp
          &exec_AES<CFB_Mode<AES>>, &exec_AES<OFB_Mode<AES>>, &exec_AES<CTR_Mode<AES>>,
          &exec_AES<XTS_Mode<AES>>};
 
-    void aes_encrypt(jsi::Runtime &rt, std::string &result, const jsi::Value *args)
+    void aes_encrypt(jsi::Runtime &rt, const jsi::Value *args, std::string &result)
     {
         std::string data;
         if (!stringValueToString(rt, args[0], &data))
@@ -88,7 +88,7 @@ namespace rncryptopp
                             (const byte *)iv.data(), iv.size(), data, result, 1);
     }
 
-    void aes_decrypt(jsi::Runtime &rt, std::string &result, const jsi::Value *args)
+    void aes_decrypt(jsi::Runtime &rt, const jsi::Value *args, std::string &result)
     {
         std::string data;
         if (!stringValueToString(rt, args[0], &data))

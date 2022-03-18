@@ -17,11 +17,11 @@ using namespace CryptoPP;
 
 namespace rncryptopp
 {
-    void md2(jsi::Runtime &rt, std::string &result, const jsi::Value *args);
+    void md2(jsi::Runtime &rt, const jsi::Value *args, std::string &result);
 
-    void md4(jsi::Runtime &rt, std::string &result, const jsi::Value *args);
+    void md4(jsi::Runtime &rt, const jsi::Value *args, std::string &result);
 
-    void md5(jsi::Runtime &rt, std::string &result, const jsi::Value *args);
+    void md5(jsi::Runtime &rt, const jsi::Value *args, std::string &result);
 }
 
 #endif // CRYPTOPPEXAMPLE_INSECURE_H

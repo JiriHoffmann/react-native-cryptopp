@@ -20,9 +20,9 @@ using namespace CryptoPP;
 
 namespace rncryptopp
 {
-    void aes_encrypt(jsi::Runtime &rt, std::string &result, const jsi::Value *args);
+    void aes_encrypt(jsi::Runtime &rt, const jsi::Value *args, std::string &result);
 
-    void aes_decrypt(jsi::Runtime &rt, std::string &result, const jsi::Value *args);
+    void aes_decrypt(jsi::Runtime &rt, const jsi::Value *args, std::string &result);
 }
 
 #endif // REACT_NATIVE_CRYPTOPP_AES_CANDIDATES_H

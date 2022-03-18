@@ -16,7 +16,7 @@ void rncryptopp_install(jsi::Runtime &jsiRuntime)
                size_t count) -> jsi::Value
             {
                     std::string result;
-                    rncryptopp::sha1(rt, result, args);
+                    rncryptopp::sha1(rt,args, result);
                     return jsi::String::createFromUtf8(rt, result);
             });
         auto sha2 = jsi::Function::createFromHostFunction(
@@ -27,7 +27,7 @@ void rncryptopp_install(jsi::Runtime &jsiRuntime)
                size_t count) -> jsi::Value
             {
                     std::string result;
-                    rncryptopp::sha2(rt, result, args);
+                    rncryptopp::sha2(rt,args, result);
                     return jsi::String::createFromUtf8(rt, result);
             });
         auto sha3 = jsi::Function::createFromHostFunction(
@@ -38,7 +38,7 @@ void rncryptopp_install(jsi::Runtime &jsiRuntime)
                size_t count) -> jsi::Value
             {
                     std::string result;
-                    rncryptopp::sha3(rt, result, args);
+                    rncryptopp::sha3(rt,args, result);
                     return jsi::String::createFromUtf8(rt, result);
             });
 
@@ -58,7 +58,7 @@ void rncryptopp_install(jsi::Runtime &jsiRuntime)
                size_t count) -> jsi::Value
             {
                     std::string result;
-                    rncryptopp::aes_encrypt(rt, result, args);
+                    rncryptopp::aes_encrypt(rt,args, result);
                     return jsi::String::createFromUtf8(rt, result);
             });
         auto aes_decrypt = jsi::Function::createFromHostFunction(
@@ -69,7 +69,7 @@ void rncryptopp_install(jsi::Runtime &jsiRuntime)
                size_t count) -> jsi::Value
             {
                     std::string result;
-                    rncryptopp::aes_decrypt(rt, result, args);
+                    rncryptopp::aes_decrypt(rt,args, result);
                     return jsi::String::createFromUtf8(rt, result);
             });
 
@@ -88,7 +88,7 @@ void rncryptopp_install(jsi::Runtime &jsiRuntime)
                size_t count) -> jsi::Value
             {
                     std::string result;
-                    rncryptopp::md2(rt, result, args);
+                    rncryptopp::md2(rt,args, result);
                     return jsi::String::createFromUtf8(rt, result);
             });
         auto md4 = jsi::Function::createFromHostFunction(
@@ -99,7 +99,7 @@ void rncryptopp_install(jsi::Runtime &jsiRuntime)
                size_t count) -> jsi::Value
             {
                     std::string result;
-                    rncryptopp::md4(rt, result, args);
+                    rncryptopp::md4(rt,args, result);
                     return jsi::String::createFromUtf8(rt, result);
             });
         auto md5 = jsi::Function::createFromHostFunction(
@@ -110,7 +110,7 @@ void rncryptopp_install(jsi::Runtime &jsiRuntime)
                size_t count) -> jsi::Value
             {
                     std::string result;
-                    rncryptopp::md5(rt, result, args);
+                    rncryptopp::md5(rt,args, result);
                     return jsi::String::createFromUtf8(rt, result);
             });
 
@@ -130,7 +130,7 @@ void rncryptopp_install(jsi::Runtime &jsiRuntime)
                size_t count) -> jsi::Value
             {
                     std::string result;
-                    rncryptopp::pkcs5_pbkdf1(rt, result, args);
+                    rncryptopp::pkcs5_pbkdf1(rt,args, result);
                     return jsi::String::createFromUtf8(rt, result);
             });
 
@@ -142,7 +142,7 @@ void rncryptopp_install(jsi::Runtime &jsiRuntime)
                size_t count) -> jsi::Value
             {
                     std::string result;
-                    rncryptopp::pkcs5_pbkdf2(rt, result, args);
+                    rncryptopp::pkcs5_pbkdf2(rt,args, result);
                     return jsi::String::createFromUtf8(rt, result);
             });
 
@@ -154,7 +154,7 @@ void rncryptopp_install(jsi::Runtime &jsiRuntime)
                size_t count) -> jsi::Value
             {
                     std::string result;
-                    rncryptopp::pbkdf12(rt, result, args);
+                    rncryptopp::pbkdf12(rt,args, result);
                     return jsi::String::createFromUtf8(rt, result);
             });
 
@@ -166,7 +166,7 @@ void rncryptopp_install(jsi::Runtime &jsiRuntime)
                size_t count) -> jsi::Value
             {
                     std::string result;
-                    rncryptopp::hkdf(rt, result, args);
+                    rncryptopp::hkdf(rt,args, result);
                     return jsi::String::createFromUtf8(rt, result);
             });
 
