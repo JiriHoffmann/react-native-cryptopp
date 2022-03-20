@@ -3,11 +3,11 @@ cmake_minimum_required(VERSION 3.9.0)
 set (CMAKE_VERBOSE_MAKEFILE ON)
 set (CMAKE_CXX_STANDARD 17)
 set (PACKAGE_NAME "rncryptopp")
-set (BUILD_DIR ./build)
+set (BUILD_DIR build)
 
 file(GLOB RN_CRYPTOPP_FILES "../cpp/*.cpp")
 file(GLOB RN_CRYPTOPP_HEADERS "../cpp")
-file(GLOB LIBRN_DIR "${BUILD_DIR}/react-native-0*/jni/${ANDROID_ABI}")
+file(GLOB LIBRN_DIR "./${BUILD_DIR}/react-native-0*/jni/${ANDROID_ABI}")
 
 # Add headers
 include_directories(
@@ -16,14 +16,10 @@ include_directories(
   "${NODE_MODULES_DIR}/react-native/React/Base"
   "${NODE_MODULES_DIR}/react-native/ReactCommon/jsi"
 
-  # rncryptopp headers
-  # Import manually to make sure the order is correct
-  "../cpp/helpers.h"
-  "../cpp/utils.h"
+  # TODO: find a way to include headers only,
+  # TODO: this includes everything,
+  # TODO: even headers in cpp/cryptopp
   ${RN_CRYPTOPP_HEADERS}
-
-  # Crypto++ headers
-  ../cpp/android/${CMAKE_ANDROID_ARCH_ABI}/include
 )
 
 # Find JSI on React Native 0.66.x and above
@@ -75,15 +71,15 @@ set_target_properties(
   # Define property location
   PROPERTIES IMPORTED_LOCATION
   # Path to the library. Must be full path.
-  ${PROJECT_SOURCE_DIR}/../cpp/android/${CMAKE_ANDROID_ARCH_ABI}/libcryptopp.a
+  ${PROJECT_SOURCE_DIR}/${BUILD_DIR}/libcryptopp_${CMAKE_ANDROID_ARCH_ABI}.a
 )
 
 # Link JNI, JSI, LOG_LIB, and cryptopp
 target_link_libraries(
   ${PACKAGE_NAME}
+  cryptopp
   ${REACT_NATIVE_JNI_LIB}
   ${JSI_LIB}
   ${LOG_LIB}
-  cryptopp
   android
 )
