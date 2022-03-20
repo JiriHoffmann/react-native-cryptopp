@@ -14,6 +14,7 @@ import ImagePicker from 'react-native-image-crop-picker';
 import ReactNativeBlobUtil from 'react-native-blob-util';
 import { PerformanceNow, timeDelta } from './utils';
 import { useCallback } from 'react';
+import type { BinaryLike } from 'src/types';
 
 export default function App() {
   const [textInput, setTextInput] = useState('');
@@ -43,21 +44,29 @@ export default function App() {
   }, [aes_key, aes_iv]);
 
   const _processData = useCallback(
-    (str: string, key: ArrayBuffer, iv: ArrayBuffer) => {
+    (str: string, key: BinaryLike, iv: BinaryLike) => {
       const start = PerformanceNow();
-      const aes = Cryptopp.AES.encrypt(str, key, iv, 'cbc');
-      const aes_decrypted = Cryptopp.AES.decrypt(aes, key, iv, 'cbc');
+      // AES encrypt and decrypt
+      const aes_encrypted = Cryptopp.AES.encrypt(str, key, iv, 'cbc');
+      const aes_decrypted = Cryptopp.AES.decrypt(aes_encrypted, key, iv, 'cbc');
       const aes_key_hex = Cryptopp.utils.toHex(aes_key);
 
       const sha = Cryptopp.SHA.sha1(str);
       const sha2 = Cryptopp.SHA.sha2(str, '512');
       const sha3 = Cryptopp.SHA.sha3(str, '512');
+
+      // Insecure hashes
       const md2 = Cryptopp.insecure.md2(str);
       const md4 = Cryptopp.insecure.md4(str);
       const md5 = Cryptopp.insecure.md5(str);
+
+      // Encoding manipulation
       const base64 = Cryptopp.utils.toBase64(str);
       const base64Url = Cryptopp.utils.toBase64Url(str);
-      const hex = Cryptopp.utils.toBase64Url(str);
+      const hexFromB64URL = Cryptopp.utils.toHex(base64Url, 'base64url');
+      const hexFromUtf8 = Cryptopp.utils.toHex(str);
+
+      // Key padding
       const pbkdf12 = Cryptopp.keyDerivation.pbkdf12(
         str,
         'salt',
@@ -86,7 +95,7 @@ export default function App() {
       const end = PerformanceNow();
       return {
         data: {
-          aes,
+          aes_encrypted,
           aes_decrypted,
           aes_key_hex,
           sha,
@@ -97,7 +106,8 @@ export default function App() {
           md5,
           base64,
           base64Url,
-          hex,
+          hexFromB64URL,
+          hexFromUtf8,
           pbkdf12,
           pkbdf1,
           pkbdf2,

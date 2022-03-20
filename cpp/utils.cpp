@@ -1,50 +1,42 @@
 #include "utils.h"
 namespace rncryptopp
 {
-    void toBase64(jsi::Runtime &rt, std::string *result, const jsi::Value *args)
+    void toBase64(jsi::Runtime &rt, const jsi::Value *args, size_t argCount, std::string *result)
     {
-        int encoding = getEncodingFromArgs(rt, args, 1);
-        if (encoding == -1)
-            throw jsi::JSError(rt, "RNCryptopp: toBase64 invalid dataEncoding");
+        int encoding = getEncodingFromArgs(rt, args, argCount, 1);
 
         std::string bytes;
         if (!binaryLikeValueToString(rt, args[0], &bytes, encoding, encoding))
             throw jsi::JSError(rt, "RNCryptopp: toBase64 data is not a string or ArrayBuffer");
 
-        base64Encode(&bytes, result);
+        base64Encode(bytes, *result);
     }
 
-    void toBase64Url(jsi::Runtime &rt, std::string *result, const jsi::Value *args)
+    void toBase64Url(jsi::Runtime &rt, const jsi::Value *args, size_t argCount, std::string *result)
     {
-        int encoding = getEncodingFromArgs(rt, args, 1);
-        if (encoding == -1)
-            throw jsi::JSError(rt, "RNCryptopp: toBase64Url invalid dataEncoding");
+        int encoding = getEncodingFromArgs(rt, args, argCount, 1);
 
         std::string bytes;
         if (!binaryLikeValueToString(rt, args[0], &bytes, encoding, encoding))
             throw jsi::JSError(rt, "RNCryptopp: toBase64Url data is not a string or ArrayBuffer");
 
-        base64UrlEncode(&bytes, result);
+        base64UrlEncode(bytes, *result);
     }
 
-    void toHex(jsi::Runtime &rt, std::string *result, const jsi::Value *args)
+    void toHex(jsi::Runtime &rt, const jsi::Value *args, size_t argCount, std::string *result)
     {
-        int encoding = getEncodingFromArgs(rt, args, 1);
-        if (encoding == -1)
-            throw jsi::JSError(rt, "RNCryptopp: toHex invalid dataEncoding");
+        int encoding = getEncodingFromArgs(rt, args, argCount, 1);
 
         std::string bytes;
         if (!binaryLikeValueToString(rt, args[0], &bytes, encoding, encoding))
             throw jsi::JSError(rt, "RNCryptopp: toHex data is not a string or ArrayBuffer");
 
-        hexEncode(&bytes, result);
+        hexEncode(bytes, *result);
     }
 
-    void toUtf8(jsi::Runtime &rt, std::string *result, const jsi::Value *args)
+    void toUtf8(jsi::Runtime &rt, const jsi::Value *args, size_t argCount, std::string *result)
     {
-        int encoding = getEncodingFromArgs(rt, args, 1);
-        if (encoding == -1)
-            throw jsi::JSError(rt, "RNCryptopp: toUtf8 invalid dataEncoding");
+        int encoding = getEncodingFromArgs(rt, args, argCount, 1);
 
         if (!binaryLikeValueToString(rt, args[0], result, encoding, encoding))
             throw jsi::JSError(rt, "RNCryptopp: toUtf8 data is not a string or ArrayBuffer");

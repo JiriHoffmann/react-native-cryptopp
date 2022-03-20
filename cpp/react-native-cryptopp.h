@@ -4,6 +4,8 @@
 #include <jsi/jsilib.h>
 #include <jsi/jsi.h>
 
+#include "cryptopp/osrng.h"
+
 #include "hash-functions.h"
 #include "aes-candidates.h"
 #include "insecure.h"

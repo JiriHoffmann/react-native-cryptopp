@@ -14,12 +14,12 @@ using namespace CryptoPP;
 
 namespace rncryptopp
 {
-    void toBase64(jsi::Runtime &rt, std::string *result, const jsi::Value *args);
+    void toBase64(jsi::Runtime &rt, const jsi::Value *args, size_t argCount, std::string *result);
 
-    void toBase64Url(jsi::Runtime &rt, std::string *result, const jsi::Value *args);
+    void toBase64Url(jsi::Runtime &rt, const jsi::Value *args, size_t argCount, std::string *result);
 
-    void toHex(jsi::Runtime &rt, std::string *result, const jsi::Value *args);
+    void toHex(jsi::Runtime &rt, const jsi::Value *args, size_t argCount, std::string *result);
 
-    void toUtf8(jsi::Runtime &rt, std::string *result, const jsi::Value *args);
+    void toUtf8(jsi::Runtime &rt, const jsi::Value *args, size_t argCount, std::string *result);
 }
 #endif // REACT_NATIVE_CRYPTOPP_UTILS_H

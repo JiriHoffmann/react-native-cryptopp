@@ -28,13 +28,13 @@ namespace rncryptopp
             switch (stringEncoding)
             {
             case 1:
-                hexDecode(&utf8, str);
+                hexDecode(utf8, *str);
                 break;
             case 2:
-                base64Decode(&utf8, str);
+                base64Decode(utf8, *str);
                 break;
             case 3:
-                base64UrlDecode(&utf8, str);
+                base64UrlDecode(utf8, *str);
                 break;
             default:
                 *str = utf8;
@@ -53,13 +53,13 @@ namespace rncryptopp
             switch (bufferEncoding)
             {
             case 1:
-                hexDecode(&utf8, str);
+                hexDecode(utf8, *str);
                 break;
             case 2:
-                base64Decode(&utf8, str);
+                base64Decode(utf8, *str);
                 break;
             case 3:
-                base64UrlDecode(&utf8, str);
+                base64UrlDecode(utf8, *str);
             default:
                 *str = utf8;
             }
@@ -69,34 +69,34 @@ namespace rncryptopp
         return false;
     }
 
-    void hexEncode(std::string *str, std::string *res)
+    void hexEncode(std::string &in, std::string &out)
     {
-        StringSource(*str, true, new HexEncoder(new StringSink(*res)));
+        StringSource(in, true, new HexEncoder(new StringSink(out)));
     }
 
-    void hexDecode(std::string *str, std::string *res)
+    void hexDecode(std::string &in, std::string &out)
     {
-        StringSource(*str, true, new HexDecoder(new StringSink(*res)));
+        StringSource(in, true, new HexDecoder(new StringSink(out)));
     }
 
-    void base64Encode(std::string *str, std::string *res)
+    void base64Encode(std::string &in, std::string &out)
     {
-        StringSource(*str, true, new Base64Encoder(new StringSink(*res)));
+        StringSource(in, true, new Base64Encoder(new StringSink(out)));
     }
 
-    void base64Decode(std::string *str, std::string *res)
+    void base64Decode(std::string &in, std::string &out)
     {
-        StringSource(*str, true, new Base64Decoder(new StringSink(*res)));
+        StringSource(in, true, new Base64Decoder(new StringSink(out)));
     }
 
-    void base64UrlEncode(std::string *str, std::string *res)
+    void base64UrlEncode(std::string &in, std::string &out)
     {
-        StringSource(*str, true, new Base64URLEncoder(new StringSink(*res)));
+        StringSource(in, true, new Base64URLEncoder(new StringSink(out)));
     }
 
-    void base64UrlDecode(std::string *str, std::string *res)
+    void base64UrlDecode(std::string &in, std::string &out)
     {
-        StringSource(*str, true, new Base64URLDecoder(new StringSink(*res)));
+        StringSource(in, true, new Base64URLDecoder(new StringSink(out)));
     }
 
     bool valueToInt(const jsi::Value &value, int *res)
@@ -117,22 +117,24 @@ namespace rncryptopp
         return true;
     }
 
-    //
-    int getEncodingFromArgs(jsi::Runtime &rt, const jsi::Value *args, int index)
+    // Int encoding from a JS string. Uses argCount to check
+    // if index is out of JS array bounds
+    // Returns:
+    // 1: Hex encoding
+    // 2: Base64 encoding
+    // 3: Base64Url encoding
+    int getEncodingFromArgs(jsi::Runtime &rt, const jsi::Value *args, size_t argCount, int index, int defaultValue)
     {
-        try
-        {
-            std::string encoding = args[index].asString(rt).utf8(rt);
-            if (encoding == "hex")
-                return 1;
-            if (encoding == "base64")
-                return 2;
-            if (encoding == "base64url")
-                return 3;
-        }
-        catch (const jsi::JSError &)
-        {
-        }
-        return 0;
+        if(index >= (int)argCount)
+            return defaultValue;
+
+         std::string encoding = args[index].asString(rt).utf8(rt);
+         if (encoding == "hex")
+             return 1;
+         if (encoding == "base64")
+             return 2;
+         if (encoding == "base64url")
+             return 3;
+        return defaultValue;
     }
 }

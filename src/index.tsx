@@ -19,3 +19,4 @@ if (!CryptoppModule) {
 }
 
 export default CryptoppModule;
+export * from './types';

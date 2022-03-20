@@ -37,7 +37,7 @@ namespace rncryptopp
     template <class H>
     void getHDKF(byte *derived, size_t derivedLen, const byte *secret, size_t secretLen,
                  const byte *salt, size_t saltLen, const byte *info, size_t infoLen,
-                 std::string &result)
+                 std::string *result)
     {
         HKDF<H> hkdf;
         hkdf.DeriveKey(derived, derivedLen,
@@ -45,7 +45,7 @@ namespace rncryptopp
                        salt, saltLen,
                        info, infoLen);
         std::string s(reinterpret_cast<char const *>(derived), derivedLen);
-        hexEncode(&s, &result);
+        hexEncode(s, *result);
     }
 
     // Array of function pointers
@@ -53,25 +53,25 @@ namespace rncryptopp
                        const byte *secret, size_t secretLen,
                        const byte *salt, size_t saltLen,
                        const byte *info, size_t infoLen,
-                       std::string &result) =
+                       std::string *result) =
         {&getHDKF<SHA1>, &getHDKF<SHA256>,
          &getHDKF<SHA512>, &getHDKF<SHA3_256>, &getHDKF<SHA3_512>, &getHDKF<SHAKE128>, &getHDKF<SHAKE256>, &getHDKF<BLAKE2b>,
          &getHDKF<BLAKE2s>, &getHDKF<LSH256>, &getHDKF<LSH512>, &getHDKF<SM3>};
 
-    void hkdf(jsi::Runtime &rt, const jsi::Value *args, std::string &result)
+    void hkdf(jsi::Runtime &rt, const jsi::Value *args, std::string *result)
     {
         std::string password;
-        if (!binaryLikeValueToString(rt, args[0], &password, 0, 0))
+        if (!binaryLikeValueToString(rt, args[0], &password))
             throwJSError(rt, "RNCryptopp: hkdf password in not a string or ArrayBuffer");
 
         std::string salt;
         if (!binaryLikeValueToString(rt, args[1],
-                                     &salt, 0, 0))
+                                     &salt))
             throwJSError(rt, "RNCryptopp: hkdf salt in not a string or ArrayBuffer");
 
         std::string info;
         if (!binaryLikeValueToString(rt, args[2],
-                                     &info, 0, 0))
+                                     &info))
             throwJSError(rt, "RNCryptopp: hkdf info in not a string or ArrayBuffer");
 
         std::string hash;
@@ -96,7 +96,7 @@ namespace rncryptopp
     // function definition
     template <class H>
     void getPBKDF12(byte *derived, size_t derivedLen, const byte *secret,
-                    size_t secretLen, const byte *salt, size_t saltLen, unsigned int iterations, std::string &result)
+                    size_t secretLen, const byte *salt, size_t saltLen, unsigned int iterations, std::string *result)
     {
         byte unused = 0;
         PKCS12_PBKDF<H> pbkdf;
@@ -105,7 +105,7 @@ namespace rncryptopp
                         salt, saltLen,
                         iterations, 0.0f);
         std::string s(reinterpret_cast<char const *>(derived), derivedLen);
-        hexEncode(&s, &result);
+        hexEncode(s, *result);
     }
 
     // Array of function pointers
@@ -113,20 +113,20 @@ namespace rncryptopp
                                const byte *secret, size_t secretLen,
                                const byte *salt, size_t saltLen,
                                unsigned int iterations,
-                               std::string &result) =
+                               std::string *result) =
         {&getPBKDF12<SHA1>, &getPBKDF12<SHA256>,
          &getPBKDF12<SHA512>, &getPBKDF12<SHA3_256>, &getPBKDF12<SHA3_512>, &getPBKDF12<SHAKE128>, &getPBKDF12<SHAKE256>, &getPBKDF12<BLAKE2b>,
          &getPBKDF12<BLAKE2s>, &getPBKDF12<LSH256>, &getPBKDF12<LSH512>, &getPBKDF12<SM3>};
 
-    void pbkdf12(jsi::Runtime &rt, const jsi::Value *args, std::string &result)
+    void pbkdf12(jsi::Runtime &rt, const jsi::Value *args, std::string *result)
     {
         std::string password;
-        if (!binaryLikeValueToString(rt, args[0], &password, 0, 0))
+        if (!binaryLikeValueToString(rt, args[0], &password))
             throwJSError(rt, "RNCryptopp: pbkdf12 password in not a string or ArrayBuffer");
 
         std::string salt;
         if (!binaryLikeValueToString(rt, args[1],
-                                     &salt, 0, 0))
+                                     &salt))
             throwJSError(rt, "RNCryptopp: pbkdf12 salt in not a string or ArrayBuffer");
 
         std::string hash;
@@ -155,7 +155,7 @@ namespace rncryptopp
     // function definition
     template <class H>
     void getPKCS5_PBKDF1(byte *derived, size_t derivedLen, const byte *secret,
-                         size_t secretLen, const byte *salt, size_t saltLen, unsigned int iterations, std::string &result)
+                         size_t secretLen, const byte *salt, size_t saltLen, unsigned int iterations, std::string *result)
     {
         byte unused = 0;
         PKCS5_PBKDF1<H> pbkdf;
@@ -164,7 +164,7 @@ namespace rncryptopp
                         salt, saltLen,
                         iterations, 0.0f);
         std::string s(reinterpret_cast<char const *>(derived), derivedLen);
-        hexEncode(&s, &result);
+        hexEncode(s, *result);
     }
 
     // Array of function pointers
@@ -172,20 +172,20 @@ namespace rncryptopp
                                const byte *secret, size_t secretLen,
                                const byte *salt, size_t saltLen,
                                unsigned int iterations,
-                               std::string &result) =
+                               std::string *result) =
         {&getPKCS5_PBKDF1<SHA1>, &getPKCS5_PBKDF1<SHA256>,
          &getPKCS5_PBKDF1<SHA512>, &getPKCS5_PBKDF1<SHA3_256>, &getPKCS5_PBKDF1<SHA3_512>, &getPKCS5_PBKDF1<SHAKE128>, &getPKCS5_PBKDF1<SHAKE256>, &getPKCS5_PBKDF1<BLAKE2b>,
          &getPKCS5_PBKDF1<BLAKE2s>, &getPKCS5_PBKDF1<LSH256>, &getPKCS5_PBKDF1<LSH512>, &getPKCS5_PBKDF1<SM3>};
 
-    void pkcs5_pbkdf1(jsi::Runtime &rt, const jsi::Value *args, std::string &result)
+    void pkcs5_pbkdf1(jsi::Runtime &rt, const jsi::Value *args, std::string *result)
     {
         std::string password;
-        if (!binaryLikeValueToString(rt, args[0], &password, 0, 0))
+        if (!binaryLikeValueToString(rt, args[0], &password))
             throwJSError(rt, "RNCryptopp: pkcs5_pbkdf1 password in not a string or ArrayBuffer");
 
         std::string salt;
         if (!binaryLikeValueToString(rt, args[1],
-                                     &salt, 0, 0))
+                                     &salt))
             throwJSError(rt, "RNCryptopp: pkcs5_pbkdf1 salt in not a string or ArrayBuffer");
 
         std::string hash;
@@ -214,7 +214,7 @@ namespace rncryptopp
     // function definition
     template <class H>
     void getPKCS5_PBKDF2_HMAC(byte *derived, size_t derivedLen, const byte *secret,
-                              size_t secretLen, const byte *salt, size_t saltLen, unsigned int iterations, std::string &result)
+                              size_t secretLen, const byte *salt, size_t saltLen, unsigned int iterations, std::string *result)
     {
         byte unused = 0;
         PKCS5_PBKDF2_HMAC<H> pbkdf;
@@ -223,7 +223,7 @@ namespace rncryptopp
                         salt, saltLen,
                         iterations, 0.0f);
         std::string s(reinterpret_cast<char const *>(derived), derivedLen);
-        hexEncode(&s, &result);
+        hexEncode(s, *result);
     }
 
     // Array of function pointers
@@ -231,20 +231,20 @@ namespace rncryptopp
                                     const byte *secret, size_t secretLen,
                                     const byte *salt, size_t saltLen,
                                     unsigned int iterations,
-                                    std::string &result) =
+                                    std::string *result) =
         {&getPKCS5_PBKDF2_HMAC<SHA1>, &getPKCS5_PBKDF2_HMAC<SHA256>,
          &getPKCS5_PBKDF2_HMAC<SHA512>, &getPKCS5_PBKDF2_HMAC<SHA3_256>, &getPKCS5_PBKDF2_HMAC<SHA3_512>, &getPKCS5_PBKDF2_HMAC<SHAKE128>, &getPKCS5_PBKDF2_HMAC<SHAKE256>, &getPKCS5_PBKDF2_HMAC<BLAKE2b>,
          &getPKCS5_PBKDF2_HMAC<BLAKE2s>, &getPKCS5_PBKDF2_HMAC<LSH256>, &getPKCS5_PBKDF2_HMAC<LSH512>, &getPKCS5_PBKDF2_HMAC<SM3>};
 
-    void pkcs5_pbkdf2(jsi::Runtime &rt, const jsi::Value *args, std::string &result)
+    void pkcs5_pbkdf2(jsi::Runtime &rt, const jsi::Value *args, std::string *result)
     {
         std::string password;
-        if (!binaryLikeValueToString(rt, args[0], &password, 0, 0))
+        if (!binaryLikeValueToString(rt, args[0], &password))
             throwJSError(rt, "RNCryptopp: pkcs5_pbkdf2 password in not a string or ArrayBuffer");
 
         std::string salt;
         if (!binaryLikeValueToString(rt, args[1],
-                                     &salt, 0, 0))
+                                     &salt))
             throwJSError(rt, "RNCryptopp: pkcs5_pbkdf2 salt in not a string or ArrayBuffer");
 
         std::string hash;

@@ -1,8 +1,8 @@
-type SHA_Standarts = '224' | '256' | '384' | '512';
-type AES_Modes = 'ecb' | 'cbc' | 'cfb' | 'ofb' | 'ctr';
-type BinaryLike = string | ArrayBuffer;
-type BinaryLikeEncoding = 'base64' | 'base64Url' | 'hex';
-type KeyDerivationHash =
+export type SHA_Standarts = '224' | '256' | '384' | '512';
+export type AES_Modes = 'ecb' | 'cbc' | 'cfb' | 'ofb' | 'ctr';
+export type BinaryLike = string | ArrayBuffer;
+export type BinaryLikeEncoding = 'utf8' | 'hex' | 'base64' | 'base64url';
+export type KeyDerivationHash =
   | 'SHA1'
   | 'SHA256'
   | 'SHA512'
@@ -19,16 +19,18 @@ export interface Cryptopp {
   };
   AES: {
     encrypt: (
-      data: string,
+      data: BinaryLike,
       key: BinaryLike,
       iv: BinaryLike,
-      mode: AES_Modes
+      mode: AES_Modes,
+      encodeTo?: BinaryLikeEncoding
     ) => string;
     decrypt: (
-      data: string,
+      data: BinaryLike,
       key: BinaryLike,
       iv: BinaryLike,
-      mode: AES_Modes
+      mode: AES_Modes,
+      dataEncoding?: BinaryLikeEncoding
     ) => string;
   };
   keyDerivation: {
@@ -62,12 +64,13 @@ export interface Cryptopp {
     md4: (data: string) => string;
     md5: (data: string) => string;
   };
+
   utils: {
     // ArrayBuffer generation
     randomBytes: (size: number) => ArrayBuffer;
     stringToBytes: (
-      data: string,
-      dataEncoding?: BinaryLikeEncoding
+      string: string,
+      stringEncoding?: BinaryLikeEncoding
     ) => ArrayBuffer;
 
     // Encoding manipulation
