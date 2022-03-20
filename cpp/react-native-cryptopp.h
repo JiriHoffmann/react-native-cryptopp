@@ -10,6 +10,7 @@
 #include "aes-candidates.h"
 #include "insecure.h"
 #include "key-derivation.h"
+#include "public-key.h"
 #include "utils.h"
 #include "helpers.h"
 

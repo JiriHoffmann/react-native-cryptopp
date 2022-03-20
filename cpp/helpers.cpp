@@ -125,16 +125,16 @@ namespace rncryptopp
     // 3: Base64Url encoding
     int getEncodingFromArgs(jsi::Runtime &rt, const jsi::Value *args, size_t argCount, int index, int defaultValue)
     {
-        if(index >= (int)argCount)
+        if (index >= (int)argCount)
             return defaultValue;
 
-         std::string encoding = args[index].asString(rt).utf8(rt);
-         if (encoding == "hex")
-             return 1;
-         if (encoding == "base64")
-             return 2;
-         if (encoding == "base64url")
-             return 3;
+        std::string encoding = args[index].asString(rt).utf8(rt);
+        if (encoding == "hex")
+            return 1;
+        if (encoding == "base64")
+            return 2;
+        if (encoding == "base64url")
+            return 3;
         return defaultValue;
     }
 }

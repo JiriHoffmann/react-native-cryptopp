@@ -174,6 +174,76 @@ void rncryptopp_install(jsi::Runtime &jsiRuntime)
         keyDerivation.setProperty(jsiRuntime, "hkdf", std::move(hkdf));
 
         /*
+        Public-key cryptography
+        */
+        auto generate_rsa_keypair = jsi::Function::createFromHostFunction(
+            jsiRuntime,
+            jsi::PropNameID::forAscii(jsiRuntime, "generate_rsa_keypair"),
+            1,
+            [](jsi::Runtime &rt, const jsi::Value &thisValue, const jsi::Value *args,
+               size_t count) -> jsi::Value
+            {
+                    jsi::Object result = jsi::Object(rt);
+                    rncryptopp::RSA::generateKeyPair(rt, args, result);
+                    return result;
+            });
+
+        auto rsa_encrypt = jsi::Function::createFromHostFunction(
+            jsiRuntime,
+            jsi::PropNameID::forAscii(jsiRuntime, "rsa_encrypt"),
+            2,
+            [](jsi::Runtime &rt, const jsi::Value &thisValue, const jsi::Value *args,
+               size_t count) -> jsi::Value
+            {
+                    std::string result;
+                    rncryptopp::RSA::encrypt(rt, args, &result);
+                    return jsi::String::createFromUtf8(rt, result);
+            });
+
+        auto rsa_decrypt = jsi::Function::createFromHostFunction(
+            jsiRuntime,
+            jsi::PropNameID::forAscii(jsiRuntime, "rsa_decrypt"),
+            2,
+            [](jsi::Runtime &rt, const jsi::Value &thisValue, const jsi::Value *args,
+               size_t count) -> jsi::Value
+            {
+                    std::string result;
+                    rncryptopp::RSA::decrypt(rt, args, &result);
+                    return jsi::String::createFromUtf8(rt, result);
+            });
+
+        auto rsa_sign = jsi::Function::createFromHostFunction(
+                jsiRuntime,
+                jsi::PropNameID::forAscii(jsiRuntime, "rsa_sign"),
+                3,
+                [](jsi::Runtime &rt, const jsi::Value &thisValue, const jsi::Value *args,
+                   size_t count) -> jsi::Value
+                {
+                        std::string result;
+                        rncryptopp::RSA::sign(rt, args, &result);
+                        return jsi::String::createFromUtf8(rt, result);
+                });
+
+        auto rsa_verify = jsi::Function::createFromHostFunction(
+                jsiRuntime,
+                jsi::PropNameID::forAscii(jsiRuntime, "rsa_verify"),
+                3,
+                [](jsi::Runtime &rt, const jsi::Value &thisValue, const jsi::Value *args,
+                   size_t count) -> jsi::Value
+                {
+                        bool result;
+                        rncryptopp::RSA::verify(rt, args, &result);
+                        return jsi::Value(result);
+                });
+
+        jsi::Object RSA = jsi::Object(jsiRuntime);
+        RSA.setProperty(jsiRuntime, "generateKeyPair", std::move(generate_rsa_keypair));
+        RSA.setProperty(jsiRuntime, "encrypt", std::move(rsa_encrypt));
+        RSA.setProperty(jsiRuntime, "decrypt", std::move(rsa_decrypt));
+        RSA.setProperty(jsiRuntime, "sign", std::move(rsa_sign));
+        RSA.setProperty(jsiRuntime, "verify", std::move(rsa_verify));
+
+        /*
         Utils
         */
         auto toBase64 = jsi::Function::createFromHostFunction(

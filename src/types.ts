@@ -33,6 +33,23 @@ export interface Cryptopp {
       dataEncoding?: BinaryLikeEncoding
     ) => string;
   };
+  RSA: {
+    generateKeyPair: (keySize: number) => {
+      public: string;
+      private: string;
+      params: {
+        n: string;
+        p: string;
+        q: string;
+        d: string;
+        e: string;
+      };
+    };
+    encrypt: (data: BinaryLike, publicKey: string) => string;
+    decrypt: (data: BinaryLike, privateKey: string) => string;
+    sign: (data: BinaryLike, privateKey: string) => string;
+    verify: (data: BinaryLike, publicKey: string, signature: string) => boolean;
+  };
   keyDerivation: {
     pbkdf12: (
       password: BinaryLike,

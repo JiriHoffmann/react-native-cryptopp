@@ -15,4 +15,5 @@ export const PerformanceNow =
 
 const fixed = (n: number) => (Math.trunc(n) === n ? n + '' : n.toFixed(3));
 
-export const timeDelta = (start: number, end: number) => fixed(end - start);
+export const timeDelta = (start: number, end: number) =>
+  fixed(end - start) + ' ms';
