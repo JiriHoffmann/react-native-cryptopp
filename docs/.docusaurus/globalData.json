@@ -1,0 +1,122 @@
+{
+  "docusaurus-plugin-content-docs": {
+    "default": {
+      "path": "/",
+      "versions": [
+        {
+          "name": "current",
+          "label": "Next",
+          "isLast": true,
+          "path": "/",
+          "mainDocId": "intro",
+          "docs": [
+            {
+              "id": "aes-and-aes-candidates/aes",
+              "path": "/aes-and-aes-candidates/aes",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "hash-functions/blake2",
+              "path": "/hash-functions/blake2",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "hash-functions/keccak",
+              "path": "/hash-functions/keccak",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "hash-functions/lsh",
+              "path": "/hash-functions/lsh",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "hash-functions/ripemd",
+              "path": "/hash-functions/ripemd",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "hash-functions/sha",
+              "path": "/hash-functions/sha",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "hash-functions/shake",
+              "path": "/hash-functions/shake",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "hash-functions/siphash",
+              "path": "/hash-functions/siphash",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "hash-functions/sm3",
+              "path": "/hash-functions/sm3",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "hash-functions/tiger",
+              "path": "/hash-functions/tiger",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "hash-functions/whirlpool",
+              "path": "/hash-functions/whirlpool",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "insecure/message-digest",
+              "path": "/insecure/message-digest",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "intro",
+              "path": "/",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "padding-schemes/hkdf",
+              "path": "/padding-schemes/hkdf",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "padding-schemes/pbkdf12",
+              "path": "/padding-schemes/pbkdf12",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "padding-schemes/pkcs5_pbkdf1",
+              "path": "/padding-schemes/pkcs5_pbkdf1",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "padding-schemes/pkcs5_pbkdf2",
+              "path": "/padding-schemes/pkcs5_pbkdf2",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "public-key-cryptography/rsa",
+              "path": "/public-key-cryptography/rsa",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "utils/utils",
+              "path": "/utils/",
+              "sidebar": "tutorialSidebar"
+            }
+          ],
+          "sidebars": {
+            "tutorialSidebar": {
+              "link": {
+                "path": "/",
+                "label": "intro"
+              }
+            }
+          }
+        }
+      ],
+      "breadcrumbs": true
+    }
+  }
+}

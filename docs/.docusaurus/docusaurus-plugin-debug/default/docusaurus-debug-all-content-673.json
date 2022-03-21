@@ -1,0 +1,655 @@
+{
+  "docusaurus-plugin-content-docs": {
+    "default": {
+      "loadedVersions": [
+        {
+          "versionName": "current",
+          "versionLabel": "Next",
+          "versionPath": "/",
+          "tagsPath": "/tags",
+          "versionEditUrl": "https://github.com/jirihoffman/react-native-cryptopp/docs/docs",
+          "versionEditUrlLocalized": "https://github.com/jirihoffman/react-native-cryptopp/docs/i18n/en/docusaurus-plugin-content-docs/current",
+          "versionBanner": null,
+          "versionBadge": false,
+          "versionClassName": "docs-version-current",
+          "isLast": true,
+          "routePriority": -1,
+          "sidebarFilePath": "/Users/jirihoffmann/Documents/GitHub/react-native-cryptopp/docs/sidebars.js",
+          "contentPath": "/Users/jirihoffmann/Documents/GitHub/react-native-cryptopp/docs/docs",
+          "contentPathLocalized": "/Users/jirihoffmann/Documents/GitHub/react-native-cryptopp/docs/i18n/en/docusaurus-plugin-content-docs/current",
+          "docs": [
+            {
+              "unversionedId": "aes-and-aes-candidates/aes",
+              "id": "aes-and-aes-candidates/aes",
+              "title": "AES",
+              "description": "Docusaurus can manage multiple versions of your docs.",
+              "source": "@site/docs/aes-and-aes-candidates/aes.md",
+              "sourceDirName": "aes-and-aes-candidates",
+              "slug": "/aes-and-aes-candidates/aes",
+              "permalink": "/aes-and-aes-candidates/aes",
+              "editUrl": "https://github.com/jirihoffman/react-native-cryptopp/docs/docs/aes-and-aes-candidates/aes.md",
+              "tags": [],
+              "version": "current",
+              "sidebarPosition": 1,
+              "frontMatter": {
+                "sidebar_position": 1
+              },
+              "sidebar": "tutorialSidebar",
+              "previous": {
+                "title": "Installation",
+                "permalink": "/"
+              },
+              "next": {
+                "title": "BLAKE2b/BLAKE2s",
+                "permalink": "/hash-functions/blake2"
+              }
+            },
+            {
+              "unversionedId": "hash-functions/blake2",
+              "id": "hash-functions/blake2",
+              "title": "BLAKE2b/BLAKE2s",
+              "description": "Docusaurus can manage multiple versions of your docs.",
+              "source": "@site/docs/hash-functions/blake2.md",
+              "sourceDirName": "hash-functions",
+              "slug": "/hash-functions/blake2",
+              "permalink": "/hash-functions/blake2",
+              "editUrl": "https://github.com/jirihoffman/react-native-cryptopp/docs/docs/hash-functions/blake2.md",
+              "tags": [],
+              "version": "current",
+              "sidebarPosition": 1,
+              "frontMatter": {
+                "sidebar_position": 1
+              },
+              "sidebar": "tutorialSidebar",
+              "previous": {
+                "title": "AES",
+                "permalink": "/aes-and-aes-candidates/aes"
+              },
+              "next": {
+                "title": "Keccak",
+                "permalink": "/hash-functions/keccak"
+              }
+            },
+            {
+              "unversionedId": "hash-functions/keccak",
+              "id": "hash-functions/keccak",
+              "title": "Keccak",
+              "description": "Docusaurus can manage multiple versions of your docs.",
+              "source": "@site/docs/hash-functions/keccak.md",
+              "sourceDirName": "hash-functions",
+              "slug": "/hash-functions/keccak",
+              "permalink": "/hash-functions/keccak",
+              "editUrl": "https://github.com/jirihoffman/react-native-cryptopp/docs/docs/hash-functions/keccak.md",
+              "tags": [],
+              "version": "current",
+              "sidebarPosition": 2,
+              "frontMatter": {
+                "sidebar_position": 2
+              },
+              "sidebar": "tutorialSidebar",
+              "previous": {
+                "title": "BLAKE2b/BLAKE2s",
+                "permalink": "/hash-functions/blake2"
+              },
+              "next": {
+                "title": "LSH",
+                "permalink": "/hash-functions/lsh"
+              }
+            },
+            {
+              "unversionedId": "hash-functions/lsh",
+              "id": "hash-functions/lsh",
+              "title": "LSH",
+              "description": "Docusaurus can manage multiple versions of your docs.",
+              "source": "@site/docs/hash-functions/lsh.md",
+              "sourceDirName": "hash-functions",
+              "slug": "/hash-functions/lsh",
+              "permalink": "/hash-functions/lsh",
+              "editUrl": "https://github.com/jirihoffman/react-native-cryptopp/docs/docs/hash-functions/lsh.md",
+              "tags": [],
+              "version": "current",
+              "sidebarPosition": 3,
+              "frontMatter": {
+                "sidebar_position": 3
+              },
+              "sidebar": "tutorialSidebar",
+              "previous": {
+                "title": "Keccak",
+                "permalink": "/hash-functions/keccak"
+              },
+              "next": {
+                "title": "RIPEMD",
+                "permalink": "/hash-functions/ripemd"
+              }
+            },
+            {
+              "unversionedId": "hash-functions/ripemd",
+              "id": "hash-functions/ripemd",
+              "title": "RIPEMD",
+              "description": "Docusaurus can manage multiple versions of your docs.",
+              "source": "@site/docs/hash-functions/ripemd.md",
+              "sourceDirName": "hash-functions",
+              "slug": "/hash-functions/ripemd",
+              "permalink": "/hash-functions/ripemd",
+              "editUrl": "https://github.com/jirihoffman/react-native-cryptopp/docs/docs/hash-functions/ripemd.md",
+              "tags": [],
+              "version": "current",
+              "sidebarPosition": 4,
+              "frontMatter": {
+                "sidebar_position": 4
+              },
+              "sidebar": "tutorialSidebar",
+              "previous": {
+                "title": "LSH",
+                "permalink": "/hash-functions/lsh"
+              },
+              "next": {
+                "title": "SHA/SHA2/SHA3",
+                "permalink": "/hash-functions/sha"
+              }
+            },
+            {
+              "unversionedId": "hash-functions/sha",
+              "id": "hash-functions/sha",
+              "title": "SHA/SHA2/SHA3",
+              "description": "Docusaurus can manage multiple versions of your docs.",
+              "source": "@site/docs/hash-functions/sha.md",
+              "sourceDirName": "hash-functions",
+              "slug": "/hash-functions/sha",
+              "permalink": "/hash-functions/sha",
+              "editUrl": "https://github.com/jirihoffman/react-native-cryptopp/docs/docs/hash-functions/sha.md",
+              "tags": [],
+              "version": "current",
+              "sidebarPosition": 5,
+              "frontMatter": {
+                "sidebar_position": 5
+              },
+              "sidebar": "tutorialSidebar",
+              "previous": {
+                "title": "RIPEMD",
+                "permalink": "/hash-functions/ripemd"
+              },
+              "next": {
+                "title": "SHAKE",
+                "permalink": "/hash-functions/shake"
+              }
+            },
+            {
+              "unversionedId": "hash-functions/shake",
+              "id": "hash-functions/shake",
+              "title": "SHAKE",
+              "description": "Docusaurus can manage multiple versions of your docs.",
+              "source": "@site/docs/hash-functions/shake.md",
+              "sourceDirName": "hash-functions",
+              "slug": "/hash-functions/shake",
+              "permalink": "/hash-functions/shake",
+              "editUrl": "https://github.com/jirihoffman/react-native-cryptopp/docs/docs/hash-functions/shake.md",
+              "tags": [],
+              "version": "current",
+              "sidebarPosition": 6,
+              "frontMatter": {
+                "sidebar_position": 6
+              },
+              "sidebar": "tutorialSidebar",
+              "previous": {
+                "title": "SHA/SHA2/SHA3",
+                "permalink": "/hash-functions/sha"
+              },
+              "next": {
+                "title": "SipHash",
+                "permalink": "/hash-functions/siphash"
+              }
+            },
+            {
+              "unversionedId": "hash-functions/siphash",
+              "id": "hash-functions/siphash",
+              "title": "SipHash",
+              "description": "Docusaurus can manage multiple versions of your docs.",
+              "source": "@site/docs/hash-functions/siphash.md",
+              "sourceDirName": "hash-functions",
+              "slug": "/hash-functions/siphash",
+              "permalink": "/hash-functions/siphash",
+              "editUrl": "https://github.com/jirihoffman/react-native-cryptopp/docs/docs/hash-functions/siphash.md",
+              "tags": [],
+              "version": "current",
+              "sidebarPosition": 7,
+              "frontMatter": {
+                "sidebar_position": 7
+              },
+              "sidebar": "tutorialSidebar",
+              "previous": {
+                "title": "SHAKE",
+                "permalink": "/hash-functions/shake"
+              },
+              "next": {
+                "title": "SM3",
+                "permalink": "/hash-functions/sm3"
+              }
+            },
+            {
+              "unversionedId": "hash-functions/sm3",
+              "id": "hash-functions/sm3",
+              "title": "SM3",
+              "description": "Docusaurus can manage multiple versions of your docs.",
+              "source": "@site/docs/hash-functions/sm3.md",
+              "sourceDirName": "hash-functions",
+              "slug": "/hash-functions/sm3",
+              "permalink": "/hash-functions/sm3",
+              "editUrl": "https://github.com/jirihoffman/react-native-cryptopp/docs/docs/hash-functions/sm3.md",
+              "tags": [],
+              "version": "current",
+              "sidebarPosition": 8,
+              "frontMatter": {
+                "sidebar_position": 8
+              },
+              "sidebar": "tutorialSidebar",
+              "previous": {
+                "title": "SipHash",
+                "permalink": "/hash-functions/siphash"
+              },
+              "next": {
+                "title": "Tiger",
+                "permalink": "/hash-functions/tiger"
+              }
+            },
+            {
+              "unversionedId": "hash-functions/tiger",
+              "id": "hash-functions/tiger",
+              "title": "Tiger",
+              "description": "Docusaurus can manage multiple versions of your docs.",
+              "source": "@site/docs/hash-functions/tiger.md",
+              "sourceDirName": "hash-functions",
+              "slug": "/hash-functions/tiger",
+              "permalink": "/hash-functions/tiger",
+              "editUrl": "https://github.com/jirihoffman/react-native-cryptopp/docs/docs/hash-functions/tiger.md",
+              "tags": [],
+              "version": "current",
+              "sidebarPosition": 9,
+              "frontMatter": {
+                "sidebar_position": 9
+              },
+              "sidebar": "tutorialSidebar",
+              "previous": {
+                "title": "SM3",
+                "permalink": "/hash-functions/sm3"
+              },
+              "next": {
+                "title": "WHIRLPOOL",
+                "permalink": "/hash-functions/whirlpool"
+              }
+            },
+            {
+              "unversionedId": "hash-functions/whirlpool",
+              "id": "hash-functions/whirlpool",
+              "title": "WHIRLPOOL",
+              "description": "Docusaurus can manage multiple versions of your docs.",
+              "source": "@site/docs/hash-functions/whirlpool.md",
+              "sourceDirName": "hash-functions",
+              "slug": "/hash-functions/whirlpool",
+              "permalink": "/hash-functions/whirlpool",
+              "editUrl": "https://github.com/jirihoffman/react-native-cryptopp/docs/docs/hash-functions/whirlpool.md",
+              "tags": [],
+              "version": "current",
+              "sidebarPosition": 10,
+              "frontMatter": {
+                "sidebar_position": 10
+              },
+              "sidebar": "tutorialSidebar",
+              "previous": {
+                "title": "Tiger",
+                "permalink": "/hash-functions/tiger"
+              },
+              "next": {
+                "title": "RSA",
+                "permalink": "/public-key-cryptography/rsa"
+              }
+            },
+            {
+              "unversionedId": "insecure/message-digest",
+              "id": "insecure/message-digest",
+              "title": "MD2/MD4/MD5",
+              "description": "Docusaurus can manage multiple versions of your docs.",
+              "source": "@site/docs/insecure/message-digest.md",
+              "sourceDirName": "insecure",
+              "slug": "/insecure/message-digest",
+              "permalink": "/insecure/message-digest",
+              "editUrl": "https://github.com/jirihoffman/react-native-cryptopp/docs/docs/insecure/message-digest.md",
+              "tags": [],
+              "version": "current",
+              "sidebarPosition": 1,
+              "frontMatter": {
+                "sidebar_position": 1
+              },
+              "sidebar": "tutorialSidebar",
+              "previous": {
+                "title": "PKCS5 PBKDF2 HMAC",
+                "permalink": "/padding-schemes/pkcs5_pbkdf2"
+              },
+              "next": {
+                "title": "Utilities",
+                "permalink": "/utils/"
+              }
+            },
+            {
+              "unversionedId": "intro",
+              "id": "intro",
+              "title": "Installation",
+              "description": "iOS",
+              "source": "@site/docs/intro.md",
+              "sourceDirName": ".",
+              "slug": "/",
+              "permalink": "/",
+              "editUrl": "https://github.com/jirihoffman/react-native-cryptopp/docs/docs/intro.md",
+              "tags": [],
+              "version": "current",
+              "sidebarPosition": 1,
+              "frontMatter": {
+                "sidebar_position": 1,
+                "slug": "/"
+              },
+              "sidebar": "tutorialSidebar",
+              "next": {
+                "title": "AES",
+                "permalink": "/aes-and-aes-candidates/aes"
+              }
+            },
+            {
+              "unversionedId": "padding-schemes/hkdf",
+              "id": "padding-schemes/hkdf",
+              "title": "HDKF",
+              "description": "Docusaurus can manage multiple versions of your docs.",
+              "source": "@site/docs/padding-schemes/hkdf.md",
+              "sourceDirName": "padding-schemes",
+              "slug": "/padding-schemes/hkdf",
+              "permalink": "/padding-schemes/hkdf",
+              "editUrl": "https://github.com/jirihoffman/react-native-cryptopp/docs/docs/padding-schemes/hkdf.md",
+              "tags": [],
+              "version": "current",
+              "sidebarPosition": 1,
+              "frontMatter": {
+                "sidebar_position": 1
+              },
+              "sidebar": "tutorialSidebar",
+              "previous": {
+                "title": "RSA",
+                "permalink": "/public-key-cryptography/rsa"
+              },
+              "next": {
+                "title": "PKCS12 PBKDF",
+                "permalink": "/padding-schemes/pbkdf12"
+              }
+            },
+            {
+              "unversionedId": "padding-schemes/pbkdf12",
+              "id": "padding-schemes/pbkdf12",
+              "title": "PKCS12 PBKDF",
+              "description": "Docusaurus can manage multiple versions of your docs.",
+              "source": "@site/docs/padding-schemes/pbkdf12.md",
+              "sourceDirName": "padding-schemes",
+              "slug": "/padding-schemes/pbkdf12",
+              "permalink": "/padding-schemes/pbkdf12",
+              "editUrl": "https://github.com/jirihoffman/react-native-cryptopp/docs/docs/padding-schemes/pbkdf12.md",
+              "tags": [],
+              "version": "current",
+              "sidebarPosition": 2,
+              "frontMatter": {
+                "sidebar_position": 2
+              },
+              "sidebar": "tutorialSidebar",
+              "previous": {
+                "title": "HDKF",
+                "permalink": "/padding-schemes/hkdf"
+              },
+              "next": {
+                "title": "PKCS5 PBKDF1",
+                "permalink": "/padding-schemes/pkcs5_pbkdf1"
+              }
+            },
+            {
+              "unversionedId": "padding-schemes/pkcs5_pbkdf1",
+              "id": "padding-schemes/pkcs5_pbkdf1",
+              "title": "PKCS5 PBKDF1",
+              "description": "Docusaurus can manage multiple versions of your docs.",
+              "source": "@site/docs/padding-schemes/pkcs5_pbkdf1.md",
+              "sourceDirName": "padding-schemes",
+              "slug": "/padding-schemes/pkcs5_pbkdf1",
+              "permalink": "/padding-schemes/pkcs5_pbkdf1",
+              "editUrl": "https://github.com/jirihoffman/react-native-cryptopp/docs/docs/padding-schemes/pkcs5_pbkdf1.md",
+              "tags": [],
+              "version": "current",
+              "sidebarPosition": 3,
+              "frontMatter": {
+                "sidebar_position": 3
+              },
+              "sidebar": "tutorialSidebar",
+              "previous": {
+                "title": "PKCS12 PBKDF",
+                "permalink": "/padding-schemes/pbkdf12"
+              },
+              "next": {
+                "title": "PKCS5 PBKDF2 HMAC",
+                "permalink": "/padding-schemes/pkcs5_pbkdf2"
+              }
+            },
+            {
+              "unversionedId": "padding-schemes/pkcs5_pbkdf2",
+              "id": "padding-schemes/pkcs5_pbkdf2",
+              "title": "PKCS5 PBKDF2 HMAC",
+              "description": "Docusaurus can manage multiple versions of your docs.",
+              "source": "@site/docs/padding-schemes/pkcs5_pbkdf2.md",
+              "sourceDirName": "padding-schemes",
+              "slug": "/padding-schemes/pkcs5_pbkdf2",
+              "permalink": "/padding-schemes/pkcs5_pbkdf2",
+              "editUrl": "https://github.com/jirihoffman/react-native-cryptopp/docs/docs/padding-schemes/pkcs5_pbkdf2.md",
+              "tags": [],
+              "version": "current",
+              "sidebarPosition": 4,
+              "frontMatter": {
+                "sidebar_position": 4
+              },
+              "sidebar": "tutorialSidebar",
+              "previous": {
+                "title": "PKCS5 PBKDF1",
+                "permalink": "/padding-schemes/pkcs5_pbkdf1"
+              },
+              "next": {
+                "title": "MD2/MD4/MD5",
+                "permalink": "/insecure/message-digest"
+              }
+            },
+            {
+              "unversionedId": "public-key-cryptography/rsa",
+              "id": "public-key-cryptography/rsa",
+              "title": "RSA",
+              "description": "Docusaurus can manage multiple versions of your docs.",
+              "source": "@site/docs/public-key-cryptography/rsa.md",
+              "sourceDirName": "public-key-cryptography",
+              "slug": "/public-key-cryptography/rsa",
+              "permalink": "/public-key-cryptography/rsa",
+              "editUrl": "https://github.com/jirihoffman/react-native-cryptopp/docs/docs/public-key-cryptography/rsa.md",
+              "tags": [],
+              "version": "current",
+              "sidebarPosition": 1,
+              "frontMatter": {
+                "sidebar_position": 1
+              },
+              "sidebar": "tutorialSidebar",
+              "previous": {
+                "title": "WHIRLPOOL",
+                "permalink": "/hash-functions/whirlpool"
+              },
+              "next": {
+                "title": "HDKF",
+                "permalink": "/padding-schemes/hkdf"
+              }
+            },
+            {
+              "unversionedId": "utils/utils",
+              "id": "utils/utils",
+              "title": "Utilities",
+              "description": "Docusaurus can manage multiple versions of your docs.",
+              "source": "@site/docs/utils/utils.md",
+              "sourceDirName": "utils",
+              "slug": "/utils/",
+              "permalink": "/utils/",
+              "editUrl": "https://github.com/jirihoffman/react-native-cryptopp/docs/docs/utils/utils.md",
+              "tags": [],
+              "version": "current",
+              "sidebarPosition": 1,
+              "frontMatter": {
+                "sidebar_position": 1
+              },
+              "sidebar": "tutorialSidebar",
+              "previous": {
+                "title": "MD2/MD4/MD5",
+                "permalink": "/insecure/message-digest"
+              }
+            }
+          ],
+          "sidebars": {
+            "tutorialSidebar": [
+              {
+                "type": "doc",
+                "id": "intro"
+              },
+              {
+                "type": "category",
+                "label": "AES and AES candidates",
+                "collapsible": true,
+                "collapsed": true,
+                "items": [
+                  {
+                    "type": "doc",
+                    "id": "aes-and-aes-candidates/aes"
+                  }
+                ]
+              },
+              {
+                "type": "category",
+                "label": "Hash functions",
+                "collapsible": true,
+                "collapsed": true,
+                "items": [
+                  {
+                    "type": "doc",
+                    "id": "hash-functions/blake2"
+                  },
+                  {
+                    "type": "doc",
+                    "id": "hash-functions/keccak"
+                  },
+                  {
+                    "type": "doc",
+                    "id": "hash-functions/lsh"
+                  },
+                  {
+                    "type": "doc",
+                    "id": "hash-functions/ripemd"
+                  },
+                  {
+                    "type": "doc",
+                    "id": "hash-functions/sha"
+                  },
+                  {
+                    "type": "doc",
+                    "id": "hash-functions/shake"
+                  },
+                  {
+                    "type": "doc",
+                    "id": "hash-functions/siphash"
+                  },
+                  {
+                    "type": "doc",
+                    "id": "hash-functions/sm3"
+                  },
+                  {
+                    "type": "doc",
+                    "id": "hash-functions/tiger"
+                  },
+                  {
+                    "type": "doc",
+                    "id": "hash-functions/whirlpool"
+                  }
+                ]
+              },
+              {
+                "type": "category",
+                "label": "Public-key cryptography",
+                "collapsible": true,
+                "collapsed": true,
+                "items": [
+                  {
+                    "type": "doc",
+                    "id": "public-key-cryptography/rsa"
+                  }
+                ]
+              },
+              {
+                "type": "category",
+                "label": "Padding schemes for public-key systems",
+                "collapsible": true,
+                "collapsed": true,
+                "items": [
+                  {
+                    "type": "doc",
+                    "id": "padding-schemes/hkdf"
+                  },
+                  {
+                    "type": "doc",
+                    "id": "padding-schemes/pbkdf12"
+                  },
+                  {
+                    "type": "doc",
+                    "id": "padding-schemes/pkcs5_pbkdf1"
+                  },
+                  {
+                    "type": "doc",
+                    "id": "padding-schemes/pkcs5_pbkdf2"
+                  }
+                ]
+              },
+              {
+                "type": "category",
+                "label": "Insecure",
+                "collapsible": true,
+                "collapsed": true,
+                "items": [
+                  {
+                    "type": "doc",
+                    "id": "insecure/message-digest"
+                  }
+                ]
+              },
+              {
+                "type": "doc",
+                "label": "Utilities",
+                "id": "utils/utils"
+              }
+            ]
+          },
+          "mainDocId": "intro",
+          "categoryGeneratedIndices": []
+        }
+      ]
+    }
+  },
+  "docusaurus-plugin-content-blog": {
+    "default": {
+      "blogSidebarTitle": "Recent posts",
+      "blogPosts": [],
+      "blogListPaginated": [],
+      "blogTags": {},
+      "blogTagsListPath": null,
+      "blogTagsPaginated": []
+    }
+  },
+  "docusaurus-plugin-content-pages": {
+    "default": []
+  },
+  "docusaurus-plugin-debug": {
+    "default": null
+  },
+  "docusaurus-theme-classic": {
+    "default": null
+  }
+}

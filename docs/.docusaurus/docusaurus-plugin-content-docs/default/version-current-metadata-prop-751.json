@@ -1,0 +1,283 @@
+{
+  "pluginId": "default",
+  "version": "current",
+  "label": "Next",
+  "banner": null,
+  "badge": false,
+  "className": "docs-version-current",
+  "isLast": true,
+  "docsSidebars": {
+    "tutorialSidebar": [
+      {
+        "type": "link",
+        "label": "Installation",
+        "href": "/",
+        "docId": "intro"
+      },
+      {
+        "type": "category",
+        "label": "AES and AES candidates",
+        "collapsible": true,
+        "collapsed": true,
+        "items": [
+          {
+            "type": "link",
+            "label": "AES",
+            "href": "/aes-and-aes-candidates/aes",
+            "docId": "aes-and-aes-candidates/aes"
+          }
+        ]
+      },
+      {
+        "type": "category",
+        "label": "Hash functions",
+        "collapsible": true,
+        "collapsed": true,
+        "items": [
+          {
+            "type": "link",
+            "label": "BLAKE2b/BLAKE2s",
+            "href": "/hash-functions/blake2",
+            "docId": "hash-functions/blake2"
+          },
+          {
+            "type": "link",
+            "label": "Keccak",
+            "href": "/hash-functions/keccak",
+            "docId": "hash-functions/keccak"
+          },
+          {
+            "type": "link",
+            "label": "LSH",
+            "href": "/hash-functions/lsh",
+            "docId": "hash-functions/lsh"
+          },
+          {
+            "type": "link",
+            "label": "RIPEMD",
+            "href": "/hash-functions/ripemd",
+            "docId": "hash-functions/ripemd"
+          },
+          {
+            "type": "link",
+            "label": "SHA/SHA2/SHA3",
+            "href": "/hash-functions/sha",
+            "docId": "hash-functions/sha"
+          },
+          {
+            "type": "link",
+            "label": "SHAKE",
+            "href": "/hash-functions/shake",
+            "docId": "hash-functions/shake"
+          },
+          {
+            "type": "link",
+            "label": "SipHash",
+            "href": "/hash-functions/siphash",
+            "docId": "hash-functions/siphash"
+          },
+          {
+            "type": "link",
+            "label": "SM3",
+            "href": "/hash-functions/sm3",
+            "docId": "hash-functions/sm3"
+          },
+          {
+            "type": "link",
+            "label": "Tiger",
+            "href": "/hash-functions/tiger",
+            "docId": "hash-functions/tiger"
+          },
+          {
+            "type": "link",
+            "label": "WHIRLPOOL",
+            "href": "/hash-functions/whirlpool",
+            "docId": "hash-functions/whirlpool"
+          }
+        ]
+      },
+      {
+        "type": "category",
+        "label": "Public-key cryptography",
+        "collapsible": true,
+        "collapsed": true,
+        "items": [
+          {
+            "type": "link",
+            "label": "RSA",
+            "href": "/public-key-cryptography/rsa",
+            "docId": "public-key-cryptography/rsa"
+          }
+        ]
+      },
+      {
+        "type": "category",
+        "label": "Padding schemes for public-key systems",
+        "collapsible": true,
+        "collapsed": true,
+        "items": [
+          {
+            "type": "link",
+            "label": "HDKF",
+            "href": "/padding-schemes/hkdf",
+            "docId": "padding-schemes/hkdf"
+          },
+          {
+            "type": "link",
+            "label": "PKCS12 PBKDF",
+            "href": "/padding-schemes/pbkdf12",
+            "docId": "padding-schemes/pbkdf12"
+          },
+          {
+            "type": "link",
+            "label": "PKCS5 PBKDF1",
+            "href": "/padding-schemes/pkcs5_pbkdf1",
+            "docId": "padding-schemes/pkcs5_pbkdf1"
+          },
+          {
+            "type": "link",
+            "label": "PKCS5 PBKDF2 HMAC",
+            "href": "/padding-schemes/pkcs5_pbkdf2",
+            "docId": "padding-schemes/pkcs5_pbkdf2"
+          }
+        ]
+      },
+      {
+        "type": "category",
+        "label": "Insecure",
+        "collapsible": true,
+        "collapsed": true,
+        "items": [
+          {
+            "type": "link",
+            "label": "MD2/MD4/MD5",
+            "href": "/insecure/message-digest",
+            "docId": "insecure/message-digest"
+          }
+        ]
+      },
+      {
+        "type": "link",
+        "label": "Utilities",
+        "href": "/utils/",
+        "docId": "utils/utils"
+      }
+    ]
+  },
+  "docs": {
+    "aes-and-aes-candidates/aes": {
+      "id": "aes-and-aes-candidates/aes",
+      "title": "AES",
+      "description": "Docusaurus can manage multiple versions of your docs.",
+      "sidebar": "tutorialSidebar"
+    },
+    "hash-functions/blake2": {
+      "id": "hash-functions/blake2",
+      "title": "BLAKE2b/BLAKE2s",
+      "description": "Docusaurus can manage multiple versions of your docs.",
+      "sidebar": "tutorialSidebar"
+    },
+    "hash-functions/keccak": {
+      "id": "hash-functions/keccak",
+      "title": "Keccak",
+      "description": "Docusaurus can manage multiple versions of your docs.",
+      "sidebar": "tutorialSidebar"
+    },
+    "hash-functions/lsh": {
+      "id": "hash-functions/lsh",
+      "title": "LSH",
+      "description": "Docusaurus can manage multiple versions of your docs.",
+      "sidebar": "tutorialSidebar"
+    },
+    "hash-functions/ripemd": {
+      "id": "hash-functions/ripemd",
+      "title": "RIPEMD",
+      "description": "Docusaurus can manage multiple versions of your docs.",
+      "sidebar": "tutorialSidebar"
+    },
+    "hash-functions/sha": {
+      "id": "hash-functions/sha",
+      "title": "SHA/SHA2/SHA3",
+      "description": "Docusaurus can manage multiple versions of your docs.",
+      "sidebar": "tutorialSidebar"
+    },
+    "hash-functions/shake": {
+      "id": "hash-functions/shake",
+      "title": "SHAKE",
+      "description": "Docusaurus can manage multiple versions of your docs.",
+      "sidebar": "tutorialSidebar"
+    },
+    "hash-functions/siphash": {
+      "id": "hash-functions/siphash",
+      "title": "SipHash",
+      "description": "Docusaurus can manage multiple versions of your docs.",
+      "sidebar": "tutorialSidebar"
+    },
+    "hash-functions/sm3": {
+      "id": "hash-functions/sm3",
+      "title": "SM3",
+      "description": "Docusaurus can manage multiple versions of your docs.",
+      "sidebar": "tutorialSidebar"
+    },
+    "hash-functions/tiger": {
+      "id": "hash-functions/tiger",
+      "title": "Tiger",
+      "description": "Docusaurus can manage multiple versions of your docs.",
+      "sidebar": "tutorialSidebar"
+    },
+    "hash-functions/whirlpool": {
+      "id": "hash-functions/whirlpool",
+      "title": "WHIRLPOOL",
+      "description": "Docusaurus can manage multiple versions of your docs.",
+      "sidebar": "tutorialSidebar"
+    },
+    "insecure/message-digest": {
+      "id": "insecure/message-digest",
+      "title": "MD2/MD4/MD5",
+      "description": "Docusaurus can manage multiple versions of your docs.",
+      "sidebar": "tutorialSidebar"
+    },
+    "intro": {
+      "id": "intro",
+      "title": "Installation",
+      "description": "iOS",
+      "sidebar": "tutorialSidebar"
+    },
+    "padding-schemes/hkdf": {
+      "id": "padding-schemes/hkdf",
+      "title": "HDKF",
+      "description": "Docusaurus can manage multiple versions of your docs.",
+      "sidebar": "tutorialSidebar"
+    },
+    "padding-schemes/pbkdf12": {
+      "id": "padding-schemes/pbkdf12",
+      "title": "PKCS12 PBKDF",
+      "description": "Docusaurus can manage multiple versions of your docs.",
+      "sidebar": "tutorialSidebar"
+    },
+    "padding-schemes/pkcs5_pbkdf1": {
+      "id": "padding-schemes/pkcs5_pbkdf1",
+      "title": "PKCS5 PBKDF1",
+      "description": "Docusaurus can manage multiple versions of your docs.",
+      "sidebar": "tutorialSidebar"
+    },
+    "padding-schemes/pkcs5_pbkdf2": {
+      "id": "padding-schemes/pkcs5_pbkdf2",
+      "title": "PKCS5 PBKDF2 HMAC",
+      "description": "Docusaurus can manage multiple versions of your docs.",
+      "sidebar": "tutorialSidebar"
+    },
+    "public-key-cryptography/rsa": {
+      "id": "public-key-cryptography/rsa",
+      "title": "RSA",
+      "description": "Docusaurus can manage multiple versions of your docs.",
+      "sidebar": "tutorialSidebar"
+    },
+    "utils/utils": {
+      "id": "utils/utils",
+      "title": "Utilities",
+      "description": "Docusaurus can manage multiple versions of your docs.",
+      "sidebar": "tutorialSidebar"
+    }
+  }
+}

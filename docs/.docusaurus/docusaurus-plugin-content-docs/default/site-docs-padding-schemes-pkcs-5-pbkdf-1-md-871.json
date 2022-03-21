@@ -1,0 +1,26 @@
+{
+  "unversionedId": "padding-schemes/pkcs5_pbkdf1",
+  "id": "padding-schemes/pkcs5_pbkdf1",
+  "title": "PKCS5 PBKDF1",
+  "description": "Docusaurus can manage multiple versions of your docs.",
+  "source": "@site/docs/padding-schemes/pkcs5_pbkdf1.md",
+  "sourceDirName": "padding-schemes",
+  "slug": "/padding-schemes/pkcs5_pbkdf1",
+  "permalink": "/padding-schemes/pkcs5_pbkdf1",
+  "editUrl": "https://github.com/jirihoffman/react-native-cryptopp/docs/docs/padding-schemes/pkcs5_pbkdf1.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 3,
+  "frontMatter": {
+    "sidebar_position": 3
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "PKCS12 PBKDF",
+    "permalink": "/padding-schemes/pbkdf12"
+  },
+  "next": {
+    "title": "PKCS5 PBKDF2 HMAC",
+    "permalink": "/padding-schemes/pkcs5_pbkdf2"
+  }
+}

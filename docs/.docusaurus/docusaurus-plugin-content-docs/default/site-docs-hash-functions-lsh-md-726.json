@@ -1,0 +1,26 @@
+{
+  "unversionedId": "hash-functions/lsh",
+  "id": "hash-functions/lsh",
+  "title": "LSH",
+  "description": "Docusaurus can manage multiple versions of your docs.",
+  "source": "@site/docs/hash-functions/lsh.md",
+  "sourceDirName": "hash-functions",
+  "slug": "/hash-functions/lsh",
+  "permalink": "/hash-functions/lsh",
+  "editUrl": "https://github.com/jirihoffman/react-native-cryptopp/docs/docs/hash-functions/lsh.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 3,
+  "frontMatter": {
+    "sidebar_position": 3
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Keccak",
+    "permalink": "/hash-functions/keccak"
+  },
+  "next": {
+    "title": "RIPEMD",
+    "permalink": "/hash-functions/ripemd"
+  }
+}
