@@ -76,11 +76,21 @@ export default function App() {
         rsa_time = timeDelta(rsa_start, PerformanceNow());
       }
 
-      // SHA hashes
+      // Hashes
       const hashes_start = PerformanceNow();
-      const sha = Cryptopp.SHA.sha1(str);
-      const sha2 = Cryptopp.SHA.sha2(str, '512');
-      const sha3 = Cryptopp.SHA.sha3(str, '512');
+      const BLAKE2b = Cryptopp.hashFunctions.BLAKE2b(str);
+      const BLAKE2s = Cryptopp.hashFunctions.BLAKE2s(str);
+      const Keccak = Cryptopp.hashFunctions.Keccak(str, '256');
+      const LSH = Cryptopp.hashFunctions.LSH(str, '256');
+      const sha = Cryptopp.hashFunctions.SHA1(str);
+      const sha2 = Cryptopp.hashFunctions.SHA2(str, '512');
+      const sha3 = Cryptopp.hashFunctions.SHA3(str, '512');
+      const SHAKE = Cryptopp.hashFunctions.SHAKE(str, '128');
+      const SipHash = Cryptopp.hashFunctions.SipHash(str, '2_4_64');
+      const SM3 = Cryptopp.hashFunctions.SM3(str);
+      const Tiger = Cryptopp.hashFunctions.Tiger(str);
+      const RIPEMD = Cryptopp.hashFunctions.RIPEMD(str, '128');
+      const Whirlpool = Cryptopp.hashFunctions.WHIRLPOOL(str);
 
       // Insecure hashes
       const md2 = Cryptopp.insecure.md2(str);
@@ -142,9 +152,19 @@ export default function App() {
         rsa_signature,
         rsa_verify,
         rsa_time,
+        BLAKE2b,
+        BLAKE2s,
+        Keccak,
+        LSH,
         sha,
         sha2,
         sha3,
+        SHAKE,
+        SipHash,
+        SM3,
+        Tiger,
+        RIPEMD,
+        Whirlpool,
         md2,
         md4,
         md5,

@@ -5,6 +5,52 @@ void rncryptopp_install(jsi::Runtime &jsiRuntime)
         /*
         Hash functions
         */
+        auto blake2b = jsi::Function::createFromHostFunction(
+            jsiRuntime,
+            jsi::PropNameID::forAscii(jsiRuntime, "sha1"),
+            1,
+            [](jsi::Runtime &rt, const jsi::Value &thisValue, const jsi::Value *args,
+               size_t count) -> jsi::Value
+            {
+                    std::string result;
+                    rncryptopp::blake2b(rt, args, &result);
+                    return jsi::String::createFromUtf8(rt, result);
+            });
+        auto blake2s = jsi::Function::createFromHostFunction(
+            jsiRuntime,
+            jsi::PropNameID::forAscii(jsiRuntime, "sha1"),
+            1,
+            [](jsi::Runtime &rt, const jsi::Value &thisValue, const jsi::Value *args,
+               size_t count) -> jsi::Value
+            {
+                    std::string result;
+                    rncryptopp::blake2s(rt, args, &result);
+                    return jsi::String::createFromUtf8(rt, result);
+            });
+
+        auto keccak = jsi::Function::createFromHostFunction(
+            jsiRuntime,
+            jsi::PropNameID::forAscii(jsiRuntime, "sha2"),
+            2,
+            [](jsi::Runtime &rt, const jsi::Value &thisValue, const jsi::Value *args,
+               size_t count) -> jsi::Value
+            {
+                    std::string result;
+                    rncryptopp::keccak(rt, args, &result);
+                    return jsi::String::createFromUtf8(rt, result);
+            });
+
+        auto lsh = jsi::Function::createFromHostFunction(
+            jsiRuntime,
+            jsi::PropNameID::forAscii(jsiRuntime, "sha3"),
+            2,
+            [](jsi::Runtime &rt, const jsi::Value &thisValue, const jsi::Value *args,
+               size_t count) -> jsi::Value
+            {
+                    std::string result;
+                    rncryptopp::lsh(rt, args, &result);
+                    return jsi::String::createFromUtf8(rt, result);
+            });
         auto sha1 = jsi::Function::createFromHostFunction(
             jsiRuntime,
             jsi::PropNameID::forAscii(jsiRuntime, "sha1"),
@@ -39,10 +85,92 @@ void rncryptopp_install(jsi::Runtime &jsiRuntime)
                     return jsi::String::createFromUtf8(rt, result);
             });
 
-        jsi::Object SHA = jsi::Object(jsiRuntime);
-        SHA.setProperty(jsiRuntime, "sha1", std::move(sha1));
-        SHA.setProperty(jsiRuntime, "sha2", std::move(sha2));
-        SHA.setProperty(jsiRuntime, "sha3", std::move(sha3));
+        auto shake = jsi::Function::createFromHostFunction(
+            jsiRuntime,
+            jsi::PropNameID::forAscii(jsiRuntime, "sha1"),
+            1,
+            [](jsi::Runtime &rt, const jsi::Value &thisValue, const jsi::Value *args,
+               size_t count) -> jsi::Value
+            {
+                    std::string result;
+                    rncryptopp::shake(rt, args, &result);
+                    return jsi::String::createFromUtf8(rt, result);
+            });
+
+        auto sipHash = jsi::Function::createFromHostFunction(
+            jsiRuntime,
+            jsi::PropNameID::forAscii(jsiRuntime, "sha2"),
+            2,
+            [](jsi::Runtime &rt, const jsi::Value &thisValue, const jsi::Value *args,
+               size_t count) -> jsi::Value
+            {
+                    std::string result;
+                    rncryptopp::sipHash(rt, args, &result);
+                    return jsi::String::createFromUtf8(rt, result);
+            });
+
+        auto sm3 = jsi::Function::createFromHostFunction(
+            jsiRuntime,
+            jsi::PropNameID::forAscii(jsiRuntime, "sha3"),
+            2,
+            [](jsi::Runtime &rt, const jsi::Value &thisValue, const jsi::Value *args,
+               size_t count) -> jsi::Value
+            {
+                    std::string result;
+                    rncryptopp::sm3(rt, args, &result);
+                    return jsi::String::createFromUtf8(rt, result);
+            });
+
+        auto tiger = jsi::Function::createFromHostFunction(
+            jsiRuntime,
+            jsi::PropNameID::forAscii(jsiRuntime, "sha3"),
+            2,
+            [](jsi::Runtime &rt, const jsi::Value &thisValue, const jsi::Value *args,
+               size_t count) -> jsi::Value
+            {
+                    std::string result;
+                    rncryptopp::tiger(rt, args, &result);
+                    return jsi::String::createFromUtf8(rt, result);
+            });
+
+        auto ripemd = jsi::Function::createFromHostFunction(
+            jsiRuntime,
+            jsi::PropNameID::forAscii(jsiRuntime, "sha3"),
+            2,
+            [](jsi::Runtime &rt, const jsi::Value &thisValue, const jsi::Value *args,
+               size_t count) -> jsi::Value
+            {
+                    std::string result;
+                    rncryptopp::ripemd(rt, args, &result);
+                    return jsi::String::createFromUtf8(rt, result);
+            });
+
+        auto whirlpool = jsi::Function::createFromHostFunction(
+            jsiRuntime,
+            jsi::PropNameID::forAscii(jsiRuntime, "sha3"),
+            2,
+            [](jsi::Runtime &rt, const jsi::Value &thisValue, const jsi::Value *args,
+               size_t count) -> jsi::Value
+            {
+                    std::string result;
+                    rncryptopp::whirlpool(rt, args, &result);
+                    return jsi::String::createFromUtf8(rt, result);
+            });
+
+        jsi::Object hashFunctions = jsi::Object(jsiRuntime);
+        hashFunctions.setProperty(jsiRuntime, "BLAKE2b", std::move(blake2b));
+        hashFunctions.setProperty(jsiRuntime, "BLAKE2s", std::move(blake2s));
+        hashFunctions.setProperty(jsiRuntime, "Keccak", std::move(keccak));
+        hashFunctions.setProperty(jsiRuntime, "LSH", std::move(lsh));
+        hashFunctions.setProperty(jsiRuntime, "SHA1", std::move(sha1));
+        hashFunctions.setProperty(jsiRuntime, "SHA2", std::move(sha2));
+        hashFunctions.setProperty(jsiRuntime, "SHA3", std::move(sha3));
+        hashFunctions.setProperty(jsiRuntime, "SHAKE", std::move(shake));
+        hashFunctions.setProperty(jsiRuntime, "SipHash", std::move(sipHash));
+        hashFunctions.setProperty(jsiRuntime, "SM3", std::move(sm3));
+        hashFunctions.setProperty(jsiRuntime, "Tiger", std::move(tiger));
+        hashFunctions.setProperty(jsiRuntime, "RIPEMD", std::move(ripemd));
+        hashFunctions.setProperty(jsiRuntime, "WHIRLPOOL", std::move(whirlpool));
 
         /*
         AES and AES candidates
@@ -213,28 +341,28 @@ void rncryptopp_install(jsi::Runtime &jsiRuntime)
             });
 
         auto rsa_sign = jsi::Function::createFromHostFunction(
-                jsiRuntime,
-                jsi::PropNameID::forAscii(jsiRuntime, "rsa_sign"),
-                3,
-                [](jsi::Runtime &rt, const jsi::Value &thisValue, const jsi::Value *args,
-                   size_t count) -> jsi::Value
-                {
-                        std::string result;
-                        rncryptopp::RSA::sign(rt, args, &result);
-                        return jsi::String::createFromUtf8(rt, result);
-                });
+            jsiRuntime,
+            jsi::PropNameID::forAscii(jsiRuntime, "rsa_sign"),
+            3,
+            [](jsi::Runtime &rt, const jsi::Value &thisValue, const jsi::Value *args,
+               size_t count) -> jsi::Value
+            {
+                    std::string result;
+                    rncryptopp::RSA::sign(rt, args, &result);
+                    return jsi::String::createFromUtf8(rt, result);
+            });
 
         auto rsa_verify = jsi::Function::createFromHostFunction(
-                jsiRuntime,
-                jsi::PropNameID::forAscii(jsiRuntime, "rsa_verify"),
-                3,
-                [](jsi::Runtime &rt, const jsi::Value &thisValue, const jsi::Value *args,
-                   size_t count) -> jsi::Value
-                {
-                        bool result;
-                        rncryptopp::RSA::verify(rt, args, &result);
-                        return jsi::Value(result);
-                });
+            jsiRuntime,
+            jsi::PropNameID::forAscii(jsiRuntime, "rsa_verify"),
+            3,
+            [](jsi::Runtime &rt, const jsi::Value &thisValue, const jsi::Value *args,
+               size_t count) -> jsi::Value
+            {
+                    bool result;
+                    rncryptopp::RSA::verify(rt, args, &result);
+                    return jsi::Value(result);
+            });
 
         jsi::Object RSA = jsi::Object(jsiRuntime);
         RSA.setProperty(jsiRuntime, "generateKeyPair", std::move(generate_rsa_keypair));
@@ -354,12 +482,12 @@ void rncryptopp_install(jsi::Runtime &jsiRuntime)
         Cryptopp module
         */
         jsi::Object module = jsi::Object(jsiRuntime);
-        module.setProperty(jsiRuntime, "SHA", std::move(SHA));
         module.setProperty(jsiRuntime, "AES", std::move(AES));
+        module.setProperty(jsiRuntime, "RSA", std::move(RSA));
+        module.setProperty(jsiRuntime, "hashFunctions", std::move(hashFunctions));
         module.setProperty(jsiRuntime, "insecure", std::move(insecure));
         module.setProperty(jsiRuntime, "keyDerivation", std::move(keyDerivation));
         module.setProperty(jsiRuntime, "utils", std::move(utils));
-        module.setProperty(jsiRuntime, "RSA", std::move(RSA));
 
         jsiRuntime.global().setProperty(jsiRuntime, "cryptoppModule", std::move(module));
 }

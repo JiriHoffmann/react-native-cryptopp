@@ -20,9 +20,9 @@ namespace rncryptopp
             return std::make_pair(5, SHAKE128::DIGESTSIZE);
         if (hash == "SHAKE256")
             return std::make_pair(6, SHAKE256::DIGESTSIZE);
-        if (hash == "BLAKE2B")
+        if (hash == "BLAKE2b")
             return std::make_pair(7, BLAKE2b::DIGESTSIZE);
-        if (hash == "BLAKE2S")
+        if (hash == "BLAKE2s")
             return std::make_pair(8, BLAKE2s::DIGESTSIZE);
         if (hash == "LSH256")
             return std::make_pair(9, LSH256::DIGESTSIZE);
