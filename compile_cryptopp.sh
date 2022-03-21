@@ -1,6 +1,6 @@
 TEMP_AND="TEMP_AND"
 TEMP_IOS="TEMP_CRYPTOPP_IOS"
-
+PACKAGE_DIR="$(dirname "$0")"
 # Note: headers for both platforms are the same except
 # android has an additional header file: cpu_features.h
 
@@ -57,8 +57,9 @@ function build_cryptopp_ios
 # #########################################
 # #####           Prepare             #####
 # #########################################
-# rm -rf "cpp/cryptopp" # clean headers
-# mkdir "cpp/cryptopp"
+pushd "$PACKAGE_DIR"
+rm -rf "cpp/cryptopp" # clean headers
+mkdir "cpp/cryptopp"
 copy_pem_pack
 
 # #########################################
@@ -66,27 +67,27 @@ copy_pem_pack
 # #########################################
 
 # Clean old data
-# rm -rf "cpp/android"
-# mkdir "cpp/android"
+rm -rf "cpp/android"
+mkdir "cpp/android"
 
-# pushd "cryptopp"
-# make clean
+pushd "cryptopp"
+make clean
 
-# # Build for all architectures
-# build_cryptopp_android 30 armeabi-v7a
-# make clean
+# Build for all architectures
+build_cryptopp_android 23 armeabi-v7a
+make clean
 
-# build_cryptopp_android 30 arm64-v8a
-# make clean
+build_cryptopp_android 23 arm64-v8a
+make clean
 
-# build_cryptopp_android 30 x86
-# make clean
+build_cryptopp_android 23 x86
+make clean
 
-# build_cryptopp_android 30 x86_64
-# make clean
+build_cryptopp_android 23 x86_64
+make clean
 
-# rm -rf "$TEMP_AND"
-# popd
+rm -rf "$TEMP_AND"
+popd
 
 # #########################################
 # #####              iOS              #####
@@ -124,3 +125,5 @@ popd
 # #####           Clean-up            #####
 # #########################################
 clean_pem_pack
+popd
+
