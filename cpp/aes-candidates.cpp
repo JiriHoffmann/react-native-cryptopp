@@ -71,22 +71,22 @@ namespace rncryptopp
 
         std::string data;
         if (!binaryLikeValueToString(rt, args[0], &data, 0, 0))
-            throwJSError(rt, "RNCryptopp: aes_encrypt data in not a string");
+            throwJSError(rt, "RNCryptopp: aes_encrypt data is not a string");
 
         std::string key;
         if (!binaryLikeValueToString(rt, args[1], &key, 1, 0))
-            throwJSError(rt, "RNCryptopp: aes_encrypt iv in not a string or ArrayBuffer");
+            throwJSError(rt, "RNCryptopp: aes_encrypt iv is not a string or ArrayBuffer");
 
         std::string iv;
         if (!binaryLikeValueToString(rt, args[2], &iv, 1, 0))
-            throwJSError(rt, "RNCryptopp: aes_encrypt iv in not a string or ArrayBuffer");
+            throwJSError(rt, "RNCryptopp: aes_encrypt iv is not a string or ArrayBuffer");
 
         std::string mode;
         if (!stringValueToString(rt, args[3], &mode))
-            throwJSError(rt, "RNCryptopp: aes_encrypt mode in not a string");
+            throwJSError(rt, "RNCryptopp: aes_encrypt mode is not a string");
 
         // encode result with base64 by default
-        int encoding = rncryptopp::getEncodingFromArgs(rt, args, argCount, 4, 2);
+        int encoding = rncryptopp::getEncodingFromArgs(rt, args, argCount, 4, 2, false);
 
         auto modeIndex = getModeIndex(mode);
 
@@ -107,19 +107,19 @@ namespace rncryptopp
 
         std::string data;
         if (!binaryLikeValueToString(rt, args[0], &data, encoding, encoding))
-            throwJSError(rt, "RNCryptopp: aes_decrypt data in not a string");
+            throwJSError(rt, "RNCryptopp: aes_decrypt data is not a string");
 
         std::string key;
         if (!binaryLikeValueToString(rt, args[1], &key, 0, 0))
-            throwJSError(rt, "RNCryptopp: aes_decrypt key in not a string");
+            throwJSError(rt, "RNCryptopp: aes_decrypt key is not a string");
 
         std::string iv;
         if (!binaryLikeValueToString(rt, args[2], &iv, 0, 0))
-            throwJSError(rt, "RNCryptopp: aes_decrypt iv in not a string");
+            throwJSError(rt, "RNCryptopp: aes_decrypt iv is not a string");
 
         std::string mode;
         if (!stringValueToString(rt, args[3], &mode))
-            throwJSError(rt, "RNCryptopp: aes_decrypt mode in not a string");
+            throwJSError(rt, "RNCryptopp: aes_decrypt mode is not a string");
 
         auto modeIndex = getModeIndex(mode);
 

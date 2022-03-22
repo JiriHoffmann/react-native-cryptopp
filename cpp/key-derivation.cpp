@@ -62,21 +62,21 @@ namespace rncryptopp
     {
         std::string password;
         if (!binaryLikeValueToString(rt, args[0], &password))
-            throwJSError(rt, "RNCryptopp: hkdf password in not a string or ArrayBuffer");
+            throwJSError(rt, "RNCryptopp: hkdf password is not a string or ArrayBuffer");
 
         std::string salt;
         if (!binaryLikeValueToString(rt, args[1],
                                      &salt))
-            throwJSError(rt, "RNCryptopp: hkdf salt in not a string or ArrayBuffer");
-
-        std::string info;
-        if (!binaryLikeValueToString(rt, args[2],
-                                     &info))
-            throwJSError(rt, "RNCryptopp: hkdf info in not a string or ArrayBuffer");
+            throwJSError(rt, "RNCryptopp: hkdf salt is not a string or ArrayBuffer");
 
         std::string hash;
-        if (!stringValueToString(rt, args[3], &hash))
-            throwJSError(rt, "RNCryptopp: hkdf hash in not a string");
+        if (!stringValueToString(rt, args[2], &hash))
+            throwJSError(rt, "RNCryptopp: hkdf hash is not a string");
+
+        std::string info;
+        if (!binaryLikeValueToString(rt, args[3],
+                                     &info))
+            throwJSError(rt, "RNCryptopp: hkdf info is not a string or ArrayBuffer");
 
         auto hashType = getHashIndexAndSize(hash);
 
@@ -122,16 +122,16 @@ namespace rncryptopp
     {
         std::string password;
         if (!binaryLikeValueToString(rt, args[0], &password))
-            throwJSError(rt, "RNCryptopp: pbkdf12 password in not a string or ArrayBuffer");
+            throwJSError(rt, "RNCryptopp: pbkdf12 password is not a string or ArrayBuffer");
 
         std::string salt;
         if (!binaryLikeValueToString(rt, args[1],
                                      &salt))
-            throwJSError(rt, "RNCryptopp: pbkdf12 salt in not a string or ArrayBuffer");
+            throwJSError(rt, "RNCryptopp: pbkdf12 salt is not a string or ArrayBuffer");
 
         std::string hash;
         if (!stringValueToString(rt, args[2], &hash))
-            throwJSError(rt, "RNCryptopp: pbkdf12 hash in not a string");
+            throwJSError(rt, "RNCryptopp: pbkdf12 hash is not a string");
 
         int iterations;
         if (!valueToInt(args[3], &iterations))
@@ -181,16 +181,16 @@ namespace rncryptopp
     {
         std::string password;
         if (!binaryLikeValueToString(rt, args[0], &password))
-            throwJSError(rt, "RNCryptopp: pkcs5_pbkdf1 password in not a string or ArrayBuffer");
+            throwJSError(rt, "RNCryptopp: pkcs5_pbkdf1 password is not a string or ArrayBuffer");
 
         std::string salt;
         if (!binaryLikeValueToString(rt, args[1],
                                      &salt))
-            throwJSError(rt, "RNCryptopp: pkcs5_pbkdf1 salt in not a string or ArrayBuffer");
+            throwJSError(rt, "RNCryptopp: pkcs5_pbkdf1 salt is not a string or ArrayBuffer");
 
         std::string hash;
         if (!stringValueToString(rt, args[2], &hash))
-            throwJSError(rt, "RNCryptopp: pkcs5_pbkdf1 hash in not a string");
+            throwJSError(rt, "RNCryptopp: pkcs5_pbkdf1 hash is not a string");
 
         int iterations;
         if (!valueToInt(args[3], &iterations))
@@ -240,16 +240,16 @@ namespace rncryptopp
     {
         std::string password;
         if (!binaryLikeValueToString(rt, args[0], &password))
-            throwJSError(rt, "RNCryptopp: pkcs5_pbkdf2 password in not a string or ArrayBuffer");
+            throwJSError(rt, "RNCryptopp: pkcs5_pbkdf2 password is not a string or ArrayBuffer");
 
         std::string salt;
         if (!binaryLikeValueToString(rt, args[1],
                                      &salt))
-            throwJSError(rt, "RNCryptopp: pkcs5_pbkdf2 salt in not a string or ArrayBuffer");
+            throwJSError(rt, "RNCryptopp: pkcs5_pbkdf2 salt is not a string or ArrayBuffer");
 
         std::string hash;
         if (!stringValueToString(rt, args[2], &hash))
-            throwJSError(rt, "RNCryptopp: pkcs5_pbkdf2 hash in not a string");
+            throwJSError(rt, "RNCryptopp: pkcs5_pbkdf2 hash is not a string");
 
         int iterations;
         if (!valueToInt(args[3], &iterations))

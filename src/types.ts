@@ -2,9 +2,17 @@ export type BitSize = '224' | '256' | '384' | '512';
 export type SipHash_Type = '2_4_64' | '4_8_128';
 export type SHAKE_Size = '128' | '256';
 export type RIPEMD_Size = '128' | '160' | '256' | '320';
-export type AES_Modes = 'ecb' | 'cbc' | 'cfb' | 'ofb' | 'ctr';
+export type AES_Modes =
+  | 'ecb'
+  | 'cbc'
+  | 'cbc_cts'
+  | 'cfb'
+  | 'ofb'
+  | 'ctr'
+  | 'xts';
 export type BinaryLike = string | ArrayBuffer;
-export type BinaryLikeEncoding = 'utf8' | 'hex' | 'base64' | 'base64url';
+export type BinaryLikeEncodingInput = 'utf8' | 'hex' | 'base64' | 'base64url';
+export type BinaryLikeEncodingOutput = 'hex' | 'base64' | 'base64url';
 export type KeyDerivationHash =
   | 'SHA1'
   | 'SHA256'
@@ -18,6 +26,11 @@ export type KeyDerivationHash =
   | 'LSH256'
   | 'LSH512'
   | 'SM3';
+
+export type RSA_EncryptionScheme = 'OAEP_SHA1' | 'OAEP_SHA256' | 'PKCS1v15';
+export type RSA_SSA = 'PKCS1v15_SHA1' | 'PKCS1v15_SHA256';
+export type RSA_PSSR = 'PSSR_SHA1' | 'PSSR_SHA256' | 'PSSR_Whirlpool';
+export type RSA_SignatureScheme = RSA_SSA | RSA_PSSR;
 
 export interface Cryptopp {
   hashFunctions: {
@@ -41,14 +54,14 @@ export interface Cryptopp {
       key: BinaryLike,
       iv: BinaryLike,
       mode: AES_Modes,
-      encodeTo?: BinaryLikeEncoding
+      encodeTo?: BinaryLikeEncodingOutput
     ) => string;
     decrypt: (
       data: BinaryLike,
       key: BinaryLike,
       iv: BinaryLike,
       mode: AES_Modes,
-      dataEncoding?: BinaryLikeEncoding
+      dataEncoding?: BinaryLikeEncodingInput
     ) => string;
   };
   RSA: {
@@ -63,10 +76,32 @@ export interface Cryptopp {
         e: string;
       };
     };
-    encrypt: (data: BinaryLike, publicKey: string) => string;
-    decrypt: (data: BinaryLike, privateKey: string) => string;
-    sign: (data: BinaryLike, privateKey: string) => string;
-    verify: (data: BinaryLike, publicKey: string, signature: string) => boolean;
+    encrypt: (
+      data: BinaryLike,
+      publicKey: string,
+      encryptionScheme: RSA_EncryptionScheme
+    ) => string;
+    decrypt: (
+      data: BinaryLike,
+      privateKey: string,
+      encryptionScheme: RSA_EncryptionScheme
+    ) => string;
+    sign: (
+      data: BinaryLike,
+      privateKey: string,
+      signatureScheme: RSA_SignatureScheme
+    ) => string;
+    verify: (
+      data: BinaryLike,
+      publicKey: string,
+      signatureScheme: RSA_SSA,
+      signature: string
+    ) => boolean;
+    recover: (
+      signature: string,
+      publicKey: string,
+      signatureScheme: RSA_PSSR
+    ) => boolean;
   };
   keyDerivation: {
     pbkdf12: (
@@ -90,14 +125,14 @@ export interface Cryptopp {
     hkdf: (
       password: BinaryLike,
       salt: BinaryLike,
-      info: BinaryLike,
-      hash: KeyDerivationHash
+      hash: KeyDerivationHash,
+      info: BinaryLike
     ) => string;
   };
   insecure: {
-    md2: (data: string) => string;
-    md4: (data: string) => string;
-    md5: (data: string) => string;
+    md2: (data: BinaryLike) => string;
+    md4: (data: BinaryLike) => string;
+    md5: (data: BinaryLike) => string;
   };
 
   utils: {
@@ -105,16 +140,25 @@ export interface Cryptopp {
     randomBytes: (size: number) => ArrayBuffer;
     stringToBytes: (
       string: string,
-      stringEncoding?: BinaryLikeEncoding
+      stringEncoding?: BinaryLikeEncodingInput
     ) => ArrayBuffer;
 
     // Encoding manipulation
-    toBase64: (data: BinaryLike, dataEncoding?: BinaryLikeEncoding) => string;
-    toBase64Url: (
-      data: BinaryLike,
-      dataEncoding?: BinaryLikeEncoding
+    toBase64: (
+      input: BinaryLike,
+      inputEncoding?: BinaryLikeEncodingInput
     ) => string;
-    toHex: (data: BinaryLike, dataEncoding?: BinaryLikeEncoding) => string;
-    toUtf8: (data: BinaryLike, dataEncoding?: BinaryLikeEncoding) => string;
+    toBase64Url: (
+      input: BinaryLike,
+      inputEncoding?: BinaryLikeEncodingInput
+    ) => string;
+    toHex: (
+      data: BinaryLike,
+      inputEncoding?: BinaryLikeEncodingInput
+    ) => string;
+    toUtf8: (
+      input: BinaryLike,
+      inputEncoding?: BinaryLikeEncodingInput
+    ) => string;
   };
 }

@@ -88,7 +88,7 @@ void rncryptopp_install(jsi::Runtime &jsiRuntime)
         auto shake = jsi::Function::createFromHostFunction(
             jsiRuntime,
             jsi::PropNameID::forAscii(jsiRuntime, "sha1"),
-            1,
+            2,
             [](jsi::Runtime &rt, const jsi::Value &thisValue, const jsi::Value *args,
                size_t count) -> jsi::Value
             {
@@ -112,7 +112,7 @@ void rncryptopp_install(jsi::Runtime &jsiRuntime)
         auto sm3 = jsi::Function::createFromHostFunction(
             jsiRuntime,
             jsi::PropNameID::forAscii(jsiRuntime, "sha3"),
-            2,
+            1,
             [](jsi::Runtime &rt, const jsi::Value &thisValue, const jsi::Value *args,
                size_t count) -> jsi::Value
             {
@@ -124,7 +124,7 @@ void rncryptopp_install(jsi::Runtime &jsiRuntime)
         auto tiger = jsi::Function::createFromHostFunction(
             jsiRuntime,
             jsi::PropNameID::forAscii(jsiRuntime, "sha3"),
-            2,
+            1,
             [](jsi::Runtime &rt, const jsi::Value &thisValue, const jsi::Value *args,
                size_t count) -> jsi::Value
             {
@@ -148,7 +148,7 @@ void rncryptopp_install(jsi::Runtime &jsiRuntime)
         auto whirlpool = jsi::Function::createFromHostFunction(
             jsiRuntime,
             jsi::PropNameID::forAscii(jsiRuntime, "sha3"),
-            2,
+            1,
             [](jsi::Runtime &rt, const jsi::Value &thisValue, const jsi::Value *args,
                size_t count) -> jsi::Value
             {
@@ -355,7 +355,7 @@ void rncryptopp_install(jsi::Runtime &jsiRuntime)
         auto rsa_verify = jsi::Function::createFromHostFunction(
             jsiRuntime,
             jsi::PropNameID::forAscii(jsiRuntime, "rsa_verify"),
-            3,
+            4,
             [](jsi::Runtime &rt, const jsi::Value &thisValue, const jsi::Value *args,
                size_t count) -> jsi::Value
             {
@@ -364,12 +364,25 @@ void rncryptopp_install(jsi::Runtime &jsiRuntime)
                     return jsi::Value(result);
             });
 
+        auto rsa_recover = jsi::Function::createFromHostFunction(
+            jsiRuntime,
+            jsi::PropNameID::forAscii(jsiRuntime, "rsa_recover"),
+            3,
+            [](jsi::Runtime &rt, const jsi::Value &thisValue, const jsi::Value *args,
+               size_t count) -> jsi::Value
+            {
+                std::string result;
+                rncryptopp::RSA::recover(rt, args, &result);
+                return jsi::String::createFromUtf8(rt, result);
+            });
+
         jsi::Object RSA = jsi::Object(jsiRuntime);
         RSA.setProperty(jsiRuntime, "generateKeyPair", std::move(generate_rsa_keypair));
         RSA.setProperty(jsiRuntime, "encrypt", std::move(rsa_encrypt));
         RSA.setProperty(jsiRuntime, "decrypt", std::move(rsa_decrypt));
         RSA.setProperty(jsiRuntime, "sign", std::move(rsa_sign));
         RSA.setProperty(jsiRuntime, "verify", std::move(rsa_verify));
+        RSA.setProperty(jsiRuntime, "recover", std::move(rsa_recover));
 
         /*
         Utils

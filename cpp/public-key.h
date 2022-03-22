@@ -8,6 +8,8 @@
 #include "cryptopp/rsa.h"
 #include "cryptopp/osrng.h"
 #include "cryptopp/pem.h"
+#include "cryptopp/pssr.h"
+#include "cryptopp/whrlpool.h"
 
 #include "helpers.h"
 
@@ -28,6 +30,8 @@ namespace rncryptopp
         void sign(jsi::Runtime &rt, const jsi::Value *args, std::string *result);
 
         void verify(jsi::Runtime &rt, const jsi::Value *args, bool *result);
+
+        void recover(jsi::Runtime &rt, const jsi::Value *args, std::string *result);
     }
 }
 #endif // CRYPTOPPEXAMPLE_PUBLIC_KEY_H

@@ -32,7 +32,7 @@ namespace rncryptopp
 
     void base64UrlEncode(std::string &in, std::string &out);
 
-    int getEncodingFromArgs(jsi::Runtime &rt, const jsi::Value *args, size_t argCount, int index, int defaultValue = 0);
+    int getEncodingFromArgs(jsi::Runtime &rt, const jsi::Value *args, size_t argCount, int index, int defaultValue = 0, bool allowUTF8 = true);
 }
 
 #endif // CRYPTOPPEXAMPLE_HELPERS_H

@@ -62,17 +62,28 @@ export default function App() {
       if (!isImage) {
         const rsa_start = PerformanceNow();
 
-        rsa_encrypted = Cryptopp.RSA.encrypt(str, rsa_keypair.public);
+        rsa_encrypted = Cryptopp.RSA.encrypt(
+          str,
+          rsa_keypair.public,
+          'OAEP_SHA1'
+        );
         rsa_decrypted = Cryptopp.RSA.decrypt(
           rsa_encrypted,
-          rsa_keypair.private
+          rsa_keypair.private,
+          'OAEP_SHA1'
         );
-        rsa_signature = Cryptopp.RSA.sign(rsa_encrypted, rsa_keypair2.private);
+        rsa_signature = Cryptopp.RSA.sign(
+          rsa_encrypted,
+          rsa_keypair2.private,
+          'PKCS1v15_SHA1'
+        );
         rsa_verify = Cryptopp.RSA.verify(
           rsa_encrypted,
           rsa_keypair2.public,
+          'PKCS1v15_SHA1',
           rsa_signature
         ).toString();
+
         rsa_time = timeDelta(rsa_start, PerformanceNow());
       }
 
@@ -129,8 +140,8 @@ export default function App() {
       const hkdf = Cryptopp.keyDerivation.hkdf(
         str,
         'salt',
-        'HKDF key derivation',
-        'SHA1'
+        'SHA1',
+        'HKDF key derivation'
       );
       const key_padding_time = timeDelta(key_padding_start, PerformanceNow());
 

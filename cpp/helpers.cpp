@@ -120,15 +120,18 @@ namespace rncryptopp
     // Int encoding from a JS string. Uses argCount to check
     // if index is out of JS array bounds
     // Returns:
+    // 0: No encoding (uft8), if not allowed returns default value
     // 1: Hex encoding
     // 2: Base64 encoding
     // 3: Base64Url encoding
-    int getEncodingFromArgs(jsi::Runtime &rt, const jsi::Value *args, size_t argCount, int index, int defaultValue)
+    int getEncodingFromArgs(jsi::Runtime &rt, const jsi::Value *args, size_t argCount, int index, int defaultValue, bool allowUTF8)
     {
         if (index >= (int)argCount)
             return defaultValue;
 
         std::string encoding = args[index].asString(rt).utf8(rt);
+        if (encoding == "utf8" && allowUTF8)
+            return 0;
         if (encoding == "hex")
             return 1;
         if (encoding == "base64")

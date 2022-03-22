@@ -8,7 +8,7 @@ namespace rncryptopp
         std::string data;
         if (!binaryLikeValueToString(rt, args[0], &data))
         {
-            throwJSError(rt, "RNCryptopp: Data in not a string");
+            throwJSError(rt, "RNCryptopp: Data is not a string");
         }
         Weak::MD2 hash;
         StringSource(data, true, new HashFilter(hash, new HexEncoder(new StringSink(*result))));
@@ -19,7 +19,7 @@ namespace rncryptopp
         std::string data;
         if (!binaryLikeValueToString(rt, args[0], &data))
         {
-            throwJSError(rt, "RNCryptopp: Data in not a string");
+            throwJSError(rt, "RNCryptopp: Data is not a string");
         }
         Weak::MD4 hash;
         StringSource(data, true, new HashFilter(hash, new HexEncoder(new StringSink(*result))));
@@ -30,7 +30,7 @@ namespace rncryptopp
         std::string data;
         if (!binaryLikeValueToString(rt, args[0], &data))
         {
-            throwJSError(rt, "RNCryptopp: Data in not a string");
+            throwJSError(rt, "RNCryptopp: Data is not a string");
         }
         Weak::MD5 hash;
         StringSource(data, true, new HashFilter(hash, new HexEncoder(new StringSink(*result))));
