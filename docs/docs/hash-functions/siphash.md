@@ -4,4 +4,15 @@ sidebar_position: 7
 
 # SipHash
 
-Docusaurus can manage multiple versions of your docs.
+```js
+Cryptopp.hashFunctions.SipHash(data);
+```
+
+#### Parameters
+
+| Parameter | Type                      | Required |
+| --------- | ------------------------- | -------- |
+| data      | `string` <br/> `ArrayBuffer`  | ✅       |
+| type      | `"2_4_64"`  <br/> `"4_8_128"` | ✅       |
+
+#### Returns: `string`

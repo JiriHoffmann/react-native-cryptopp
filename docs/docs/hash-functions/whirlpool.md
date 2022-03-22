@@ -4,4 +4,14 @@ sidebar_position: 10
 
 # WHIRLPOOL
 
-Docusaurus can manage multiple versions of your docs.
+```js
+Cryptopp.hashFunctions.WHIRLPOOL(data, '512');
+```
+
+#### Parameters
+
+| Parameter | Type                      | Required |
+| --------- | ------------------------- | -------- |
+| data      | `string` <br/> `ArrayBuffer`  | ✅       |
+
+#### Returns: `string`

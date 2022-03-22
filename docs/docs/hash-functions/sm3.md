@@ -4,4 +4,14 @@ sidebar_position: 8
 
 # SM3
 
-Docusaurus can manage multiple versions of your docs.
+```js
+Cryptopp.hashFunctions.SM3(data, '512');
+```
+
+#### Parameters
+
+| Parameter | Type                      | Required |
+| --------- | ------------------------- | -------- |
+| data      | `string` <br/> `ArrayBuffer`  | ✅       |
+
+#### Returns: `string`
