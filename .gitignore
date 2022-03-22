@@ -66,3 +66,5 @@ cpp/ios/libcryptopp.a
 example/yarn.lock
 example/yarn.lock
 example/package-lock.json
+
+docs/.docusaurus/
