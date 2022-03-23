@@ -16,7 +16,7 @@ cd ios && pod install
 npx pod install
 ```
 
-**`Important:`** First time builds will take several minutes as Crypto++ has to be compiled for all CPU architectures. Make sure the `android build` and `pod install` is **NOT** running at the same time! More information about the build process can be found [here]().
+**`Important:`** First time builds will take several minutes as Crypto++ has to be compiled for all CPU architectures. Make sure the `android build` and `pod install` is **NOT** running at the same time! More information about the build process can be found [here](https://jirihoffmann.github.io/react-native-cryptopp).
 
 ## Usage
 
