@@ -14,8 +14,6 @@
     "ios",
     "cpp",
     "react-native-cryptopp.podspec",
-    "combine_ios_fat_lib.sh",
-    "compile_cryptopp.sh",
     "!lib/typescript/example",
     "!android/build",
     "!ios/build",
@@ -23,7 +21,9 @@
     "!**/__fixtures__",
     "!**/__mocks__",
     "!android/.cxx",
-    "!android/.gradle"
+    "!android/.gradle",
+    "cryptopp",
+    "cryptopp-pem"
   ],
   "scripts": {
     "test": "jest",
