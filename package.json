@@ -24,7 +24,8 @@
     "!**/__fixtures__",
     "!**/__mocks__",
     "!android/.cxx",
-    "!android/.gradle"
+    "!android/.gradle",
+    "!example"
   ],
   "scripts": {
     "test": "jest",
