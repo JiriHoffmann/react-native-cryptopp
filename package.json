@@ -13,6 +13,9 @@
     "android",
     "ios",
     "cpp",
+    "cryptopp",
+    "cryptopp-pem",
+    "scripts",
     "react-native-cryptopp.podspec",
     "!lib/typescript/example",
     "!android/build",
@@ -21,9 +24,7 @@
     "!**/__fixtures__",
     "!**/__mocks__",
     "!android/.cxx",
-    "!android/.gradle",
-    "cryptopp",
-    "cryptopp-pem"
+    "!android/.gradle"
   ],
   "scripts": {
     "test": "jest",
