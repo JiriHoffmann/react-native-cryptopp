@@ -29,9 +29,13 @@ Make sure you **DON't** run the `android build` and `pod install` at the same ti
 
 You can check the following files for more information about the compilation process:
 
-Location from the root of the project: <br/>
-`node_modules/react-native-cryptopp/android/build/cryptopp_build.txt` <br/>
-`node_modules/react-native-cryptopp/android/build/cryptopp_error.txt` <br/>
+Location from the root of the project: 
+```
+node_modules/react-native-cryptopp/android/build/cryptopp_build.txt
+```
+```
+node_modules/react-native-cryptopp/android/build/cryptopp_error.txt
+```
 
 #### iOS
 
