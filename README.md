@@ -1,191 +1,38 @@
 # React Native Cryptopp
 
+The goal of this library is to provide a wide variety cryptography functionality to React Native at super fast speeds by using a C++ library called [Cryptopp](https://www.cryptopp.com/) under the hood.
 
 ## Installation
 
 ```sh
 npm install react-native-cryptopp
 ```
+
 #### `iOS`
 
-```
+```sh
 cd ios && pod install
-# or 
+# or
 npx pod install
 ```
 
-The Crypto++ library is precompiled for each architecture and static binaries are contained `android` and `ios` folders respectively. Android builds per 
-architecture and iOS uses a fat binary that is created before the pod is installed. You are more than welcome to complile the Crypto++ library locally using the `build_cryptopp.sh` script.
+**`Important:`** First time builds will take several minutes as Crypto++ has to be compiled for all CPU architectures. Make sure the `android build` and `pod install` is **NOT** running at the same time! More information about the build process can be found [here]().
 
 ## Usage
+
+```js
+import Cryptopp from 'react-native-cryptopp';
+
+const hash = Cryptopp.hashFunctions.SHA1('Hello World');
+```
 
 - [Documentation]()
 - [Crypto++](http://www.cryptopp.com/wiki/Main_Page)
 
-
-# Supported Alghorithms
-Here is the list of all Crypto++ algorithms supported by this library. You are 
-always free to help exapand the list.
-
-## Authenticated encryption schemes
-| Name                                 | Supported |
-|--------------------------------------|-----------|
-| GCM                                  |     ❌    |
-| CCM                                  |     ❌    |
-| EAX                                  |     ❌    |
-| ChaCha20Poly1305                     |     ❌    |
-| XChaCha20Poly1305                    |     ❌    |
-
-##  High speed stream ciphers
-| Name                       | Supported |
-|----------------------------|-----------|
-| ChaCha (8/12/20)           | ❌        |
-| ChaCha (IETF) HC (128/256) | ❌        |
-| Panama                     | ❌        |
-| Rabbit (128/256)           | ❌        |
-| Sosemanuk                  | ❌        |
-| Salsa20 (8/12/20)          | ❌        |
-| XChaCha (8/12/20)          | ❌        |
-| XSalsa20                   | ❌        |
-
-## AES and AES candidates	
-| Name           | Supported |
-|----------------|-----------|
-| AES (Rijndael) | ❌        |
-| RC6            | ❌        |
-| MARS           | ❌        |
-| Twofish        | ❌        |
-| Serpent        | ❌        |
-| CAST-256       | ❌        |
-
-## Other block ciphers	
-| Name                               | Supported |
-|------------------------------------|-----------|
-| ARIA                               | ❌        |
-| Blowfish                           | ❌        |
-| Camellia                           | ❌        |
-| CHAM                               | ❌        |
-| HIGHT                              | ❌        |
-| IDEA                               | ❌        |
-| Kalyna (128/256/512)               | ❌        |
-| LEA                                | ❌        |
-| SEED                               | ❌        |
-| RC5                                | ❌        |
-| SHACAL-2                           | ❌        |
-| SIMECK                             | ❌        |
-| SIMON (64/128)                     | ❌        |
-| Skipjack                           | ❌        |
-| SPECK (64/128)                     | ❌        |
-| Simeck                             | ❌        |
-| SM4                                | ❌        |
-| Threefish (256/512/1024)           | ❌        |
-| Triple-DES (DES-EDE2 and DES-EDE3) | ❌        |
-| TEA                                | ❌        |
-| XTEA                               | ❌        |
-## Block cipher modes of operation
-| Name                               | Supported |
-|------------------------------------|-----------|
-| ECB                                | ❌        |
-| CBC                                | ❌        |
-| CBC ciphertext stealing (CTS)      | ❌        |
-| CFB                                | ❌        |
-| OFB                                | ❌        |
-| counter mode (CTR)                 | ❌        |
-| XTS                                | ❌        |
-### Message authentication codes	
-| Name                               | Supported |
-|------------------------------------|-----------|
-| BLVMACAKE2b                        | ❌        |
-| BLAKE2s                            | ❌        |
-| CMAC                               | ❌        |
-| CBC-MAC                            | ❌        |
-| DMAC                               | ❌        |
-| GMAC (GCM)                         | ❌        |
-| HMAC                               | ❌        |
-| Poly1305                           | ❌        |
-| SipHash                            | ❌        |
-| Two-Track-MAC                      | ❌        |
-| VMAC                               | ❌        |
-### Hash functions	
-| Name                               | Supported |
-|------------------------------------|-----------|
-| BLAKE2b                            | ❌         |
-| BLAKE2s                            | ❌         |
-| Keccack (F1600)                    | ❌         |
-| SHA-1                              | ❌         |
-| SHA-2                              | ❌         |
-| SHA-3                              | ❌         |
-| SHAKE (128/256)                    | ❌         |
-| SipHash                            | ❌         |
-| LSH (128/256)                      | ❌         |
-| Tiger                              | ❌         |
-| RIPEMD (128/160/256/320)           | ❌         |
-| SM3                                | ❌         |
-| WHIRLPOOL                          | ❌         |
-### Public-key cryptography	
-| Name                                       | Supported |
-|--------------------------------------------|-----------|
-| RSA                                        | ❌        |
-| DSA                                        | ❌        |
-| Determinsitic DSA (RFC 6979)               | ❌        |
-| ElGamal                                    | ❌        |
-| Nyberg-Rueppel (NR)                        | ❌        |
-| Rabin-Williams (RW)                        | ❌        |
-| EC-based German Digital Signature (ECGDSA) | ❌        |
-| LUC                                        | ❌        |
-| LUCELG                                     | ❌        |
-| DLIES (variants of DHAES)                  | ❌        |
-| ESIGN                                      | ❌        |
-### Padding schemes for public-key systems	
-| Name                                       | Supported |
-|--------------------------------------------|-----------|
-| PKCS#1 v2.0                                | ❌         |
-| OAEP                                       | ❌         |
-| PSS                                        | ❌         |
-| PSSR                                       | ❌         |
-| IEEE P1363 EMSA2 and EMSA5                 | ❌         |
-### Key agreement schemes	
-| Name                               | Supported |
-|------------------------------------|-----------|
-| Diffie-Hellman (DH)                | ❌         |
-| Unified Diffie-Hellman (DH2)       | ❌         |
-| Menezes-Qu-Vanstone (MQV)          | ❌         |
-| Hashed MQV (HMQV)                  | ❌         |
-| Fully Hashed MQV (FHMQV)           | ❌         |
-| LUCDIF                             | ❌         |
-| XTR-DH                             | ❌         |
-### Elliptic curve cryptography	
-| Name                               | Supported |
-|------------------------------------|-----------|
-| ECDSA                              | ❌         |
-| Determinsitic ECDSA (RFC 6979)     | ❌         |
-| ed25519                            | ❌         |
-| ECGDSA                             | ❌         |
-| ECNR                               | ❌         |
-| ECIES                              | ❌         |
-| x25519                             | ❌         |
-| ECDH                               | ❌         |
-| ECMQV                              | ❌         |
-### Insecure or obsolescent algorithms retained for backwards compatibility and historical value	
-| Name                               | Supported |
-|------------------------------------|-----------|
-| MD2                                | ❌         |
-| MD4                                | ❌         |
-| MD5                                | ❌         |
-| Panama Hash                        | ❌         |
-| DES                                | ❌         |
-| ARC4                               | ❌         |
-| SEAL 3.0                           | ❌         |
-| WAKE-OFB                           | ❌         |
-| DESX (DES-XEX3)                    | ❌         |
-| RC2                                | ❌         |
-| SAFER                              | ❌         |
-| 3-WAY                              | ❌         |
-| GOST                               | ❌         |
-| SHARK                              | ❌         |
-| CAST-128                           | ❌         |
-| Square                             | ❌         |
-
+## TODOs:
+- [ ] Implement remaining functionality
+- [ ] GitHub Actions pipeline to auto pre-compile Crypto++ for all CPU architectures
+- [ ] Async multi-threaded version of each function
 
 
 ## Contributing
@@ -195,3 +42,5 @@ See the [contributing guide](CONTRIBUTING.md) to learn how to contribute to the 
 ## License
 
 MIT
+
+Check [Crypto++](https://github.com/weidai11/cryptopp/blob/master/License.txt) for additional licensing.

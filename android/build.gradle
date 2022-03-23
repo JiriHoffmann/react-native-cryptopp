@@ -27,13 +27,11 @@ def basePath = projectDir.toPath().normalize()
 
 def nodeModulesDir = ''
 def reactNativeDir = ''
-def rnCryptoppDir = ''
 def found = false
 
 // Find node_modules inside the example project
 nodeModulesDir = Paths.get(basePath.getParent().toString(), "example/node_modules")
 reactNativeDir = Paths.get(nodeModulesDir.toString(), "react-native/android")
-rnCryptoppDir = Paths.get(basePath.getParent().toString(), "cpp/android")
 
 if (nodeModulesDir.toFile().exists() && reactNativeDir.toFile().exists()) {
   found = true
@@ -61,8 +59,6 @@ if(!found) {
 
 def nodeModulesPath = nodeModulesDir.toString().replace("\\", "/")
 def reactNativePath = reactNativeDir.toString().replace("\\", "/")
-def rnCryptoppPath = rnCryptoppDir.toString().replace("\\", "/")
-
 
 android {
   compileSdkVersion getExtOrIntegerDefault('compileSdkVersion')
@@ -79,7 +75,10 @@ android {
         cmake {
             cppFlags "-O3 -frtti -fexceptions -Wall -fstack-protector-all -Wl", "-DONANDROID"
             abiFilters 'x86', 'x86_64', 'armeabi-v7a', 'arm64-v8a'
-            arguments "-DANDROID_STL=c++_shared", "-DNODE_MODULES_DIR=${nodeModulesPath}"
+            arguments "-DANDROID_STL=c++_shared",
+                      "-DNODE_MODULES_DIR=${nodeModulesPath}",
+                      "-DSDK_ROOT_PATH=${android.sdkDirectory.path}",
+                      "-DNDK_ROOT_PATH=${android.ndkDirectory.path}"
         }
     }
   }
@@ -111,7 +110,6 @@ android {
 
   configurations {
     extractJNI
-    extractCryptopp
   }
 }
 
@@ -133,10 +131,6 @@ dependencies {
 
   def rnAAR = fileTree(reactNativePath).matching({ it.include "**/**/*.aar" }).singleFile
   extractJNI(files(rnAAR))
-
-
-  def rncryptopp = fileTree(rnCryptoppPath).matching({ it.include "*.zip" }).files;
-  extractCryptopp(files(rncryptopp))
 }
 
 def extracted = false;
@@ -156,25 +150,7 @@ task extractJNIFiles {
   }
 }
 
-def extractedCryptopp = false;
-task extractCryptoppFiles {
-  if (extractedCryptopp) return
-  doFirst {
-    configurations.extractCryptopp.files.each {
-      def file = it.absoluteFile
-
-      copy {
-        from zipTree(file)
-        into "$buildDir"
-      }
-      extractedCryptopp = true;
-    }
-  }
-}
-
-
 // Extract JNI files as soon as first task is added
 tasks.whenTaskAdded { task ->
   task.dependsOn(extractJNIFiles);
-  task.dependsOn(extractCryptoppFiles);
 }

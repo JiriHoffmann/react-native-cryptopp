@@ -1,0 +1,7 @@
+cp "cryptopp-pem/pem_common.cpp" "cryptopp/pem_common.cpp"
+cp "cryptopp-pem/pem_common.h" "cryptopp/pem_common.h"
+cp "cryptopp-pem/pem_read.cpp" "cryptopp/pem_read.cpp"
+cp "cryptopp-pem/pem_write.cpp" "cryptopp/pem_write.cpp"
+cp "cryptopp-pem/pem.h" "cryptopp/pem.h"
+cp "cryptopp-pem/x509cert.cpp" "cryptopp/x509cert.cpp"
+cp "cryptopp-pem/x509cert.h" "cryptopp/x509cert.h"

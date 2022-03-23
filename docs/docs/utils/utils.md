@@ -48,9 +48,9 @@ const b64 = Cryptopp.utils.toBase64(str);
 
 #### Parameters
 
-| Parameter    | Type                                                            | Required |
-| ------------ | --------------------------------------------------------------- | -------- | -------- |
-| input         | `string` <br/> `ArrayBuffer`                                        | ✅       |
+| Parameter     | Type                                                            | Required | Default  |
+| ------------- | --------------------------------------------------------------- | -------- | -------- |
+| input         | `string` <br/> `ArrayBuffer`                                    | ✅       |
 | inputEncoding | `"utf8"` <br/> `"hex"` <br/> `"base64"` <br/>`"base64url"`<br/> | ❌       | `"utf8"` |
 
 #### Returns: `string`
@@ -65,9 +65,9 @@ const b64url = Cryptopp.utils.toBase64Url(str);
 
 #### Parameters
 
-| Parameter    | Type                                                            | Required |
-| ------------ | --------------------------------------------------------------- | -------- | -------- |
-| input         | `string` <br/> `ArrayBuffer`                                        | ✅       |
+| Parameter     | Type                                                            | Required | Default  |
+| ------------- | --------------------------------------------------------------- | -------- | -------- |
+| input         | `string` <br/> `ArrayBuffer`                                    | ✅       |
 | inputEncoding | `"utf8"` <br/> `"hex"` <br/> `"base64"` <br/>`"base64url"`<br/> | ❌       | `"utf8"` |
 
 #### Returns: `string`
@@ -82,9 +82,9 @@ const toHex = Cryptopp.utils.toHex(str);
 
 #### Parameters
 
-| Parameter    | Type                                                            | Required |
-| ------------ | --------------------------------------------------------------- | -------- | -------- |
-| input         | `string` <br/> `ArrayBuffer`                                        | ✅       |
+| Parameter     | Type                                                            | Required | Default  |
+| ------------- | --------------------------------------------------------------- | -------- | -------- |
+| input         | `string` <br/> `ArrayBuffer`                                    | ✅       |
 | inputEncoding | `"utf8"` <br/> `"hex"` <br/> `"base64"` <br/>`"base64url"`<br/> | ❌       | `"utf8"` |
 
 #### Returns: `string`
@@ -99,9 +99,9 @@ const utf8 = Cryptopp.utils.toUtf8(str);
 
 #### Parameters
 
-| Parameter    | Type                                                            | Required |
-| ------------ | --------------------------------------------------------------- | -------- | -------- |
-| input         | `string` <br/> `ArrayBuffer`                                        | ✅       |
+| Parameter     | Type                                                            | Required | Default  |
+| ------------- | --------------------------------------------------------------- | -------- | -------- |
+| input         | `string` <br/> `ArrayBuffer`                                    | ✅       |
 | inputEncoding | `"utf8"` <br/> `"hex"` <br/> `"base64"` <br/>`"base64url"`<br/> | ❌       | `"utf8"` |
 
 #### Returns: `string`
