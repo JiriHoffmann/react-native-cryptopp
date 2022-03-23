@@ -21,6 +21,27 @@ npx pod install
 
 Make sure [Hermes](https://reactnative.dev/docs/hermes) is enabled in your project.
 
+As mentioned in the README, the Crypto++ library has to be compiled for all CPU architectures (4 on android, 3 on iOS) the first time it is used, then it is cached for subsequent builds.
+
+Make sure you **DON't** run the `android build` and `pod install` at the same time! Temporary compiled files are saved inside the cryptopp folder and will overwrite each other resulting in issues when they are combined into the final library.
+
+#### Android
+
+You can check the following files for more information about the compilation process:
+
+Location from the root of the project: <br/>
+`node_modules/react-native-cryptopp/android/build/cryptopp_build.txt` <br/>
+`node_modules/react-native-cryptopp/android/build/cryptopp_error.txt` <br/>
+
+#### iOS
+
+Run `pod install --verbose` instead to see compilation output.
+
+## Optional: Using pre-compiled Crypto++ library
+
+A drag-and-drop pre-compiled version of Crypto++ will be added to GitHub assets via GitHub Actions.
+🚧 TODO 🚧
+
 ## Usage
 
 ```js
@@ -28,33 +49,3 @@ import Cryptopp from 'react-native-cryptopp';
 
 const hash = Cryptopp.hashFunctions.SHA1('Hello World');
 ```
-
-## Optional: Compiling CryptoPP
-
-React Native CryptoPP is build on top of the Crypto++ library. Currently each platform (android & iOS) have their own precompiled static libraries that are distributed as a part of this package as it makes the build process easier.
-
-For security reasons you might want to compile the Crypto++ library yourself. You can do so by running the `compile_cryptopp.sh` script.
-
-Run from the root of the project:
-
-```sh
-./node_modules/react-native-cryptopp/compile_cryptopp.sh
-```
-
-Ensure you have the following environment variables set correctly:
-
-```
-export ANDROID_HOME=
-export ANDROID_SDK_ROOT=
-export ANDROID_AVD_HOME=
-export ANDROID_NDK_ROOT=
-```
-
-### Android binaries
-
-Can be found under `cpp/android` in a zip format to reduce package size and fit GitHub file size limits.
-Extracted and linked during the android build process.
-
-### iOS binaries
-
-Can be found under `cpp/iOS`. Combined into a fat binary and linked during pod install.

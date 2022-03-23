@@ -6,7 +6,7 @@ sidebar_position: 1
 
 ```js
 const {hkdf} = Cryptopp.keyDerivation;
-const derived = hkdf(str, 'salt', 'HKDF key derivation',, 1024);
+const derived = hkdf(str, 'salt', 'HKDF key derivation', 1024);
 ```
 
 #### Parameters
