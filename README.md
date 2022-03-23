@@ -1,6 +1,6 @@
 # React Native Cryptopp
 
-The goal of this library is to provide a wide variety cryptography functionality to React Native at super fast speeds by using a C++ library called [Cryptopp](https://www.cryptopp.com/) under the hood.
+The goal of this library is to provide a wide variety cryptography functionality to React Native at super fast speeds by using a C++ library called [Crypto++](https://www.cryptopp.com/) under the hood.
 
 ## Installation
 
