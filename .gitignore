@@ -67,4 +67,10 @@ example/yarn.lock
 example/yarn.lock
 example/package-lock.json
 
+# Ignore compiled files
+cpp/android
+cpp/cryptopp
+cpp/ios
+
+# Docs
 docs/.docusaurus/
