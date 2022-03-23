@@ -18,8 +18,7 @@ else()
   # Must have full paths
   execute_process(
           COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/../scripts/compile_cryptopp_android.sh
-          ${ANDROID_PLATFORM} ${ANDROID_ABI} "${CMAKE_CURRENT_SOURCE_DIR}/../"
-          ${SDK_ROOT_PATH} ${NDK_ROOT_PATH}
+          ${ANDROID_PLATFORM} "${CMAKE_CURRENT_SOURCE_DIR}/../" ${SDK_ROOT_PATH} ${NDK_ROOT_PATH}
           OUTPUT_FILE ${CMAKE_CURRENT_SOURCE_DIR}/build/cryptopp_build.txt
           ERROR_FILE ${CMAKE_CURRENT_SOURCE_DIR}/build/cryptopp_error.txt
   )

@@ -1,18 +1,17 @@
 #!/bin/bash
 ANDROID_PLATFORM=$1
-ANDROID_CPU=$2
-CWD=$3
-export ANDROID_SDK_ROOT=$4
-export ANDROID_NDK_ROOT=$5
+CWD=$2 #Path to the root of the project
+export ANDROID_SDK_ROOT=$3
+export ANDROID_NDK_ROOT=$4
 
 TEMP_AND="TEMP_AND"
 ANDROID_API="${ANDROID_PLATFORM: -2}"
 
 echo "Root directory for react-native-cryptopp: $CWD"
-echo "Using API:${ANDROID_API} and CPU:${ANDROID_CPU}"
+echo "Using API:${ANDROID_API}"
 echo "Android SDK: $ANDROID_SDK_ROOT"
 echo "Android NDK: $ANDROID_NDK_ROOT"
-echo "Crypto++ Compilation output: \n\n\n"
+echo -e "Crypto++ Compilation output: \n\n\n"
 
 function build_cryptopp_android
 {
@@ -37,9 +36,19 @@ sh scripts/copy_pem_pack.sh
 pushd "cryptopp"
 make clean
 
-# Build for all architectures
-build_cryptopp_android ${ANDROID_API} ${ANDROID_CPU}
+# Compile for all architectures
+build_cryptopp_android ${ANDROID_API} armeabi-v7a
 make clean
+
+build_cryptopp_android ${ANDROID_API} arm64-v8a
+make clean
+
+build_cryptopp_android ${ANDROID_API} x86
+make clean
+
+build_cryptopp_android ${ANDROID_API} x86_64
+make clean
+
 
 rm -rf "$TEMP_AND"
 popd
