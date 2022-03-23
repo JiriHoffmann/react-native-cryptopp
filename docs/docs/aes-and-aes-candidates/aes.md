@@ -16,7 +16,7 @@ AES block size will be determined be the size of the key. Here are the block siz
 
 ## Key & IV
 
-The easiest way to obtain a key or an iv is by using the [randomBytes](../utils) utility function.
+The easiest way to obtain a key or an iv is by using the [randomBytes](../../utils) utility function.
 
 ```js
 const aes_key = Cryptopp.utils.randomBytes(32);

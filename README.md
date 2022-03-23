@@ -20,20 +20,20 @@ npx pod install
 
 ## Usage
 
+- [Documentation]()
+- [Crypto++ Wiki](http://www.cryptopp.com/wiki/Main_Page)
+
 ```js
 import Cryptopp from 'react-native-cryptopp';
 
 const hash = Cryptopp.hashFunctions.SHA1('Hello World');
 ```
 
-- [Documentation]()
-- [Crypto++](http://www.cryptopp.com/wiki/Main_Page)
-
 ## TODOs:
+
 - [ ] Implement remaining functionality
 - [ ] GitHub Actions pipeline to auto pre-compile Crypto++ for all CPU architectures
 - [ ] Async multi-threaded version of each function
-
 
 ## Contributing
 

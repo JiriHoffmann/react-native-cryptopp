@@ -9,14 +9,14 @@ const config = {
   title: 'React Native Cryptopp',
   tagline:
     'Super fast cryptography library for React Native using Cryptop++ and JSI',
-  url: 'https://your-docusaurus-test-site.com',
-  baseUrl: '/',
+  url: 'https://JiriHoffmann.github.io/',
+  baseUrl: '/react-native-cryptopp/',
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
   favicon: 'img/favicon.ico',
-  organizationName: 'jirihoffann',
+  organizationName: 'JiriHoffmann',
   projectName: 'react-native-cryptopp',
-
+  trailingSlash: true,
   presets: [
     [
       'classic',
@@ -26,7 +26,8 @@ const config = {
           routeBasePath: '/',
           sidebarPath: require.resolve('./sidebars.js'),
           // Please change this to your repo.
-          editUrl: 'https://github.com/jirihoffman/react-native-cryptopp/docs/',
+          editUrl:
+            'https://github.com/JiriHoffmann/react-native-cryptopp/docs/',
         },
         theme: {
           customCss: require.resolve('./src/css/custom.css'),
@@ -45,7 +46,7 @@ const config = {
             type: 'docsVersionDropdown',
           },
           {
-            href: 'https://github.com/jirihoffman/react-native-cryptopp',
+            href: 'https://github.com/JiriHoffmann/react-native-cryptopp',
             label: 'GitHub',
             position: 'right',
           },
