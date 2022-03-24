@@ -1,11 +1,19 @@
 #!/bin/bash
 ANDROID_PLATFORM=$1
+ANDROID_API="${ANDROID_PLATFORM: -2}" # from android-21 to 21
 CWD=$2 #Path to the root of the project
 export ANDROID_SDK_ROOT=$3
 export ANDROID_NDK_ROOT=$4
-
 TEMP_AND="TEMP_AND"
-ANDROID_API="${ANDROID_PLATFORM: -2}"
+
+# Do not compile if the library already exists
+if [ -e "$CWD/cpp/android/libcryptopp_arm64-v8a.a" && 
+     -e "$CWD/cpp/android/libcryptopp_armeabi-v7a.a" && 
+     -e "$CWD/cpp/android/libcryptopp_x86_64.a" &&
+     -e "$CWD/cpp/android/libcryptopp_x86.a"]
+then
+    exit 0
+fi
 
 echo "Root directory for react-native-cryptopp: $CWD"
 echo "Using API:${ANDROID_API}"
@@ -48,7 +56,6 @@ make clean
 
 build_cryptopp_android ${ANDROID_API} x86_64
 make clean
-
 
 rm -rf "$TEMP_AND"
 popd

@@ -25,7 +25,9 @@
     "!**/__mocks__",
     "!android/.cxx",
     "!android/.gradle",
-    "!example"
+    "!cpp/ios",
+    "!cpp/android",
+    "!cpp/cryptopp"
   ],
   "scripts": {
     "test": "jest",

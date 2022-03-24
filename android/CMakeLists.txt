@@ -5,24 +5,19 @@ set (CMAKE_CXX_STANDARD 17)
 set (PACKAGE_NAME "rncryptopp")
 set (BUILD_DIR build)
 
-
 # Compile Crypto++
-if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/../cpp/android/libcryptopp_${ANDROID_ABI}.a")
-  message(ERROR "Compiled Cryptopp library found at: ${CMAKE_CURRENT_SOURCE_DIR}/../cpp/android/libcryptopp_${ANDROID_ABI}.a" )
-else()
-  execute_process(
-          COMMAND chmod u+x ${CMAKE_CURRENT_SOURCE_DIR}/../scripts/compile_cryptopp_android.sh
-          OUTPUT_FILE ${CMAKE_CURRENT_SOURCE_DIR}/build/cryptopp_build.txt
-          ERROR_FILE ${CMAKE_CURRENT_SOURCE_DIR}/build/cryptopp_error.txt
-  )
-  # Must have full paths
-  execute_process(
-          COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/../scripts/compile_cryptopp_android.sh
-          ${ANDROID_PLATFORM} "${CMAKE_CURRENT_SOURCE_DIR}/../" ${SDK_ROOT_PATH} ${NDK_ROOT_PATH}
-          OUTPUT_FILE ${CMAKE_CURRENT_SOURCE_DIR}/build/cryptopp_build.txt
-          ERROR_FILE ${CMAKE_CURRENT_SOURCE_DIR}/build/cryptopp_error.txt
-  )
-endif()
+# Must have full paths
+execute_process(
+        COMMAND chmod u+x ${CMAKE_CURRENT_SOURCE_DIR}/../scripts/compile_cryptopp_android.sh
+        OUTPUT_FILE ${CMAKE_CURRENT_SOURCE_DIR}/build/cryptopp_chmod.txt
+        ERROR_FILE ${CMAKE_CURRENT_SOURCE_DIR}/build/cryptopp_chmod.txt
+)
+execute_process(
+        COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/../scripts/compile_cryptopp_android.sh
+        ${ANDROID_PLATFORM} "${CMAKE_CURRENT_SOURCE_DIR}/../" ${SDK_ROOT_PATH} ${NDK_ROOT_PATH}
+        OUTPUT_FILE ${CMAKE_CURRENT_SOURCE_DIR}/build/cryptopp_build.txt
+        ERROR_FILE ${CMAKE_CURRENT_SOURCE_DIR}/build/cryptopp_error.txt
+)
 
 file(GLOB RN_CRYPTOPP_FILES "../cpp/*.cpp")
 file(GLOB RN_CRYPTOPP_HEADERS "../cpp")
