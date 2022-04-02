@@ -1,5 +1,4 @@
 #!/bin/bash
-
 TEMP_IOS="TEMP_IOS"
 CWD=$(pwd -P)
 
@@ -15,7 +14,7 @@ function build_cryptopp_ios
     make -f GNUmakefile-cross static
     make install -f GNUmakefile-cross PREFIX="$TEMP_IOS"
     mv "$TEMP_IOS/lib/libcryptopp.a" "../cpp/ios/libcryptopp_$2.a"
-    mv "$TEMP_IOS/include/cryptopp" "../cpp"
+    mv -f "$TEMP_IOS/include/cryptopp" "../cpp"
 }
 
 # #########################################
@@ -32,10 +31,18 @@ sh scripts/copy_pem_pack.sh
 pushd "cryptopp"
 make clean
 
-# Bug fix => https://github.com/weidai11/cryptopp/issues/1074
 cp -f "TestScripts/setenv-ios.sh" "setenv-ios.sh"
+
+# Bug fix => https://github.com/weidai11/cryptopp/issues/1074
 search="-DNDEBUG"
 replace="-DNDEBUG -DCRYPTOPP_DISABLE_ARM_CRC32"
+sed -i  -e "s/$search/$replace/g" "setenv-ios.sh"
+
+# Bug fix => https://github.com/weidai11/cryptopp/issues/1113
+# Causes crashes on iOS simulator, if you can't comile cryptopp
+# comment out the following lines
+search="-DCRYPTOPP_DISABLE_ASM"
+replace="-DCRYPTOPP_DISABLE_SSSE3"
 sed -i  -e "s/$search/$replace/g" "setenv-ios.sh"
 
 # Build for physical devices

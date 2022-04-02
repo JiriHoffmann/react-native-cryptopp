@@ -7,10 +7,10 @@ export ANDROID_NDK_ROOT=$4
 TEMP_AND="TEMP_AND"
 
 # Do not compile if the library already exists
-if [ -e "$CWD/cpp/android/libcryptopp_arm64-v8a.a" && 
+if [[ -e "$CWD/cpp/android/libcryptopp_arm64-v8a.a" && 
      -e "$CWD/cpp/android/libcryptopp_armeabi-v7a.a" && 
      -e "$CWD/cpp/android/libcryptopp_x86_64.a" &&
-     -e "$CWD/cpp/android/libcryptopp_x86.a"]
+     -e "$CWD/cpp/android/libcryptopp_x86.a" ]]
 then
     exit 0
 fi
