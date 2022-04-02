@@ -41,7 +41,7 @@ jobs:
         id: get_cryptopp_version
         env:
           ANDROID_NDK_ROOT: ${{ steps.setup-ndk.outputs.ndk-path }}
-        run: echo "::set-output name=cryptopp_version::$(yarn get_cryptopp_version) "
+        run: echo "::set-output name=cryptopp_version::$(yarn get_cryptopp_version| tail -2) "
 
       - name: Compile
         env:
