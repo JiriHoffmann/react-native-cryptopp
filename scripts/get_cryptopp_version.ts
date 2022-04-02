@@ -1,7 +1,7 @@
-import p from 'process';
+import { exit } from 'process';
 import fs from 'fs';
 
 const pck = JSON.parse(fs.readFileSync('package.json').toString());
 
 console.log(pck.cryptoppVersion);
-p.exit(0);
+exit(0);
