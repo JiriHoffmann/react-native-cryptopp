@@ -1,0 +1,59 @@
+name: Compile crypto++
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'cryptopp/**'
+      - 'cryptopp-pem/**'
+  pull_request:
+    paths:
+      - 'cryptopp/**'
+      - 'cryptopp-pem/**'
+
+jobs:
+  build:
+    name: Compile crypto++ for iOS and Android
+    runs-on: macos-latest
+    concurrency:
+      group: cryptopp-${{ github.ref }}
+      cancel-in-progress: true
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          submodules: recursive
+
+      - name: Setup Android NDK
+        id: setup-ndk
+        uses: nttld/setup-ndk@v1
+        with:
+          ndk-version: r21e
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v2
+
+      - name: Install root node dependencies
+        run: yarn
+
+      - name: Get Crypto++ version
+        id: get_cryptopp_version
+        env:
+          ANDROID_NDK_ROOT: ${{ steps.setup-ndk.outputs.ndk-path }}
+        run: echo "::set-output name=cryptopp_version::$(yarn get_cryptopp_version) "
+
+      - name: Compile
+        env:
+          ANDROID_NDK_ROOT: ${{ steps.setup-ndk.outputs.ndk-path }}
+        run: yarn compile_cryptopp
+
+      - name: Create Release
+        uses: ncipollo/release-action@v1
+        with:
+          tag: 'cryptopp_${{steps.get_cryptopp_version.outputs.cryptopp_version}}'
+          name: 'Compiled cryptopp ${{steps.get_cryptopp_version.outputs.cryptopp_version}}'
+          artifacts: cryptopp.zip
+          generateReleaseNotes: false
+          removeArtifacts: true
+          replacesArtifacts: true
