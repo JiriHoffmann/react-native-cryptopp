@@ -1,5 +1,5 @@
-const p = require('process');
-const fs = require('fs');
+import p from 'process';
+import fs from 'fs';
 
 const pck = JSON.parse(fs.readFileSync('package.json').toString());
 

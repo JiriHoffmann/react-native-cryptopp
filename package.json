@@ -34,7 +34,7 @@
     "test": "jest",
     "typescript": "tsc --noEmit",
     "lint": "eslint \"**/*.{js,ts,tsx}\"",
-    "prepare": "bob build",
+    "prepare": "bob build && husky install",
     "release": "release-it",
     "clang-format": "find cpp/ -iname *.h -o -iname *.cpp | xargs clang-format -i",
     "compile_cryptopp": "yarn ts-node ./scripts/compile_cryptopp.ts",
@@ -72,6 +72,7 @@
   "devDependencies": {
     "@react-native-community/eslint-config": "^3.0.1",
     "@release-it/conventional-changelog": "^4.2.2",
+    "@types/archiver": "^5.3.1",
     "@types/jest": "^27.4.1",
     "@types/react": "^17.0.43",
     "@types/react-native": "0.67.3",

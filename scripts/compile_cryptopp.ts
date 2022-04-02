@@ -1,7 +1,7 @@
-const { execSync } = require('child_process');
-const { exit } = require('process');
-const path = require('path');
-const utils = require('./utils');
+import { execSync } from 'child_process';
+import { exit } from 'process';
+import path from 'path';
+import utils from './utils';
 
 // Compile iOS
 const compile_cryptopp_ios = path.join(

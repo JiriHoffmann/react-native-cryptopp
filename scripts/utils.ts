@@ -1,5 +1,5 @@
-const archiver = require('archiver');
-const file_sys = require('fs');
+import archiver from 'archiver';
+import fs from 'fs';
 
 interface Source {
   dir: string;
@@ -8,7 +8,7 @@ interface Source {
 
 function zipDirectories(sourceDirs: Source[], outPath: string) {
   const archive = archiver('zip', { zlib: { level: 9 } });
-  const stream = file_sys.createWriteStream(outPath);
+  const stream = fs.createWriteStream(outPath);
 
   return new Promise<void>((resolve, reject) => {
     var result = archive;
@@ -22,6 +22,4 @@ function zipDirectories(sourceDirs: Source[], outPath: string) {
   });
 }
 
-module.exports = {
-  zipDirectories,
-};
+export default { zipDirectories };
