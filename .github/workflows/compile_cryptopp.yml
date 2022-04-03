@@ -39,7 +39,7 @@ jobs:
 
       - name: Get Crypto++ version
         id: get_cryptopp_version
-        run: echo "::set-output name=cryptopp_version::$(yarn get_cryptopp_version| tail -2 | head -c 5)"
+        run: echo "::set-output name=cryptopp_version::$(yarn get_cryptopp_version | tail -2 | head -n 1)"
 
       - name: Compile
         env:

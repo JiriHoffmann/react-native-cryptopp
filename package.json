@@ -34,12 +34,12 @@
     "test": "jest",
     "typescript": "tsc --noEmit",
     "lint": "eslint \"**/*.{js,ts,tsx}\"",
-    "prepare": "bob build && husky install",
+    "prepare": "bob build && husky install && yarn download_cryptopp",
     "release": "release-it",
     "clang-format": "find cpp/ -iname *.h -o -iname *.cpp | xargs clang-format -i",
-    "compile_cryptopp": "yarn ts-node scripts/compile_cryptopp.ts",
-    "get_cryptopp_version": "yarn ts-node scripts/get_cryptopp_version.ts",
-    "download_cryptopp": "yarn ts-node scripts/download_cryptopp.ts"
+    "compile_cryptopp": "yarn node scripts/compile_cryptopp.js",
+    "get_cryptopp_version": "yarn node scripts/get_cryptopp_version.js",
+    "download_cryptopp": "yarn node scripts/download_cryptopp.js"
   },
   "keywords": [
     "react-native",
@@ -97,7 +97,7 @@
   "peerDependencies": {
     "react": "*",
     "react-native": "*",
-    "ts-node": "*"
+    "extract-zip": "*"
   },
   "jest": {
     "preset": "react-native",
