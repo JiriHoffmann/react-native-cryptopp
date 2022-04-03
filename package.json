@@ -33,7 +33,7 @@
   "scripts": {
     "test": "jest",
     "typescript": "tsc --noEmit",
-    "lint": "eslint \"**/*.{js,ts,tsx}\"",
+    "lint": "eslint \"**/*.{js,ts,tsx}\" --fix",
     "prepare": "bob build && husky install && yarn download_cryptopp",
     "release": "release-it",
     "clang-format": "find cpp/ -iname *.h -o -iname *.cpp | xargs clang-format -i",
