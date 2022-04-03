@@ -71,6 +71,7 @@ example/package-lock.json
 cpp/android
 cpp/cryptopp
 cpp/ios
+cryptopp_*.zip
 
 # Docs
 docs/.docusaurus/

@@ -1,11 +1,11 @@
 import { execSync } from 'child_process';
 import { exit } from 'process';
 import path from 'path';
-import utils from './utils';
+import { moduleDir, zipDirectories } from './utils';
 
 // Compile iOS
 const compile_cryptopp_ios = path.join(
-  process.cwd(),
+  moduleDir,
   'scripts/compile_cryptopp_ios.sh'
 );
 
@@ -28,7 +28,7 @@ if (!process.env.ANDROID_SDK_ROOT) {
 }
 
 const compile_cryptopp_android = path.join(
-  process.cwd(),
+  moduleDir,
   'scripts/compile_cryptopp_android.sh'
 );
 
@@ -38,11 +38,11 @@ const sdk = process.env.ANDROID_SDK_ROOT;
 const ndk = process.env.ANDROID_NDK_ROOT;
 
 execSync(
-  `sh ${compile_cryptopp_android} ${platform} ${process.cwd()} ${sdk} ${ndk}`
+  `sh ${compile_cryptopp_android} ${platform} ${moduleDir} ${sdk} ${ndk}`
 );
 
 // Create a single zip file that will be attached to the release.
-utils.zipDirectories(
+zipDirectories(
   [
     { dir: 'cpp/cryptopp', dest: 'cryptopp' },
     { dir: 'cpp/android', dest: 'android' },

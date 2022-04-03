@@ -37,8 +37,9 @@
     "prepare": "bob build && husky install",
     "release": "release-it",
     "clang-format": "find cpp/ -iname *.h -o -iname *.cpp | xargs clang-format -i",
-    "compile_cryptopp": "yarn ts-node ./scripts/compile_cryptopp.ts",
-    "get_cryptopp_version": "yarn ts-node ./scripts/get_cryptopp_version.ts"
+    "compile_cryptopp": "yarn ts-node scripts/compile_cryptopp.ts",
+    "get_cryptopp_version": "yarn ts-node scripts/get_cryptopp_version.ts",
+    "download_cryptopp": "yarn ts-node scripts/download_cryptopp.ts"
   },
   "keywords": [
     "react-native",
@@ -74,14 +75,15 @@
     "@release-it/conventional-changelog": "^4.2.2",
     "@types/archiver": "^5.3.1",
     "@types/jest": "^27.4.1",
+    "@types/node": "^17.0.23",
     "@types/react": "^17.0.43",
     "@types/react-native": "0.67.3",
-    "@types/node": "^17.0.23",
     "archiver": "^5.3.0",
     "clang-format": "^1.6.0",
     "eslint": "^7.32.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.0.0",
+    "extract-zip": "^2.0.1",
     "husky": "^7.0.4",
     "jest": "^27.5.1",
     "pod-install": "^0.1.32",
