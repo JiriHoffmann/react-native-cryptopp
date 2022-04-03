@@ -6,6 +6,23 @@ const fs = require('fs');
 
 const moduleDir = path.join(__dirname, '..');
 
+// source: { dir: string; dest: string; }[], outPath: string
+const zipDirectories = (sourceDirs, outPath) => {
+  const archive = archiver('zip', { zlib: { level: 9 } });
+  const stream = fs.createWriteStream(outPath);
+
+  return new Promise((resolve, reject) => {
+    var result = archive;
+    sourceDirs.forEach((sourceDir) => {
+      result = result.directory(sourceDir.dir, sourceDir.dest);
+    });
+    result.on('error', (err) => reject(err)).pipe(stream);
+
+    stream.on('close', () => resolve());
+    archive.finalize();
+  });
+};
+
 // Compile iOS
 const compile_cryptopp_ios = `${moduleDir}/scripts/compile_cryptopp_ios.sh`;
 execSync(`sh ${compile_cryptopp_ios}`);
@@ -45,24 +62,3 @@ zipDirectories(
   ],
   'cryptopp.zip'
 );
-
-/*
- * Helper functions
- */
-
-// source: { dir: string; dest: string; }[], outPath: string
-const zipDirectories = (sourceDirs, outPath) => {
-  const archive = archiver('zip', { zlib: { level: 9 } });
-  const stream = fs.createWriteStream(outPath);
-
-  return new Promise((resolve, reject) => {
-    var result = archive;
-    sourceDirs.forEach((sourceDir) => {
-      result = result.directory(sourceDir.dir, sourceDir.dest);
-    });
-    result.on('error', (err) => reject(err)).pipe(stream);
-
-    stream.on('close', () => resolve());
-    archive.finalize();
-  });
-};
