@@ -23,6 +23,11 @@ const zipDirectories = (sourceDirs, outPath) => {
   });
 };
 
+// Remove all compiled files
+execSync(`rm -rf ${moduleDir}/cpp/ios`);
+execSync(`rm -rf ${moduleDir}/cpp/adnroid`);
+execSync(`rm -rf ${moduleDir}/cpp/cryptopp`);
+
 // Compile iOS
 const compile_cryptopp_ios = `${moduleDir}/scripts/compile_cryptopp_ios.sh`;
 execSync(`sh ${compile_cryptopp_ios}`);
