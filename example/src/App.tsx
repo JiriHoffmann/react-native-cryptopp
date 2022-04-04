@@ -8,14 +8,13 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
+  ScrollView,
 } from 'react-native';
-import Cryptopp from 'react-native-cryptopp';
+import Cryptopp, { BinaryLike } from 'react-native-cryptopp';
 import ImagePicker from 'react-native-image-crop-picker';
 import ReactNativeBlobUtil from 'react-native-blob-util';
 import { PerformanceNow, timeDelta } from './utils';
 import { useCallback } from 'react';
-import type { BinaryLike } from 'src/types';
-import { ScrollView } from 'react-native';
 
 export default function App() {
   const [textInput, setTextInput] = useState('');

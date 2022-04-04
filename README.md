@@ -4,13 +4,19 @@ The goal of this library is to provide a wide variety cryptography functionality
 
 ## Installation
 
-```sh
+```bash
 npm install react-native-cryptopp
 ```
 
-#### `iOS`
+### Optional: Using pre-compiled Crypto++ library
 
-```sh
+```bash
+yarn node node_modules/react-native-cryptopp/scripts/download_cryptopp.js
+```
+
+### iOS
+
+```bash
 cd ios && pod install
 # or
 npx pod install
@@ -32,8 +38,9 @@ const hash = Cryptopp.hashFunctions.SHA1('Hello World');
 ## TODOs:
 
 - [ ] Implement remaining functionality
-- [ ] GitHub Actions pipeline to auto pre-compile Crypto++ for all CPU architectures
+- [X] Use GitHub Actions to pre-compile Crypto++ for iOS and Android
 - [ ] Async multi-threaded version of each function
+- [ ] Tests, tests, tests... and more tests!
 
 ## Contributing
 
