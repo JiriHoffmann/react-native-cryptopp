@@ -1,15 +1,6 @@
 name: Compile crypto++
 
-on:
-  workflow_dispatch:
-  push:
-    paths:
-      - 'cryptopp/**'
-      - 'cryptopp-pem/**'
-  pull_request:
-    paths:
-      - 'cryptopp/**'
-      - 'cryptopp-pem/**'
+on: [push, workflow_dispatch]
 
 jobs:
   build:
