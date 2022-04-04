@@ -14,7 +14,7 @@ on:
 jobs:
   build:
     name: Compile crypto++ for iOS and Android
-    runs-on: macos-latest
+    runs-on: macos-12
     concurrency:
       group: cryptopp-${{ github.ref }}
       cancel-in-progress: true
@@ -37,6 +37,12 @@ jobs:
       - name: Install root node dependencies
         run: yarn
 
+      - name: Check xcode version
+        run: xcodebuild -version
+
+      - name: Check clang version
+        run: xcrun clang --version
+
       - name: Get Crypto++ version
         id: get_cryptopp_version
         run: echo "::set-output name=cryptopp_version::$(yarn get_cryptopp_version | tail -2 | head -n 1)"
@@ -49,7 +55,7 @@ jobs:
       - name: Create Release
         uses: ncipollo/release-action@v1
         with:
-          tag: 'cryptopp_${{steps.get_cryptopp_version.outputs.cryptopp_version}}'
+          tag: 'cryptopp_${{steps.get_cryptopp_version.outputs.cryptopp_version}}-macos-12'
           name: 'Compiled cryptopp ${{steps.get_cryptopp_version.outputs.cryptopp_version}}'
           artifacts: cryptopp.zip
           generateReleaseNotes: false
