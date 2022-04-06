@@ -25,6 +25,7 @@ using namespace facebook::jsi::detail;
 using namespace CryptoPP;
 
 namespace rncryptopp {
+namespace hash {
 void blake2b(jsi::Runtime &rt, const jsi::Value *args, std::string *result);
 
 void blake2s(jsi::Runtime &rt, const jsi::Value *args, std::string *result);
@@ -50,6 +51,7 @@ void tiger(jsi::Runtime &rt, const jsi::Value *args, std::string *result);
 void ripemd(jsi::Runtime &rt, const jsi::Value *args, std::string *result);
 
 void whirlpool(jsi::Runtime &rt, const jsi::Value *args, std::string *result);
+} // namespace hash
 } // namespace rncryptopp
 
 #endif // CRYPTOPPEXAMPLE_HASH_FUNCTIONS_H

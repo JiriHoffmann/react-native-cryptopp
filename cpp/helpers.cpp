@@ -11,13 +11,14 @@ bool stringValueToString(jsi::Runtime &rt, const jsi::Value &value,
   }
   return false;
 }
-
-// Returns false if the passed value is not a string or an ArrayBuffer.
-// String and ArrayBuffer encoding types:
-// 0: No encoding
-// 1: Hex encoding
-// 2: Base64 encoding
-// 3: Base64Url encoding
+/*
+ * Returns false if the passed value is not a string or an ArrayBuffer.
+ * String and ArrayBuffer encoding types:
+ * 0: No encoding
+ * 1: Hex encoding
+ * 2: Base64 encoding
+ * 3: Base64Url encoding
+ */
 bool binaryLikeValueToString(jsi::Runtime &rt, const jsi::Value &value,
                              std::string *str, int stringEncoding,
                              int bufferEncoding) {
@@ -63,6 +64,23 @@ bool binaryLikeValueToString(jsi::Runtime &rt, const jsi::Value &value,
   return false;
 }
 
+/*
+ * Encode string, otherwise just set pointer
+ * 1: Hex encoding
+ * 2: Base64 encoding
+ * 3: Base64Url encoding
+ */
+void encode(std::string *in, std::string *out, int encoding) {
+  if (encoding == 1)
+    hexEncode(*in, *out);
+  else if (encoding == 2)
+    base64Encode(*in, *out);
+  else if (encoding == 3)
+    base64UrlEncode(*in, *out);
+  else
+    *in = *out;
+}
+
 void hexEncode(std::string &in, std::string &out) {
   StringSource(in, true, new HexEncoder(new StringSink(out)));
 }
@@ -103,13 +121,15 @@ bool valueToDouble(const jsi::Value &value, double *res) {
   return true;
 }
 
-// Int encoding from a JS string. Uses argCount to check
-// if index is out of JS array bounds
-// Returns:
-// 0: No encoding (uft8), if not allowed returns default value
-// 1: Hex encoding
-// 2: Base64 encoding
-// 3: Base64Url encoding
+/*
+ * Int encoding from a JS string. Uses argCount to check
+ * if index is out of JS array bounds
+ * Returns:
+ * 0: No encoding (uft8), if not allowed returns default value
+ * 1: Hex encoding
+ * 2: Base64 encoding
+ * 3: Base64Url encoding
+ */
 int getEncodingFromArgs(jsi::Runtime &rt, const jsi::Value *args,
                         size_t argCount, int index, int defaultValue,
                         bool allowUTF8) {

@@ -1,72 +1,29 @@
 #include "hash-functions.h"
 
 namespace rncryptopp {
+namespace hash {
 
 // function definition
-template <class H> void hash(std::string &data, std::string *result) {
+template <class H> void hash(std::string *data, std::string *result) {
   H sha;
-  StringSource(data, true,
+  StringSource(*data, true,
                new HashFilter(sha, new HexEncoder(new StringSink(*result))));
 }
-
-// Array of function pointers
-void (*hashPtrs[])(std::string &data,
-                   std::string *result) = {
-    &hash<BLAKE2b>, // 0
-    &hash<BLAKE2s>, // 1
-
-    &hash<Keccak_224>, // 2
-    &hash<Keccak_256>, // 3
-    &hash<Keccak_384>, // 4
-    &hash<Keccak_512>, // 5
-
-    &hash<LSH224>, // 6
-    &hash<LSH256>, // 7
-    &hash<LSH384>, // 8
-    &hash<LSH512>, // 9
-
-    &hash<SHA1>, // 10
-
-    &hash<SHA224>, // 11
-    &hash<SHA256>, // 12
-    &hash<SHA384>, // 13
-    &hash<SHA512>, // 14
-
-    &hash<SHA3_224>, // 15
-    &hash<SHA3_256>, // 16
-    &hash<SHA3_384>, // 17
-    &hash<SHA3_512>, // 18
-
-    &hash<SHAKE128>, // 19
-    &hash<SHAKE256>, // 20
-
-    &hash<SipHash<2, 4, false>>, // 21
-    &hash<SipHash<4, 8, true>>,  // 22
-
-    &hash<SM3>, // 23
-
-    &hash<Tiger>, // 24
-
-    &hash<RIPEMD128>, // 25
-    &hash<RIPEMD160>, // 26
-    &hash<RIPEMD256>, // 27
-    &hash<RIPEMD320>, // 28
-
-    &hash<Whirlpool> // 29
-};
 
 void blake2b(jsi::Runtime &rt, const jsi::Value *args, std::string *result) {
   std::string data;
   if (!binaryLikeValueToString(rt, args[0], &data))
     throwJSError(rt, "RNCryptopp: BLAKE2s data is not a string or ArrayBuffer");
-  hashPtrs[0](data, result);
+
+  hash<BLAKE2b>(&data, result);
 }
 
 void blake2s(jsi::Runtime &rt, const jsi::Value *args, std::string *result) {
   std::string data;
   if (!binaryLikeValueToString(rt, args[0], &data))
     throwJSError(rt, "RNCryptopp: BLAKE2b data is not a string or ArrayBuffer");
-  hashPtrs[1](data, result);
+
+  hash<BLAKE2s>(&data, result);
 }
 
 void keccak(jsi::Runtime &rt, const jsi::Value *args, std::string *result) {
@@ -78,18 +35,16 @@ void keccak(jsi::Runtime &rt, const jsi::Value *args, std::string *result) {
   if (!stringValueToString(rt, args[1], &size))
     throwJSError(rt, "RNCryptopp: Keccak size is not a string");
 
-  int sizeIndex = size == "224"   ? 0
-                  : size == "256" ? 1
-                  : size == "384" ? 2
-                  : size == "512" ? 3
-                                  : -1;
-
-  if (sizeIndex == -1) {
+  if (size == "224")
+    hash<Keccak_224>(&data, result);
+  else if (size == "256")
+    hash<Keccak_256>(&data, result);
+  else if (size == "384")
+    hash<Keccak_384>(&data, result);
+  else if (size == "512")
+    hash<Keccak_512>(&data, result);
+  else
     throwJSError(rt, "RNCryptopp: Keccak invalid size");
-    return;
-  }
-
-  hashPtrs[2 + sizeIndex](data, result);
 }
 
 void lsh(jsi::Runtime &rt, const jsi::Value *args, std::string *result) {
@@ -101,18 +56,16 @@ void lsh(jsi::Runtime &rt, const jsi::Value *args, std::string *result) {
   if (!stringValueToString(rt, args[1], &size))
     throwJSError(rt, "RNCryptopp: LSH size is not a string");
 
-  int sizeIndex = size == "224"   ? 0
-                  : size == "256" ? 1
-                  : size == "384" ? 2
-                  : size == "512" ? 3
-                                  : -1;
-
-  if (sizeIndex == -1) {
+  if (size == "224")
+    hash<LSH224>(&data, result);
+  else if (size == "256")
+    hash<LSH256>(&data, result);
+  else if (size == "384")
+    hash<LSH384>(&data, result);
+  else if (size == "512")
+    hash<LSH512>(&data, result);
+  else
     throwJSError(rt, "RNCryptopp: LSH invalid size");
-    return;
-  }
-
-  hashPtrs[6 + sizeIndex](data, result);
 }
 
 void sha1(jsi::Runtime &rt, const jsi::Value *args, std::string *result) {
@@ -120,7 +73,7 @@ void sha1(jsi::Runtime &rt, const jsi::Value *args, std::string *result) {
   if (!binaryLikeValueToString(rt, args[0], &data))
     throwJSError(rt, "RNCryptopp: sha1 data is not a string or ArrayBuffer");
 
-  hashPtrs[10](data, result);
+  hash<SHA1>(&data, result);
 }
 
 void sha2(jsi::Runtime &rt, const jsi::Value *args, std::string *result) {
@@ -132,18 +85,16 @@ void sha2(jsi::Runtime &rt, const jsi::Value *args, std::string *result) {
   if (!stringValueToString(rt, args[1], &size))
     throwJSError(rt, "RNCryptopp: SHA2 size is not a string");
 
-  int index = size == "224"   ? 0
-              : size == "256" ? 1
-              : size == "384" ? 2
-              : size == "512" ? 3
-                              : -1;
-
-  if (index == -1) {
+  if (size == "224")
+    hash<SHA224>(&data, result);
+  else if (size == "256")
+    hash<SHA256>(&data, result);
+  else if (size == "384")
+    hash<SHA384>(&data, result);
+  else if (size == "512")
+    hash<SHA512>(&data, result);
+  else
     throwJSError(rt, "RNCryptopp: SHA2 invalid size");
-    return;
-  }
-
-  hashPtrs[11 + index](data, result);
 }
 
 void sha3(jsi::Runtime &rt, const jsi::Value *args, std::string *result) {
@@ -155,18 +106,16 @@ void sha3(jsi::Runtime &rt, const jsi::Value *args, std::string *result) {
   if (!stringValueToString(rt, args[1], &size))
     throwJSError(rt, "RNCryptopp: SHA3 size is not a string");
 
-  int index = size == "224"   ? 0
-              : size == "256" ? 1
-              : size == "384" ? 2
-              : size == "512" ? 3
-                              : -1;
-
-  if (index == -1) {
+  if (size == "224")
+    hash<SHA3_224>(&data, result);
+  else if (size == "256")
+    hash<SHA3_256>(&data, result);
+  else if (size == "384")
+    hash<SHA3_384>(&data, result);
+  else if (size == "512")
+    hash<SHA3_512>(&data, result);
+  else
     throwJSError(rt, "RNCryptopp: SHA3 invalid size");
-    return;
-  }
-
-  hashPtrs[15 + index](data, result);
 }
 
 void shake(jsi::Runtime &rt, const jsi::Value *args, std::string *result) {
@@ -178,14 +127,12 @@ void shake(jsi::Runtime &rt, const jsi::Value *args, std::string *result) {
   if (!stringValueToString(rt, args[1], &size))
     throwJSError(rt, "RNCryptopp: SHAKE size is not a string");
 
-  int index = size == "128" ? 0 : size == "256" ? 1 : -1;
-
-  if (index == -1) {
+  if (size == "128")
+    hash<SHAKE128>(&data, result);
+  else if (size == "256")
+    hash<SHAKE256>(&data, result);
+  else
     throwJSError(rt, "RNCryptopp: SHAKE invalid size");
-    return;
-  }
-
-  hashPtrs[19 + index](data, result);
 }
 
 void sipHash(jsi::Runtime &rt, const jsi::Value *args, std::string *result) {
@@ -197,14 +144,12 @@ void sipHash(jsi::Runtime &rt, const jsi::Value *args, std::string *result) {
   if (!stringValueToString(rt, args[1], &type))
     throwJSError(rt, "RNCryptopp: SipHash type is not a string");
 
-  int index = type == "2_4_64" ? 0 : type == "4_8_128" ? 1 : -1;
-
-  if (index == -1) {
+  if (type == "2_4_64")
+    hash<SipHash<2, 4, false>>(&data, result);
+  else if (type == "4_8_128")
+    hash<SipHash<4, 8, true>>(&data, result);
+  else
     throwJSError(rt, "RNCryptopp: SipHash invalid type");
-    return;
-  }
-
-  hashPtrs[21 + index](data, result);
 }
 
 void sm3(jsi::Runtime &rt, const jsi::Value *args, std::string *result) {
@@ -212,7 +157,7 @@ void sm3(jsi::Runtime &rt, const jsi::Value *args, std::string *result) {
   if (!binaryLikeValueToString(rt, args[0], &data))
     throwJSError(rt, "RNCryptopp: SM3 data is not a string or ArrayBuffer");
 
-  hashPtrs[23](data, result);
+  hash<SM3>(&data, result);
 }
 
 void tiger(jsi::Runtime &rt, const jsi::Value *args, std::string *result) {
@@ -220,7 +165,7 @@ void tiger(jsi::Runtime &rt, const jsi::Value *args, std::string *result) {
   if (!binaryLikeValueToString(rt, args[0], &data))
     throwJSError(rt, "RNCryptopp: Tiger data is not a string or ArrayBuffer");
 
-  hashPtrs[24](data, result);
+  hash<Tiger>(&data, result);
 }
 
 void ripemd(jsi::Runtime &rt, const jsi::Value *args, std::string *result) {
@@ -228,22 +173,20 @@ void ripemd(jsi::Runtime &rt, const jsi::Value *args, std::string *result) {
   if (!binaryLikeValueToString(rt, args[0], &data))
     throwJSError(rt, "RNCryptopp: RIPEMD data is not a string or ArrayBuffer");
 
-  std::string type;
-  if (!stringValueToString(rt, args[1], &type))
+  std::string size;
+  if (!stringValueToString(rt, args[1], &size))
     throwJSError(rt, "RNCryptopp: RIPEMD type is not a string");
 
-  int index = type == "128"   ? 0
-              : type == "160" ? 1
-              : type == "256" ? 2
-              : type == "320" ? 3
-                              : -1;
-
-  if (index == -1) {
-    throwJSError(rt, "RNCryptopp: RIPEMD invalid type");
-    return;
-  }
-
-  hashPtrs[25 + index](data, result);
+  if (size == "128")
+    hash<RIPEMD128>(&data, result);
+  else if (size == "160")
+    hash<RIPEMD160>(&data, result);
+  else if (size == "256")
+    hash<RIPEMD256>(&data, result);
+  else if (size == "320")
+    hash<RIPEMD320>(&data, result);
+  else
+    throwJSError(rt, "RNCryptopp: RIPEMD invalid size");
 }
 
 void whirlpool(jsi::Runtime &rt, const jsi::Value *args, std::string *result) {
@@ -251,6 +194,7 @@ void whirlpool(jsi::Runtime &rt, const jsi::Value *args, std::string *result) {
   if (!binaryLikeValueToString(rt, args[0], &data))
     throwJSError(rt,
                  "RNCryptopp: WHIRLPOOL data is not a string or ArrayBuffer");
-  hashPtrs[29](data, result);
+  hash<Whirlpool>(&data, result);
 }
+} // namespace hash
 } // namespace rncryptopp

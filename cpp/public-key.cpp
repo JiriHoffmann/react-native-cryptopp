@@ -134,6 +134,17 @@ void decrypt(jsi::Runtime &rt, const jsi::Value *args, std::string *result) {
   }
 }
 
+template <class SCHEME>
+void exec_sign(std::string *data, CryptoPP::RSA::PrivateKey *privateKey,
+               std::string *result) {
+  AutoSeededRandomPool rng;
+  typename SCHEME::Signer signer(*privateKey);
+
+  StringSource(*data, true,
+               new SignerFilter(rng, signer,
+                                new Base64Encoder(new StringSink(*result))));
+}
+
 void sign(jsi::Runtime &rt, const jsi::Value *args, std::string *result) {
   std::string data;
   if (!binaryLikeValueToString(rt, args[0], &data))
@@ -151,39 +162,18 @@ void sign(jsi::Runtime &rt, const jsi::Value *args, std::string *result) {
   CryptoPP::RSA::PrivateKey privateKey;
   PEM_Load(PKeyStringSource, privateKey);
 
-  AutoSeededRandomPool rng;
-
-  if (signScheme == "PKCS1v15_SHA1") {
-    RSASS<PKCS1v15, SHA1>::Signer signer(privateKey);
-    StringSource(data, true,
-                 new SignerFilter(rng, signer,
-                                  new Base64Encoder(new StringSink(*result))));
-  } else if (signScheme == "PKCS1v15_SHA256") {
-    RSASS<PKCS1v15, SHA256>::Signer signer(privateKey);
-    StringSource(data, true,
-                 new SignerFilter(rng, signer,
-                                  new Base64Encoder(new StringSink(*result))));
-  } else if (signScheme == "PSSR_SHA1") {
-    RSASS<PSSR, SHA1>::Signer signer(privateKey);
-    StringSource(data, true,
-                 new SignerFilter(rng, signer,
-                                  new Base64Encoder(new StringSink(*result)),
-                                  true));
-  } else if (signScheme == "PSSR_SHA256") {
-    RSASS<PSSR, SHA256>::Signer signer(privateKey);
-    StringSource(data, true,
-                 new SignerFilter(rng, signer,
-                                  new Base64Encoder(new StringSink(*result)),
-                                  true));
-  } else if (signScheme == "PSSR_Whirlpool") {
-    RSASS<PSSR, Whirlpool>::Signer signer(privateKey);
-    StringSource(data, true,
-                 new SignerFilter(rng, signer,
-                                  new Base64Encoder(new StringSink(*result)),
-                                  true));
-  } else {
+  if (signScheme == "PKCS1v15_SHA1")
+    exec_sign<RSASS<PKCS1v15, SHA1>>(&data, &privateKey, result);
+  else if (signScheme == "PKCS1v15_SHA256")
+    exec_sign<RSASS<PKCS1v15, SHA256>>(&data, &privateKey, result);
+  else if (signScheme == "PSSR_SHA1")
+    exec_sign<RSASS<PSSR, SHA1>>(&data, &privateKey, result);
+  else if (signScheme == "PSSR_SHA256")
+    exec_sign<RSASS<PSSR, SHA256>>(&data, &privateKey, result);
+  else if (signScheme == "PSSR_Whirlpool")
+    exec_sign<RSASS<PSSR, Whirlpool>>(&data, &privateKey, result);
+  else
     throwJSError(rt, "RNCryptopp: RSA sign invalid scheme");
-  }
 }
 
 void verify(jsi::Runtime &rt, const jsi::Value *args, bool *result) {
@@ -217,9 +207,8 @@ void verify(jsi::Runtime &rt, const jsi::Value *args, bool *result) {
     *result = verifier.VerifyMessage((const byte *)data.data(), data.size(),
                                      (const byte *)signature.data(),
                                      signature.size());
-  } else {
+  } else
     throwJSError(rt, "RNCryptopp: RSA verify invalid scheme");
-  }
 }
 
 void recover(jsi::Runtime &rt, const jsi::Value *args, std::string *result) {

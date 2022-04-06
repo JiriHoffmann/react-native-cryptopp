@@ -22,6 +22,8 @@ bool valueToInt(const jsi::Value &value, int *res);
 
 bool valueToDouble(const jsi::Value &value, double *res);
 
+void encode(std::string *in, std::string *out, int encoding);
+
 void hexEncode(std::string &in, std::string &out);
 
 void hexDecode(std::string &in, std::string &out);
@@ -37,6 +39,7 @@ void base64UrlEncode(std::string &in, std::string &out);
 int getEncodingFromArgs(jsi::Runtime &rt, const jsi::Value *args,
                         size_t argCount, int index, int defaultValue = 0,
                         bool allowUTF8 = true);
+
 } // namespace rncryptopp
 
 #endif // CRYPTOPPEXAMPLE_HELPERS_H
