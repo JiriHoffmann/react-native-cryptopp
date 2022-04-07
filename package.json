@@ -97,7 +97,8 @@
   "peerDependencies": {
     "react": "*",
     "react-native": "*",
-    "extract-zip": "*"
+    "extract-zip": "*",
+    "rimraf": "*"
   },
   "jest": {
     "preset": "react-native",

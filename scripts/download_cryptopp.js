@@ -2,8 +2,8 @@ var fs = require('fs');
 const { exit } = require('process');
 const extract = require('extract-zip');
 const path = require('path');
-const { execSync } = require('child_process');
 const https = require('https');
+const rimraf = require('rimraf');
 
 const downloadFile = (url, dest, file) => {
   return new Promise((resolve, reject) => {
@@ -66,7 +66,8 @@ if (
 }
 
 // Clean up old archives
-execSync(`rm -f ${moduleDir}/cryptopp_*.zip`);
+// execSync(`rm -f ${moduleDir}/cryptopp_*.zip`);
+rimraf.sync(`${moduleDir}/cryptopp_*.zip`);
 
 // example: https://github.com/JiriHoffmann/react-native-cryptopp/releases/download/cryptopp_8.6.0/cryptopp.zip
 const link = `${repo}/releases/download/cryptopp_${cryptopp_v}/cryptopp.zip`;
