@@ -1,13 +1,16 @@
 #include "key-derivation.h"
 
 namespace rncryptopp {
-/// \brief Derivation function used for HKDF
-/// \tparam HASH HashTransformation class
-template <class HASH>
+/**
+ * Derivation function used for HKDF
+ *
+ * @tparam T_hash HashTransformation class
+ */
+template <class T_hash>
 void deriveHKDF(std::string *secret, std::string *salt, std::string *info,
                 std::string *result) {
-  HKDF<HASH> hkdf;
-  byte derived[HASH::DIGESTSIZE];
+  HKDF<T_hash> hkdf;
+  byte derived[T_hash::DIGESTSIZE];
   size_t derivedLen = sizeof(derived);
 
   hkdf.DeriveKey(derived, derivedLen, reinterpret_cast<const byte *>(secret),
@@ -94,14 +97,17 @@ void hkdf(jsi::Runtime &rt, const jsi::Value *args, std::string *result) {
     throwJSError(rt, "RNCryptopp: hkdf hash invalid hash value");
 }
 
-/// \brief Derivation function used for pbkdf12, pkcs5_pbkdf1, and pkcs5_pbkdf2
-/// \tparam FUNC PasswordBasedKeyDerivationFunction
-/// \tparam HASH HashTransformation class
-template <template <class> class FUNC, class HASH>
+/**
+ * Derivation function used for pbkdf12, pkcs5_pbkdf1, and pkcs5_pbkdf2
+ *
+ * @tparam T_func PasswordBasedKeyDerivationFunction
+ * @tparam T_hash HashTransformation class
+ */
+template <template <class> class T_func, class T_hash>
 void derivePBKDF(std::string *secret, std::string *salt,
                  unsigned int iterations, std::string *result) {
-  FUNC<HASH> func;
-  byte derived[HASH::DIGESTSIZE];
+  T_func<T_hash> func;
+  byte derived[T_hash::DIGESTSIZE];
   size_t derivedLen = sizeof(derived);
   byte unused = 0;
 
@@ -111,6 +117,69 @@ void derivePBKDF(std::string *secret, std::string *salt,
                  0.0f);
   std::string s(reinterpret_cast<char const *>(derived), derivedLen);
   hexEncode(s, *result);
+}
+
+template <template <class> class T_func>
+void getHashAndDerivePBKDF(jsi::Runtime &rt, std::string *secret,
+                           std::string *salt, std::string &hash, int numIter,
+                           std::string *result) {
+  if (hash == "BLAKE2b")
+    derivePBKDF<T_func, BLAKE2b>(secret, salt, numIter, result);
+  else if (hash == "BLAKE2s")
+    derivePBKDF<T_func, BLAKE2s>(secret, salt, numIter, result);
+  else if (hash == "Keccak_224")
+    derivePBKDF<T_func, Keccak_224>(secret, salt, numIter, result);
+  else if (hash == "Keccak_256")
+    derivePBKDF<T_func, Keccak_256>(secret, salt, numIter, result);
+  else if (hash == "Keccak_384")
+    derivePBKDF<T_func, Keccak_384>(secret, salt, numIter, result);
+  else if (hash == "Keccak_512")
+    derivePBKDF<T_func, Keccak_512>(secret, salt, numIter, result);
+  else if (hash == "LSH224")
+    derivePBKDF<T_func, LSH224>(secret, salt, numIter, result);
+  else if (hash == "LSH256")
+    derivePBKDF<T_func, LSH256>(secret, salt, numIter, result);
+  else if (hash == "LSH384")
+    derivePBKDF<T_func, LSH384>(secret, salt, numIter, result);
+  else if (hash == "LSH512")
+    derivePBKDF<T_func, LSH512>(secret, salt, numIter, result);
+  else if (hash == "SHA1")
+    derivePBKDF<T_func, SHA1>(secret, salt, numIter, result);
+  else if (hash == "SHA224")
+    derivePBKDF<T_func, SHA224>(secret, salt, numIter, result);
+  else if (hash == "SHA256")
+    derivePBKDF<T_func, SHA256>(secret, salt, numIter, result);
+  else if (hash == "SHA384")
+    derivePBKDF<T_func, SHA384>(secret, salt, numIter, result);
+  else if (hash == "SHA512")
+    derivePBKDF<T_func, SHA512>(secret, salt, numIter, result);
+  else if (hash == "SHA3_224")
+    derivePBKDF<T_func, SHA3_224>(secret, salt, numIter, result);
+  else if (hash == "SHA3_256")
+    derivePBKDF<T_func, SHA3_256>(secret, salt, numIter, result);
+  else if (hash == "SHA3_384")
+    derivePBKDF<T_func, SHA3_384>(secret, salt, numIter, result);
+  else if (hash == "SHA3_512")
+    derivePBKDF<T_func, SHA3_512>(secret, salt, numIter, result);
+  else if (hash == "SHAKE128")
+    derivePBKDF<T_func, SHAKE128>(secret, salt, numIter, result);
+  else if (hash == "SHAKE256")
+    derivePBKDF<T_func, SHAKE256>(secret, salt, numIter, result);
+  else if (hash == "SM3")
+    derivePBKDF<T_func, SM3>(secret, salt, numIter, result);
+  else if (hash == "Tiger")
+    derivePBKDF<T_func, Tiger>(secret, salt, numIter, result);
+  else if (hash == "RIPEMD128")
+    derivePBKDF<T_func, RIPEMD128>(secret, salt, numIter, result);
+  else if (hash == "RIPEMD160")
+    derivePBKDF<T_func, RIPEMD160>(secret, salt, numIter, result);
+  else if (hash == "RIPEMD256")
+    derivePBKDF<T_func, RIPEMD256>(secret, salt, numIter, result);
+  else if (hash == "RIPEMD320")
+    derivePBKDF<T_func, RIPEMD320>(secret, salt, numIter, result);
+  else
+    throwJSError(rt,
+                 "RNCryptopp: key derivation hash is not a valid hash value");
 }
 
 void pbkdf12(jsi::Runtime &rt, const jsi::Value *args, std::string *result) {
@@ -130,62 +199,7 @@ void pbkdf12(jsi::Runtime &rt, const jsi::Value *args, std::string *result) {
   if (!valueToInt(args[3], &numIter))
     throwJSError(rt, "RNCryptopp: pbkdf12 numIter in not a number");
 
-  if (hash == "BLAKE2b")
-    derivePBKDF<PKCS12_PBKDF, BLAKE2b>(&pass, &salt, numIter, result);
-  else if (hash == "BLAKE2s")
-    derivePBKDF<PKCS12_PBKDF, BLAKE2s>(&pass, &salt, numIter, result);
-  else if (hash == "Keccak_224")
-    derivePBKDF<PKCS12_PBKDF, Keccak_224>(&pass, &salt, numIter, result);
-  else if (hash == "Keccak_256")
-    derivePBKDF<PKCS12_PBKDF, Keccak_256>(&pass, &salt, numIter, result);
-  else if (hash == "Keccak_384")
-    derivePBKDF<PKCS12_PBKDF, Keccak_384>(&pass, &salt, numIter, result);
-  else if (hash == "Keccak_512")
-    derivePBKDF<PKCS12_PBKDF, Keccak_512>(&pass, &salt, numIter, result);
-  else if (hash == "LSH224")
-    derivePBKDF<PKCS12_PBKDF, LSH224>(&pass, &salt, numIter, result);
-  else if (hash == "LSH256")
-    derivePBKDF<PKCS12_PBKDF, LSH256>(&pass, &salt, numIter, result);
-  else if (hash == "LSH384")
-    derivePBKDF<PKCS12_PBKDF, LSH384>(&pass, &salt, numIter, result);
-  else if (hash == "LSH512")
-    derivePBKDF<PKCS12_PBKDF, LSH512>(&pass, &salt, numIter, result);
-  else if (hash == "SHA1")
-    derivePBKDF<PKCS12_PBKDF, SHA1>(&pass, &salt, numIter, result);
-  else if (hash == "SHA224")
-    derivePBKDF<PKCS12_PBKDF, SHA224>(&pass, &salt, numIter, result);
-  else if (hash == "SHA256")
-    derivePBKDF<PKCS12_PBKDF, SHA256>(&pass, &salt, numIter, result);
-  else if (hash == "SHA384")
-    derivePBKDF<PKCS12_PBKDF, SHA384>(&pass, &salt, numIter, result);
-  else if (hash == "SHA512")
-    derivePBKDF<PKCS12_PBKDF, SHA512>(&pass, &salt, numIter, result);
-  else if (hash == "SHA3_224")
-    derivePBKDF<PKCS12_PBKDF, SHA3_224>(&pass, &salt, numIter, result);
-  else if (hash == "SHA3_256")
-    derivePBKDF<PKCS12_PBKDF, SHA3_256>(&pass, &salt, numIter, result);
-  else if (hash == "SHA3_384")
-    derivePBKDF<PKCS12_PBKDF, SHA3_384>(&pass, &salt, numIter, result);
-  else if (hash == "SHA3_512")
-    derivePBKDF<PKCS12_PBKDF, SHA3_512>(&pass, &salt, numIter, result);
-  else if (hash == "SHAKE128")
-    derivePBKDF<PKCS12_PBKDF, SHAKE128>(&pass, &salt, numIter, result);
-  else if (hash == "SHAKE256")
-    derivePBKDF<PKCS12_PBKDF, SHAKE256>(&pass, &salt, numIter, result);
-  else if (hash == "SM3")
-    derivePBKDF<PKCS12_PBKDF, SM3>(&pass, &salt, numIter, result);
-  else if (hash == "Tiger")
-    derivePBKDF<PKCS12_PBKDF, Tiger>(&pass, &salt, numIter, result);
-  else if (hash == "RIPEMD128")
-    derivePBKDF<PKCS12_PBKDF, RIPEMD128>(&pass, &salt, numIter, result);
-  else if (hash == "RIPEMD160")
-    derivePBKDF<PKCS12_PBKDF, RIPEMD160>(&pass, &salt, numIter, result);
-  else if (hash == "RIPEMD256")
-    derivePBKDF<PKCS12_PBKDF, RIPEMD256>(&pass, &salt, numIter, result);
-  else if (hash == "RIPEMD320")
-    derivePBKDF<PKCS12_PBKDF, RIPEMD320>(&pass, &salt, numIter, result);
-  else
-    throwJSError(rt, "RNCryptopp: pbkdf12 hash invalid hash value");
+  getHashAndDerivePBKDF<PKCS12_PBKDF>(rt, &pass, &salt, hash, numIter, result);
 }
 
 void pkcs5_pbkdf1(jsi::Runtime &rt, const jsi::Value *args,
@@ -208,62 +222,7 @@ void pkcs5_pbkdf1(jsi::Runtime &rt, const jsi::Value *args,
   if (!valueToInt(args[3], &numIter))
     throwJSError(rt, "RNCryptopp: pkcs5_pbkdf1 numIter in not a number");
 
-  if (hash == "BLAKE2b")
-    derivePBKDF<PKCS5_PBKDF1, BLAKE2b>(&pass, &salt, numIter, result);
-  else if (hash == "BLAKE2s")
-    derivePBKDF<PKCS5_PBKDF1, BLAKE2s>(&pass, &salt, numIter, result);
-  else if (hash == "Keccak_224")
-    derivePBKDF<PKCS5_PBKDF1, Keccak_224>(&pass, &salt, numIter, result);
-  else if (hash == "Keccak_256")
-    derivePBKDF<PKCS5_PBKDF1, Keccak_256>(&pass, &salt, numIter, result);
-  else if (hash == "Keccak_384")
-    derivePBKDF<PKCS5_PBKDF1, Keccak_384>(&pass, &salt, numIter, result);
-  else if (hash == "Keccak_512")
-    derivePBKDF<PKCS5_PBKDF1, Keccak_512>(&pass, &salt, numIter, result);
-  else if (hash == "LSH224")
-    derivePBKDF<PKCS5_PBKDF1, LSH224>(&pass, &salt, numIter, result);
-  else if (hash == "LSH256")
-    derivePBKDF<PKCS5_PBKDF1, LSH256>(&pass, &salt, numIter, result);
-  else if (hash == "LSH384")
-    derivePBKDF<PKCS5_PBKDF1, LSH384>(&pass, &salt, numIter, result);
-  else if (hash == "LSH512")
-    derivePBKDF<PKCS5_PBKDF1, LSH512>(&pass, &salt, numIter, result);
-  else if (hash == "SHA1")
-    derivePBKDF<PKCS5_PBKDF1, SHA1>(&pass, &salt, numIter, result);
-  else if (hash == "SHA224")
-    derivePBKDF<PKCS5_PBKDF1, SHA224>(&pass, &salt, numIter, result);
-  else if (hash == "SHA256")
-    derivePBKDF<PKCS5_PBKDF1, SHA256>(&pass, &salt, numIter, result);
-  else if (hash == "SHA384")
-    derivePBKDF<PKCS5_PBKDF1, SHA384>(&pass, &salt, numIter, result);
-  else if (hash == "SHA512")
-    derivePBKDF<PKCS5_PBKDF1, SHA512>(&pass, &salt, numIter, result);
-  else if (hash == "SHA3_224")
-    derivePBKDF<PKCS5_PBKDF1, SHA3_224>(&pass, &salt, numIter, result);
-  else if (hash == "SHA3_256")
-    derivePBKDF<PKCS5_PBKDF1, SHA3_256>(&pass, &salt, numIter, result);
-  else if (hash == "SHA3_384")
-    derivePBKDF<PKCS5_PBKDF1, SHA3_384>(&pass, &salt, numIter, result);
-  else if (hash == "SHA3_512")
-    derivePBKDF<PKCS5_PBKDF1, SHA3_512>(&pass, &salt, numIter, result);
-  else if (hash == "SHAKE128")
-    derivePBKDF<PKCS5_PBKDF1, SHAKE128>(&pass, &salt, numIter, result);
-  else if (hash == "SHAKE256")
-    derivePBKDF<PKCS5_PBKDF1, SHAKE256>(&pass, &salt, numIter, result);
-  else if (hash == "SM3")
-    derivePBKDF<PKCS5_PBKDF1, SM3>(&pass, &salt, numIter, result);
-  else if (hash == "Tiger")
-    derivePBKDF<PKCS5_PBKDF1, Tiger>(&pass, &salt, numIter, result);
-  else if (hash == "RIPEMD128")
-    derivePBKDF<PKCS5_PBKDF1, RIPEMD128>(&pass, &salt, numIter, result);
-  else if (hash == "RIPEMD160")
-    derivePBKDF<PKCS5_PBKDF1, RIPEMD160>(&pass, &salt, numIter, result);
-  else if (hash == "RIPEMD256")
-    derivePBKDF<PKCS5_PBKDF1, RIPEMD256>(&pass, &salt, numIter, result);
-  else if (hash == "RIPEMD320")
-    derivePBKDF<PKCS5_PBKDF1, RIPEMD320>(&pass, &salt, numIter, result);
-  else
-    throwJSError(rt, "RNCryptopp: pkcs5_pbkdf1 hash invalid hash value");
+  getHashAndDerivePBKDF<PKCS5_PBKDF1>(rt, &pass, &salt, hash, numIter, result);
 }
 
 void pkcs5_pbkdf2(jsi::Runtime &rt, const jsi::Value *args,
@@ -286,61 +245,7 @@ void pkcs5_pbkdf2(jsi::Runtime &rt, const jsi::Value *args,
   if (!valueToInt(args[3], &numIter))
     throwJSError(rt, "RNCryptopp: pkcs5_pbkdf2 numIter in not a number");
 
-  if (hash == "BLAKE2b")
-    derivePBKDF<PKCS5_PBKDF2_HMAC, BLAKE2b>(&pass, &salt, numIter, result);
-  else if (hash == "BLAKE2s")
-    derivePBKDF<PKCS5_PBKDF2_HMAC, BLAKE2s>(&pass, &salt, numIter, result);
-  else if (hash == "Keccak_224")
-    derivePBKDF<PKCS5_PBKDF2_HMAC, Keccak_224>(&pass, &salt, numIter, result);
-  else if (hash == "Keccak_256")
-    derivePBKDF<PKCS5_PBKDF2_HMAC, Keccak_256>(&pass, &salt, numIter, result);
-  else if (hash == "Keccak_384")
-    derivePBKDF<PKCS5_PBKDF2_HMAC, Keccak_384>(&pass, &salt, numIter, result);
-  else if (hash == "Keccak_512")
-    derivePBKDF<PKCS5_PBKDF2_HMAC, Keccak_512>(&pass, &salt, numIter, result);
-  else if (hash == "LSH224")
-    derivePBKDF<PKCS5_PBKDF2_HMAC, LSH224>(&pass, &salt, numIter, result);
-  else if (hash == "LSH256")
-    derivePBKDF<PKCS5_PBKDF2_HMAC, LSH256>(&pass, &salt, numIter, result);
-  else if (hash == "LSH384")
-    derivePBKDF<PKCS5_PBKDF2_HMAC, LSH384>(&pass, &salt, numIter, result);
-  else if (hash == "LSH512")
-    derivePBKDF<PKCS5_PBKDF2_HMAC, LSH512>(&pass, &salt, numIter, result);
-  else if (hash == "SHA1")
-    derivePBKDF<PKCS5_PBKDF2_HMAC, SHA1>(&pass, &salt, numIter, result);
-  else if (hash == "SHA224")
-    derivePBKDF<PKCS5_PBKDF2_HMAC, SHA224>(&pass, &salt, numIter, result);
-  else if (hash == "SHA256")
-    derivePBKDF<PKCS5_PBKDF2_HMAC, SHA256>(&pass, &salt, numIter, result);
-  else if (hash == "SHA384")
-    derivePBKDF<PKCS5_PBKDF2_HMAC, SHA384>(&pass, &salt, numIter, result);
-  else if (hash == "SHA512")
-    derivePBKDF<PKCS5_PBKDF2_HMAC, SHA512>(&pass, &salt, numIter, result);
-  else if (hash == "SHA3_224")
-    derivePBKDF<PKCS5_PBKDF2_HMAC, SHA3_224>(&pass, &salt, numIter, result);
-  else if (hash == "SHA3_256")
-    derivePBKDF<PKCS5_PBKDF2_HMAC, SHA3_256>(&pass, &salt, numIter, result);
-  else if (hash == "SHA3_384")
-    derivePBKDF<PKCS5_PBKDF2_HMAC, SHA3_384>(&pass, &salt, numIter, result);
-  else if (hash == "SHA3_512")
-    derivePBKDF<PKCS5_PBKDF2_HMAC, SHA3_512>(&pass, &salt, numIter, result);
-  else if (hash == "SHAKE128")
-    derivePBKDF<PKCS5_PBKDF2_HMAC, SHAKE128>(&pass, &salt, numIter, result);
-  else if (hash == "SHAKE256")
-    derivePBKDF<PKCS5_PBKDF2_HMAC, SHAKE256>(&pass, &salt, numIter, result);
-  else if (hash == "SM3")
-    derivePBKDF<PKCS5_PBKDF2_HMAC, SM3>(&pass, &salt, numIter, result);
-  else if (hash == "Tiger")
-    derivePBKDF<PKCS5_PBKDF2_HMAC, Tiger>(&pass, &salt, numIter, result);
-  else if (hash == "RIPEMD128")
-    derivePBKDF<PKCS5_PBKDF2_HMAC, RIPEMD128>(&pass, &salt, numIter, result);
-  else if (hash == "RIPEMD160")
-    derivePBKDF<PKCS5_PBKDF2_HMAC, RIPEMD160>(&pass, &salt, numIter, result);
-  else if (hash == "RIPEMD256")
-    derivePBKDF<PKCS5_PBKDF2_HMAC, RIPEMD256>(&pass, &salt, numIter, result);
-  else if (hash == "RIPEMD320")
-    derivePBKDF<PKCS5_PBKDF2_HMAC, RIPEMD320>(&pass, &salt, numIter, result);
-  else
-    throwJSError(rt, "RNCryptopp: pkcs5_pbkdf2 hash invalid hash value");
+  getHashAndDerivePBKDF<PKCS5_PBKDF2_HMAC>(rt, &pass, &salt, hash, numIter,
+                                           result);
 }
 } // namespace rncryptopp

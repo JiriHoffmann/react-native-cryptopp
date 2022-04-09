@@ -5,11 +5,11 @@
 #include <jsi/jsilib.h>
 #include <string>
 
-#include "cryptopp/base64.h"
-#include "cryptopp/cryptlib.h"
-#include "cryptopp/filters.h"
 #include "cryptopp/modes.h"
-#include "cryptopp/osrng.h"
+
+#include "cryptopp/ccm.h"
+#include "cryptopp/eax.h"
+#include "cryptopp/gcm.h"
 #include "cryptopp/xts.h"
 
 #include "helpers.h"
@@ -19,11 +19,17 @@ using namespace facebook::jsi::detail;
 using namespace CryptoPP;
 
 namespace rncryptopp {
-void aes_encrypt(jsi::Runtime &rt, const jsi::Value *args, size_t argCount,
-                 std::string *result);
+namespace aescandidates {
 
-void aes_decrypt(jsi::Runtime &rt, const jsi::Value *args, size_t argCount,
-                 std::string *result);
+template <class T_BlockCipher>
+void encrypt(jsi::Runtime &rt, const jsi::Value *args, size_t argCount,
+             std::string *result);
+
+template <class T_BlockCipher>
+void decrypt(jsi::Runtime &rt, const jsi::Value *args, size_t argCount,
+             std::string *result);
+
+} // namespace aescandidates
 } // namespace rncryptopp
 
 #endif // REACT_NATIVE_CRYPTOPP_AES_CANDIDATES_H

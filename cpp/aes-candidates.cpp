@@ -1,77 +1,106 @@
 #include "aes-candidates.h"
 
 namespace rncryptopp {
+namespace aescandidates {
 
-template <class CIPHER>
-void encrypt(std::string *key, std::string *iv, std::string *data,
-             std::string *result, int encodingWith) {
+template <template <class> class Mode, class T_BlockCipher>
+void runEncrypt(std::string *key, std::string *iv, std::string *data,
+                std::string *result, int encodeTo) {
 
-  typename CIPHER::Encryption e;
+  typename Mode<T_BlockCipher>::Encryption e;
   e.SetKeyWithIV(reinterpret_cast<const byte *>(key), key->size(),
                  reinterpret_cast<const byte *>(iv), iv->size());
   std::string encrypted;
   StringSource _(*data, true,
                  new StreamTransformationFilter(e, new StringSink(encrypted)));
-  encode(&encrypted, result, encodingWith);
+  encode(&encrypted, result, encodeTo);
 }
 
-template <class CIPHER>
-void decrypt(std::string *key, std::string *iv, std::string *data,
-             std::string *result) {
+template <class T_BlockCipher>
+void getModeAndRunEncrypt(jsi::Runtime &rt, std::string *key, std::string *iv,
+                          std::string *data, std::string &mode,
+                          std::string *result, int encodeTo) {
+  if (mode == "ecb")
+    runEncrypt<ECB_Mode, T_BlockCipher>(key, iv, data, result, encodeTo);
+  else if (mode == "cbc")
+    runEncrypt<CBC_Mode, T_BlockCipher>(key, iv, data, result, encodeTo);
+  else if (mode == "cbc_cts")
+    runEncrypt<CBC_CTS_Mode, T_BlockCipher>(key, iv, data, result, encodeTo);
+  else if (mode == "cfb")
+    runEncrypt<CFB_Mode, T_BlockCipher>(key, iv, data, result, encodeTo);
+  else if (mode == "ofb")
+    runEncrypt<OFB_Mode, T_BlockCipher>(key, iv, data, result, encodeTo);
+  else if (mode == "ctr")
+    runEncrypt<CTR_Mode, T_BlockCipher>(key, iv, data, result, encodeTo);
+  else if (mode == "xts")
+    runEncrypt<XTS_Mode, T_BlockCipher>(key, iv, data, result, encodeTo);
+  else
+    throwJSError(rt, "RNCryptopp: encrypt mode is not a valid mode value");
+}
 
-  typename CIPHER::Decryption d;
+template <class T_BlockCipher>
+void encrypt(jsi::Runtime &rt, const jsi::Value *args, size_t argCount,
+             std::string *result) {
+  std::string data;
+  if (!binaryLikeValueToString(rt, args[0], &data, 0, 0))
+    throwJSError(rt, "RNCryptopp: encrypt data is not a string");
+
+  std::string key;
+  if (!binaryLikeValueToString(rt, args[1], &key, 1, 0))
+    throwJSError(rt, "RNCryptopp: encrypt key is not a string or ArrayBuffer");
+
+  std::string iv;
+  if (!binaryLikeValueToString(rt, args[2], &iv, 1, 0))
+    throwJSError(rt, "RNCryptopp: encrypt iv is not a string or ArrayBuffer");
+
+  std::string mode;
+  if (!stringValueToString(rt, args[3], &mode))
+    throwJSError(rt, "RNCryptopp: encrypt mode is not a string");
+
+  // encode result with base64 by default
+  int encodeTo =
+      rncryptopp::getEncodingFromArgs(rt, args, argCount, 4, 2, false);
+
+  getModeAndRunEncrypt<T_BlockCipher>(rt, &key, &iv, &data, mode, result,
+                                      encodeTo);
+}
+
+template <template <class> class Mode, class T_BlockCipher>
+void runDecrypt(std::string *key, std::string *iv, std::string *data,
+                std::string *result) {
+
+  typename Mode<T_BlockCipher>::Decryption d;
   d.SetKeyWithIV(reinterpret_cast<const byte *>(key), key->size(),
                  reinterpret_cast<const byte *>(iv), iv->size());
   StringSource s(*data, true,
                  new StreamTransformationFilter(d, new StringSink(*result)));
 }
 
-void aes_encrypt(jsi::Runtime &rt, const jsi::Value *args, size_t argCount,
-                 std::string *result) {
-
-  std::string data;
-  if (!binaryLikeValueToString(rt, args[0], &data, 0, 0))
-    throwJSError(rt, "RNCryptopp: aes_encrypt data is not a string");
-
-  std::string key;
-  if (!binaryLikeValueToString(rt, args[1], &key, 1, 0))
-    throwJSError(rt,
-                 "RNCryptopp: aes_encrypt iv is not a string or ArrayBuffer");
-
-  std::string iv;
-  if (!binaryLikeValueToString(rt, args[2], &iv, 1, 0))
-    throwJSError(rt,
-                 "RNCryptopp: aes_encrypt iv is not a string or ArrayBuffer");
-
-  std::string mode;
-  if (!stringValueToString(rt, args[3], &mode))
-    throwJSError(rt, "RNCryptopp: aes_encrypt mode is not a string");
-
-  // encode result with base64 by default
-  int encodingWith =
-      rncryptopp::getEncodingFromArgs(rt, args, argCount, 4, 2, false);
-
+template <class T_BlockCipher>
+void getModeAndRunDecrypt(jsi::Runtime &rt, std::string *key, std::string *iv,
+                          std::string *data, std::string &mode,
+                          std::string *result) {
   if (mode == "ecb")
-    encrypt<ECB_Mode<AES>>(&key, &iv, &data, result, encodingWith);
+    runDecrypt<ECB_Mode, T_BlockCipher>(key, iv, data, result);
   else if (mode == "cbc")
-    encrypt<CBC_Mode<AES>>(&key, &iv, &data, result, encodingWith);
+    runDecrypt<CBC_Mode, T_BlockCipher>(key, iv, data, result);
   else if (mode == "cbc_cts")
-    encrypt<CBC_CTS_Mode<AES>>(&key, &iv, &data, result, encodingWith);
+    runDecrypt<CBC_CTS_Mode, T_BlockCipher>(key, iv, data, result);
   else if (mode == "cfb")
-    encrypt<CFB_Mode<AES>>(&key, &iv, &data, result, encodingWith);
+    runDecrypt<CFB_Mode, T_BlockCipher>(key, iv, data, result);
   else if (mode == "ofb")
-    encrypt<OFB_Mode<AES>>(&key, &iv, &data, result, encodingWith);
+    runDecrypt<OFB_Mode, T_BlockCipher>(key, iv, data, result);
   else if (mode == "ctr")
-    encrypt<CTR_Mode<AES>>(&key, &iv, &data, result, encodingWith);
+    runDecrypt<CTR_Mode, T_BlockCipher>(key, iv, data, result);
   else if (mode == "xts")
-    encrypt<XTS_Mode<AES>>(&key, &iv, &data, result, encodingWith);
+    runDecrypt<XTS_Mode, T_BlockCipher>(key, iv, data, result);
   else
-    throwJSError(rt,
-                 "RNCryptopp: aes_encrypt mode is not a invalid mode value");
+    throwJSError(rt, "RNCryptopp: decrypt mode is not a valid mode value");
 }
 
-void aes_decrypt(jsi::Runtime &rt, const jsi::Value *args, size_t argCount,
-                 std::string *result) {
+template <class T_BlockCipher>
+void decrypt(jsi::Runtime &rt, const jsi::Value *args, size_t argCount,
+             std::string *result) {
   // Result is encoded with base64 by default
   int encoding = rncryptopp::getEncodingFromArgs(rt, args, argCount, 4, 2);
 
@@ -91,22 +120,7 @@ void aes_decrypt(jsi::Runtime &rt, const jsi::Value *args, size_t argCount,
   if (!stringValueToString(rt, args[3], &mode))
     throwJSError(rt, "RNCryptopp: aes_decrypt mode is not a string");
 
-  if (mode == "ecb")
-    decrypt<ECB_Mode<AES>>(&key, &iv, &data, result);
-  else if (mode == "cbc")
-    decrypt<CBC_Mode<AES>>(&key, &iv, &data, result);
-  else if (mode == "cbc_cts")
-    decrypt<CBC_CTS_Mode<AES>>(&key, &iv, &data, result);
-  else if (mode == "cfb")
-    decrypt<CFB_Mode<AES>>(&key, &iv, &data, result);
-  else if (mode == "ofb")
-    decrypt<OFB_Mode<AES>>(&key, &iv, &data, result);
-  else if (mode == "ctr")
-    decrypt<CTR_Mode<AES>>(&key, &iv, &data, result);
-  else if (mode == "xts")
-    decrypt<XTS_Mode<AES>>(&key, &iv, &data, result);
-  else
-    throwJSError(rt,
-                 "RNCryptopp: aes_decrypt mode is not a invalid mode value");
+  getModeAndRunDecrypt<T_BlockCipher>(rt, &key, &iv, &data, mode, result);
 }
+} // namespace aescandidates
 } // namespace rncryptopp

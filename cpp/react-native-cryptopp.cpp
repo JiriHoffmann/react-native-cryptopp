@@ -140,7 +140,7 @@ void rncryptopp_install(jsi::Runtime &jsiRuntime) {
       [](jsi::Runtime &rt, const jsi::Value &thisValue, const jsi::Value *args,
          size_t count) -> jsi::Value {
         std::string result;
-        rncryptopp::aes_encrypt(rt, args, count, &result);
+        rncryptopp::aescandidates::encrypt<AES>(rt, args, count, &result);
         return jsi::String::createFromUtf8(rt, result);
       });
   auto aes_decrypt = jsi::Function::createFromHostFunction(
@@ -148,13 +148,118 @@ void rncryptopp_install(jsi::Runtime &jsiRuntime) {
       [](jsi::Runtime &rt, const jsi::Value &thisValue, const jsi::Value *args,
          size_t count) -> jsi::Value {
         std::string result;
-        rncryptopp::aes_decrypt(rt, args, count, &result);
+        rncryptopp::aescandidates::decrypt<AES>(rt, args, count, &result);
         return jsi::String::createFromUtf8(rt, result);
       });
 
   jsi::Object AES = jsi::Object(jsiRuntime);
   AES.setProperty(jsiRuntime, "encrypt", std::move(aes_encrypt));
   AES.setProperty(jsiRuntime, "decrypt", std::move(aes_decrypt));
+
+  auto rc6_encrypt = jsi::Function::createFromHostFunction(
+      jsiRuntime, jsi::PropNameID::forAscii(jsiRuntime, "rc6_encrypt"), 5,
+      [](jsi::Runtime &rt, const jsi::Value &thisValue, const jsi::Value *args,
+         size_t count) -> jsi::Value {
+        std::string result;
+        rncryptopp::aescandidates::encrypt<RC6>(rt, args, count, &result);
+        return jsi::String::createFromUtf8(rt, result);
+      });
+  auto rc6_decrypt = jsi::Function::createFromHostFunction(
+      jsiRuntime, jsi::PropNameID::forAscii(jsiRuntime, "rc6_decrypt"), 5,
+      [](jsi::Runtime &rt, const jsi::Value &thisValue, const jsi::Value *args,
+         size_t count) -> jsi::Value {
+        std::string result;
+        rncryptopp::aescandidates::decrypt<RC6>(rt, args, count, &result);
+        return jsi::String::createFromUtf8(rt, result);
+      });
+
+  jsi::Object RC6 = jsi::Object(jsiRuntime);
+  RC6.setProperty(jsiRuntime, "encrypt", std::move(rc6_encrypt));
+  RC6.setProperty(jsiRuntime, "decrypt", std::move(rc6_decrypt));
+
+  auto mars_encrypt = jsi::Function::createFromHostFunction(
+      jsiRuntime, jsi::PropNameID::forAscii(jsiRuntime, "mars_encrypt"), 5,
+      [](jsi::Runtime &rt, const jsi::Value &thisValue, const jsi::Value *args,
+         size_t count) -> jsi::Value {
+        std::string result;
+        rncryptopp::aescandidates::encrypt<MARS>(rt, args, count, &result);
+        return jsi::String::createFromUtf8(rt, result);
+      });
+  auto mars_decrypt = jsi::Function::createFromHostFunction(
+      jsiRuntime, jsi::PropNameID::forAscii(jsiRuntime, "mars_decrypt"), 5,
+      [](jsi::Runtime &rt, const jsi::Value &thisValue, const jsi::Value *args,
+         size_t count) -> jsi::Value {
+        std::string result;
+        rncryptopp::aescandidates::decrypt<MARS>(rt, args, count, &result);
+        return jsi::String::createFromUtf8(rt, result);
+      });
+
+  jsi::Object MARS = jsi::Object(jsiRuntime);
+  MARS.setProperty(jsiRuntime, "encrypt", std::move(mars_encrypt));
+  MARS.setProperty(jsiRuntime, "decrypt", std::move(mars_decrypt));
+
+  auto twofish_encrypt = jsi::Function::createFromHostFunction(
+      jsiRuntime, jsi::PropNameID::forAscii(jsiRuntime, "twofish_encrypt"), 5,
+      [](jsi::Runtime &rt, const jsi::Value &thisValue, const jsi::Value *args,
+         size_t count) -> jsi::Value {
+        std::string result;
+        rncryptopp::aescandidates::encrypt<Twofish>(rt, args, count, &result);
+        return jsi::String::createFromUtf8(rt, result);
+      });
+  auto twofish_decrypt = jsi::Function::createFromHostFunction(
+      jsiRuntime, jsi::PropNameID::forAscii(jsiRuntime, "twofish_decrypt"), 5,
+      [](jsi::Runtime &rt, const jsi::Value &thisValue, const jsi::Value *args,
+         size_t count) -> jsi::Value {
+        std::string result;
+        rncryptopp::aescandidates::decrypt<Twofish>(rt, args, count, &result);
+        return jsi::String::createFromUtf8(rt, result);
+      });
+
+  jsi::Object Twofish = jsi::Object(jsiRuntime);
+  Twofish.setProperty(jsiRuntime, "encrypt", std::move(twofish_encrypt));
+  Twofish.setProperty(jsiRuntime, "decrypt", std::move(twofish_decrypt));
+
+  auto serpent_encrypt = jsi::Function::createFromHostFunction(
+      jsiRuntime, jsi::PropNameID::forAscii(jsiRuntime, "serpent_encrypt"), 5,
+      [](jsi::Runtime &rt, const jsi::Value &thisValue, const jsi::Value *args,
+         size_t count) -> jsi::Value {
+        std::string result;
+        rncryptopp::aescandidates::encrypt<Serpent>(rt, args, count, &result);
+        return jsi::String::createFromUtf8(rt, result);
+      });
+  auto serpent_decrypt = jsi::Function::createFromHostFunction(
+      jsiRuntime, jsi::PropNameID::forAscii(jsiRuntime, "serpent_decrypt"), 5,
+      [](jsi::Runtime &rt, const jsi::Value &thisValue, const jsi::Value *args,
+         size_t count) -> jsi::Value {
+        std::string result;
+        rncryptopp::aescandidates::decrypt<Serpent>(rt, args, count, &result);
+        return jsi::String::createFromUtf8(rt, result);
+      });
+
+  jsi::Object Serpent = jsi::Object(jsiRuntime);
+  Serpent.setProperty(jsiRuntime, "encrypt", std::move(serpent_encrypt));
+  Serpent.setProperty(jsiRuntime, "decrypt", std::move(serpent_decrypt));
+
+  auto cast256_encrypt = jsi::Function::createFromHostFunction(
+      jsiRuntime, jsi::PropNameID::forAscii(jsiRuntime, "cast256_encrypt"), 5,
+      [](jsi::Runtime &rt, const jsi::Value &thisValue, const jsi::Value *args,
+         size_t count) -> jsi::Value {
+        std::string result;
+        rncryptopp::aescandidates::encrypt<CAST256>(rt, args, count, &result);
+        return jsi::String::createFromUtf8(rt, result);
+      });
+  auto cast256_decrypt = jsi::Function::createFromHostFunction(
+      jsiRuntime, jsi::PropNameID::forAscii(jsiRuntime, "cast256_decrypt"), 5,
+      [](jsi::Runtime &rt, const jsi::Value &thisValue, const jsi::Value *args,
+         size_t count) -> jsi::Value {
+        std::string result;
+        rncryptopp::aescandidates::decrypt<CAST256>(rt, args, count, &result);
+        return jsi::String::createFromUtf8(rt, result);
+      });
+
+  jsi::Object CAST256 = jsi::Object(jsiRuntime);
+  CAST256.setProperty(jsiRuntime, "encrypt", std::move(cast256_encrypt));
+  CAST256.setProperty(jsiRuntime, "decrypt", std::move(cast256_decrypt));
 
   /*
   Insecure
@@ -403,6 +508,11 @@ void rncryptopp_install(jsi::Runtime &jsiRuntime) {
   */
   jsi::Object module = jsi::Object(jsiRuntime);
   module.setProperty(jsiRuntime, "AES", std::move(AES));
+  module.setProperty(jsiRuntime, "RC6", std::move(RC6));
+  module.setProperty(jsiRuntime, "MARS", std::move(MARS));
+  module.setProperty(jsiRuntime, "Twofish", std::move(Twofish));
+  module.setProperty(jsiRuntime, "Serpent", std::move(Serpent));
+  module.setProperty(jsiRuntime, "CAST256", std::move(CAST256));
   module.setProperty(jsiRuntime, "RSA", std::move(RSA));
   module.setProperty(jsiRuntime, "hashFunctions", std::move(hashFunctions));
   module.setProperty(jsiRuntime, "insecure", std::move(insecure));
