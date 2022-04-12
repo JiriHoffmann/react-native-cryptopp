@@ -21,13 +21,11 @@ using namespace CryptoPP;
 namespace rncryptopp {
 namespace aescandidates {
 
-template <class T_BlockCipher>
 void encrypt(jsi::Runtime &rt, const jsi::Value *args, size_t argCount,
-             std::string *result);
+             std::string &cipher, std::string *result);
 
-template <class T_BlockCipher>
 void decrypt(jsi::Runtime &rt, const jsi::Value *args, size_t argCount,
-             std::string *result);
+             std::string &cipher, std::string *result);
 
 } // namespace aescandidates
 } // namespace rncryptopp

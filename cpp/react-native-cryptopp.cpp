@@ -139,16 +139,18 @@ void rncryptopp_install(jsi::Runtime &jsiRuntime) {
       jsiRuntime, jsi::PropNameID::forAscii(jsiRuntime, "aes_encrypt"), 5,
       [](jsi::Runtime &rt, const jsi::Value &thisValue, const jsi::Value *args,
          size_t count) -> jsi::Value {
+        std::string cipher = "AES";
         std::string result;
-        rncryptopp::aescandidates::encrypt<AES>(rt, args, count, &result);
+        rncryptopp::aescandidates::encrypt(rt, args, count, cipher, &result);
         return jsi::String::createFromUtf8(rt, result);
       });
   auto aes_decrypt = jsi::Function::createFromHostFunction(
       jsiRuntime, jsi::PropNameID::forAscii(jsiRuntime, "aes_decrypt"), 5,
       [](jsi::Runtime &rt, const jsi::Value &thisValue, const jsi::Value *args,
          size_t count) -> jsi::Value {
+        std::string cipher = "AES";
         std::string result;
-        rncryptopp::aescandidates::decrypt<AES>(rt, args, count, &result);
+        rncryptopp::aescandidates::decrypt(rt, args, count, cipher, &result);
         return jsi::String::createFromUtf8(rt, result);
       });
 
@@ -160,16 +162,18 @@ void rncryptopp_install(jsi::Runtime &jsiRuntime) {
       jsiRuntime, jsi::PropNameID::forAscii(jsiRuntime, "rc6_encrypt"), 5,
       [](jsi::Runtime &rt, const jsi::Value &thisValue, const jsi::Value *args,
          size_t count) -> jsi::Value {
+        std::string cipher = "RC6";
         std::string result;
-        rncryptopp::aescandidates::encrypt<RC6>(rt, args, count, &result);
+        rncryptopp::aescandidates::encrypt(rt, args, count, cipher, &result);
         return jsi::String::createFromUtf8(rt, result);
       });
   auto rc6_decrypt = jsi::Function::createFromHostFunction(
       jsiRuntime, jsi::PropNameID::forAscii(jsiRuntime, "rc6_decrypt"), 5,
       [](jsi::Runtime &rt, const jsi::Value &thisValue, const jsi::Value *args,
          size_t count) -> jsi::Value {
+        std::string cipher = "RC6";
         std::string result;
-        rncryptopp::aescandidates::decrypt<RC6>(rt, args, count, &result);
+        rncryptopp::aescandidates::decrypt(rt, args, count, cipher, &result);
         return jsi::String::createFromUtf8(rt, result);
       });
 
@@ -181,16 +185,18 @@ void rncryptopp_install(jsi::Runtime &jsiRuntime) {
       jsiRuntime, jsi::PropNameID::forAscii(jsiRuntime, "mars_encrypt"), 5,
       [](jsi::Runtime &rt, const jsi::Value &thisValue, const jsi::Value *args,
          size_t count) -> jsi::Value {
+        std::string cipher = "MARS";
         std::string result;
-        rncryptopp::aescandidates::encrypt<MARS>(rt, args, count, &result);
+        rncryptopp::aescandidates::encrypt(rt, args, count, cipher, &result);
         return jsi::String::createFromUtf8(rt, result);
       });
   auto mars_decrypt = jsi::Function::createFromHostFunction(
       jsiRuntime, jsi::PropNameID::forAscii(jsiRuntime, "mars_decrypt"), 5,
       [](jsi::Runtime &rt, const jsi::Value &thisValue, const jsi::Value *args,
          size_t count) -> jsi::Value {
+        std::string cipher = "MARS";
         std::string result;
-        rncryptopp::aescandidates::decrypt<MARS>(rt, args, count, &result);
+        rncryptopp::aescandidates::decrypt(rt, args, count, cipher, &result);
         return jsi::String::createFromUtf8(rt, result);
       });
 
@@ -202,16 +208,18 @@ void rncryptopp_install(jsi::Runtime &jsiRuntime) {
       jsiRuntime, jsi::PropNameID::forAscii(jsiRuntime, "twofish_encrypt"), 5,
       [](jsi::Runtime &rt, const jsi::Value &thisValue, const jsi::Value *args,
          size_t count) -> jsi::Value {
+        std::string cipher = "Twofish";
         std::string result;
-        rncryptopp::aescandidates::encrypt<Twofish>(rt, args, count, &result);
+        rncryptopp::aescandidates::encrypt(rt, args, count, cipher, &result);
         return jsi::String::createFromUtf8(rt, result);
       });
   auto twofish_decrypt = jsi::Function::createFromHostFunction(
       jsiRuntime, jsi::PropNameID::forAscii(jsiRuntime, "twofish_decrypt"), 5,
       [](jsi::Runtime &rt, const jsi::Value &thisValue, const jsi::Value *args,
          size_t count) -> jsi::Value {
+        std::string cipher = "Twofish";
         std::string result;
-        rncryptopp::aescandidates::decrypt<Twofish>(rt, args, count, &result);
+        rncryptopp::aescandidates::decrypt(rt, args, count, cipher, &result);
         return jsi::String::createFromUtf8(rt, result);
       });
 
@@ -223,16 +231,18 @@ void rncryptopp_install(jsi::Runtime &jsiRuntime) {
       jsiRuntime, jsi::PropNameID::forAscii(jsiRuntime, "serpent_encrypt"), 5,
       [](jsi::Runtime &rt, const jsi::Value &thisValue, const jsi::Value *args,
          size_t count) -> jsi::Value {
+        std::string cipher = "Serpent";
         std::string result;
-        rncryptopp::aescandidates::encrypt<Serpent>(rt, args, count, &result);
+        rncryptopp::aescandidates::encrypt(rt, args, count, cipher, &result);
         return jsi::String::createFromUtf8(rt, result);
       });
   auto serpent_decrypt = jsi::Function::createFromHostFunction(
       jsiRuntime, jsi::PropNameID::forAscii(jsiRuntime, "serpent_decrypt"), 5,
       [](jsi::Runtime &rt, const jsi::Value &thisValue, const jsi::Value *args,
          size_t count) -> jsi::Value {
+        std::string cipher = "Serpent";
         std::string result;
-        rncryptopp::aescandidates::decrypt<Serpent>(rt, args, count, &result);
+        rncryptopp::aescandidates::decrypt(rt, args, count, cipher, &result);
         return jsi::String::createFromUtf8(rt, result);
       });
 
@@ -244,16 +254,18 @@ void rncryptopp_install(jsi::Runtime &jsiRuntime) {
       jsiRuntime, jsi::PropNameID::forAscii(jsiRuntime, "cast256_encrypt"), 5,
       [](jsi::Runtime &rt, const jsi::Value &thisValue, const jsi::Value *args,
          size_t count) -> jsi::Value {
+        std::string cipher = "CAST256";
         std::string result;
-        rncryptopp::aescandidates::encrypt<CAST256>(rt, args, count, &result);
+        rncryptopp::aescandidates::encrypt(rt, args, count, cipher, &result);
         return jsi::String::createFromUtf8(rt, result);
       });
   auto cast256_decrypt = jsi::Function::createFromHostFunction(
       jsiRuntime, jsi::PropNameID::forAscii(jsiRuntime, "cast256_decrypt"), 5,
       [](jsi::Runtime &rt, const jsi::Value &thisValue, const jsi::Value *args,
          size_t count) -> jsi::Value {
+        std::string cipher = "CAST256";
         std::string result;
-        rncryptopp::aescandidates::decrypt<CAST256>(rt, args, count, &result);
+        rncryptopp::aescandidates::decrypt(rt, args, count, cipher, &result);
         return jsi::String::createFromUtf8(rt, result);
       });
 
