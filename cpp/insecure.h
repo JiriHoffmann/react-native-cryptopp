@@ -1,5 +1,5 @@
-#ifndef CRYPTOPPEXAMPLE_INSECURE_H
-#define CRYPTOPPEXAMPLE_INSECURE_H
+#ifndef REACT_NATIVE_CRYPTOPP_INSECURE_H
+#define REACT_NATIVE_CRYPTOPP_INSECURE_H
 
 #include <jsi/jsi.h>
 #include <jsi/jsilib.h>
@@ -23,4 +23,4 @@ void md4(jsi::Runtime &rt, const jsi::Value *args, std::string *result);
 void md5(jsi::Runtime &rt, const jsi::Value *args, std::string *result);
 } // namespace rncryptopp
 
-#endif // CRYPTOPPEXAMPLE_INSECURE_H
+#endif // REACT_NATIVE_CRYPTOPP_INSECURE_H

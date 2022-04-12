@@ -9,6 +9,7 @@
 #include "cryptopp/blake2.h"
 #include "cryptopp/filters.h"
 #include "cryptopp/hex.h"
+#include "cryptopp/hmac.h"
 #include "cryptopp/keccak.h"
 #include "cryptopp/lsh.h"
 #include "cryptopp/ripemd.h"
@@ -18,7 +19,6 @@
 #include "cryptopp/sm3.h"
 #include "cryptopp/tiger.h"
 #include "cryptopp/whrlpool.h"
-#include <cryptopp/hmac.h>
 
 #include "cryptopp/aria.h"
 #include "cryptopp/blowfish.h"

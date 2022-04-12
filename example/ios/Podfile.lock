@@ -292,7 +292,7 @@ PODS:
     - glog
   - react-native-blob-util (0.14.1):
     - React-Core
-  - react-native-cryptopp (0.1.2):
+  - react-native-cryptopp (0.2.0):
     - React-Core
   - React-perflogger (0.67.1)
   - React-RCTActionSheet (0.67.1):
@@ -558,7 +558,7 @@ SPEC CHECKSUMS:
   React-jsinspector: ab80bcdb02f28cdfc0dbbaea6db1241565d59002
   React-logger: b08f354e4c928ff794ca477347fea0922aaf11c3
   react-native-blob-util: 7ac01cd4a4ba81016864727a756ce2c1af995e35
-  react-native-cryptopp: 9feb4539b2be3985fd3389c119c626ccd2063951
+  react-native-cryptopp: be3d54766b2ff2a67cdc21e2cb174d7f16af4304
   React-perflogger: 9a6172711d9c4c8c7ac0a426717317c3c6ecf85c
   React-RCTActionSheet: ed408b54b08278e6af8a75e08679675041da61ae
   React-RCTAnimation: 0163b497a423a9576a776685c6e3fe276f934758
