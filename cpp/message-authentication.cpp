@@ -133,8 +133,8 @@ void generate(jsi::Runtime &rt, const jsi::Value *args, size_t argCount,
   int encodeWith =
       rncryptopp::getEncodingFromArgs(rt, args, argCount, 3, 1, false);
 
-  if (!invokeWithBlockCipher<runGenerateWrapperCMAC>()(cipher, &key, &data,
-                                                       result, encodeWith))
+  if (!invokeWithBlockCipher<runGenerateWrapperCMAC>()(
+          cipher, true, true, &key, &data, result, encodeWith))
     throwJSError(rt, "RNCryptopp: CMAC generate, invalid hash value");
 }
 
@@ -165,8 +165,8 @@ void verify(jsi::Runtime &rt, const jsi::Value *args, size_t argCount,
 
   std::string dataAndMac = data + mac;
 
-  if (!invokeWithBlockCipher<runVerifyWrapperCMAC>()(cipher, &key, &dataAndMac,
-                                                     result))
+  if (!invokeWithBlockCipher<runVerifyWrapperCMAC>()(cipher, true, true, &key,
+                                                     &dataAndMac, result))
     throwJSError(rt, "RNCryptopp: CMAC verify, invalid hash value");
 }
 } // namespace cmac

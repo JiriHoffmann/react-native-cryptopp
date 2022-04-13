@@ -65,8 +65,9 @@ void encrypt(jsi::Runtime &rt, const jsi::Value *args, size_t argCount,
       rncryptopp::getEncodingFromArgs(rt, args, argCount, 4, 2, false);
 
   bool isModeValid = true;
-  invokeWithBlockCipherAES<getModeAndRunEncryption>()(
-      cipher, mode, &isModeValid, &key, &iv, &data, encodeTo, result);
+  invokeWithBlockCipher<getModeAndRunEncryption>()(cipher, true, false, mode,
+                                                   &isModeValid, &key, &iv,
+                                                   &data, encodeTo, result);
 
   if (!isModeValid)
     throwJSError(
@@ -132,8 +133,8 @@ void decrypt(jsi::Runtime &rt, const jsi::Value *args, size_t argCount,
                  "RNCryptopp: aes & candidates decrypt mode is not a string");
 
   bool isModeValid = true;
-  invokeWithBlockCipherAES<getModeAndRunDecryption>()(
-      cipher, mode, &isModeValid, &key, &iv, &data, result);
+  invokeWithBlockCipher<getModeAndRunDecryption>()(
+      cipher, true, false, mode, &isModeValid, &key, &iv, &data, result);
 
   if (!isModeValid)
     throwJSError(

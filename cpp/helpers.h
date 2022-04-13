@@ -146,96 +146,88 @@ template <template <typename> class F> struct invokeWithHash {
   }
 };
 
-template <template <typename T, typename... R> class F>
-struct invokeWithBlockCipher {
+template <template <typename T> class F> struct invokeWithBlockCipher {
   template <typename... R>
-  bool operator()(std::string &cipher, R... rest) const {
-    if (cipher == "ARIA")
+  bool operator()(std::string &cipher, bool allowAES, bool allowOther,
+                  R... rest) const {
+    // AES and candidates block ciphers
+    if (cipher == "AES" && allowAES)
+      F<AES>()(rest...);
+    else if (cipher == "RC6" && allowAES)
+      F<RC6>()(rest...);
+    else if (cipher == "MARS" && allowAES)
+      F<MARS>()(rest...);
+    else if (cipher == "Twofish" && allowAES)
+      F<Twofish>()(rest...);
+    else if (cipher == "Serpent" && allowAES)
+      F<Serpent>()(rest...);
+    else if (cipher == "CAST256" && allowAES)
+      F<CAST256>()(rest...);
+
+    // Other block ciphers
+    else if (cipher == "ARIA" && allowOther)
       F<ARIA>()(rest...);
-    else if (cipher == "Blowfish")
+    else if (cipher == "Blowfish" && allowOther)
       F<Blowfish>()(rest...);
-    else if (cipher == "Camellia")
+    else if (cipher == "Camellia" && allowOther)
       F<Camellia>()(rest...);
-    else if (cipher == "CHAM64")
+    else if (cipher == "CHAM64" && allowOther)
       F<CHAM64>()(rest...);
-    else if (cipher == "CHAM128")
+    else if (cipher == "CHAM128" && allowOther)
       F<CHAM128>()(rest...);
-    else if (cipher == "HIGHT")
+    else if (cipher == "HIGHT" && allowOther)
       F<HIGHT>()(rest...);
-    else if (cipher == "IDEA")
+    else if (cipher == "IDEA" && allowOther)
       F<IDEA>()(rest...);
-    else if (cipher == "Kalyna128")
+    else if (cipher == "Kalyna128" && allowOther)
       F<Kalyna128>()(rest...);
-    else if (cipher == "Kalyna256")
+    else if (cipher == "Kalyna256" && allowOther)
       F<Kalyna256>()(rest...);
-    else if (cipher == "Kalyna512")
+    else if (cipher == "Kalyna512" && allowOther)
       F<Kalyna512>()(rest...);
-    else if (cipher == "LEA")
+    else if (cipher == "LEA" && allowOther)
       F<LEA>()(rest...);
-    else if (cipher == "SEED")
+    else if (cipher == "SEED" && allowOther)
       F<SEED>()(rest...);
-    else if (cipher == "RC5")
+    else if (cipher == "RC5" && allowOther)
       F<RC5>()(rest...);
-    else if (cipher == "SHACAL2")
+    else if (cipher == "SHACAL2" && allowOther)
       F<SHACAL2>()(rest...);
-    else if (cipher == "SIMECK32")
+    else if (cipher == "SIMECK32" && allowOther)
       F<SIMECK32>()(rest...);
-    else if (cipher == "SIMECK64")
+    else if (cipher == "SIMECK64" && allowOther)
       F<SIMECK64>()(rest...);
-    else if (cipher == "SIMON64")
+    else if (cipher == "SIMON64" && allowOther)
       F<SIMON64>()(rest...);
-    else if (cipher == "SIMON128")
+    else if (cipher == "SIMON128" && allowOther)
       F<SIMON128>()(rest...);
-    else if (cipher == "SKIPJACK")
+    else if (cipher == "SKIPJACK" && allowOther)
       F<SKIPJACK>()(rest...);
-    else if (cipher == "SPECK64")
+    else if (cipher == "SPECK64" && allowOther)
       F<SPECK64>()(rest...);
-    else if (cipher == "SPECK128")
+    else if (cipher == "SPECK128" && allowOther)
       F<SPECK128>()(rest...);
-    else if (cipher == "SM4")
+    else if (cipher == "SM4" && allowOther)
       F<SM4>()(rest...);
-    else if (cipher == "Threefish256")
+    else if (cipher == "Threefish256" && allowOther)
       F<Threefish256>()(rest...);
-    else if (cipher == "Threefish512")
+    else if (cipher == "Threefish512" && allowOther)
       F<Threefish512>()(rest...);
-    else if (cipher == "Threefish1024")
+    else if (cipher == "Threefish1024" && allowOther)
       F<Threefish1024>()(rest...);
-    else if (cipher == "DES_EDE2")
+    else if (cipher == "DES_EDE2" && allowOther)
       F<DES_EDE2>()(rest...);
-    else if (cipher == "DES_EDE3")
+    else if (cipher == "DES_EDE3" && allowOther)
       F<DES_EDE3>()(rest...);
-    else if (cipher == "TEA")
+    else if (cipher == "TEA" && allowOther)
       F<TEA>()(rest...);
-    else if (cipher == "XTEA")
+    else if (cipher == "XTEA" && allowOther)
       F<XTEA>()(rest...);
     else
       return false;
     return true;
   }
 };
-
-template <template <typename T, typename... R> class F>
-struct invokeWithBlockCipherAES {
-  template <typename... R>
-  bool operator()(std::string &cipher, R... rest) const {
-    if (cipher == "AES")
-      F<AES>()(rest...);
-    else if (cipher == "RC6")
-      F<RC6>()(rest...);
-    else if (cipher == "MARS")
-      F<MARS>()(rest...);
-    else if (cipher == "Twofish")
-      F<Twofish>()(rest...);
-    else if (cipher == "Serpent")
-      F<Serpent>()(rest...);
-    else if (cipher == "CAST256")
-      F<CAST256>()(rest...);
-    else
-      return false;
-    return true;
-  }
-};
-
 } // namespace rncryptopp
 
 #endif // REACT_NATIVE_CRYPTOPP_HELPERS_H

@@ -11,6 +11,7 @@
 #include "helpers.h"
 #include "insecure.h"
 #include "key-derivation.h"
+#include "message-authentication.h"
 #include "public-key.h"
 #include "utils.h"
 

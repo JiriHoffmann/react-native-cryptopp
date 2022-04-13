@@ -307,8 +307,54 @@ void rncryptopp_install(jsi::Runtime &jsiRuntime) {
   insecure.setProperty(jsiRuntime, "md5", std::move(md5));
 
   /*
-  Key Derivation Functions
-  */
+   * Message authentication codes
+   */
+  auto hmac_generate = jsi::Function::createFromHostFunction(
+      jsiRuntime, jsi::PropNameID::forAscii(jsiRuntime, "hmac_generate"), 4,
+      [](jsi::Runtime &rt, const jsi::Value &thisValue, const jsi::Value *args,
+         size_t count) -> jsi::Value {
+        std::string result;
+        rncryptopp::hmac::generate(rt, args, count, &result);
+        return jsi::String::createFromUtf8(rt, result);
+      });
+
+  auto hmac_verify = jsi::Function::createFromHostFunction(
+      jsiRuntime, jsi::PropNameID::forAscii(jsiRuntime, "hmac_verify"), 4,
+      [](jsi::Runtime &rt, const jsi::Value &thisValue, const jsi::Value *args,
+         size_t count) -> jsi::Value {
+        bool result;
+        rncryptopp::hmac::verify(rt, args, count, &result);
+        return jsi::Value(result);
+      });
+  auto cmac_generate = jsi::Function::createFromHostFunction(
+      jsiRuntime, jsi::PropNameID::forAscii(jsiRuntime, "cmac_generate"), 4,
+      [](jsi::Runtime &rt, const jsi::Value &thisValue, const jsi::Value *args,
+         size_t count) -> jsi::Value {
+        std::string result;
+        rncryptopp::cmac::generate(rt, args, count, &result);
+        return jsi::String::createFromUtf8(rt, result);
+      });
+
+  auto cmac_verify = jsi::Function::createFromHostFunction(
+      jsiRuntime, jsi::PropNameID::forAscii(jsiRuntime, "cmac_verify"), 4,
+      [](jsi::Runtime &rt, const jsi::Value &thisValue, const jsi::Value *args,
+         size_t count) -> jsi::Value {
+        bool result;
+        rncryptopp::cmac::verify(rt, args, count, &result);
+        return jsi::Value(result);
+      });
+
+  jsi::Object HMAC = jsi::Object(jsiRuntime);
+  HMAC.setProperty(jsiRuntime, "generate", std::move(hmac_generate));
+  HMAC.setProperty(jsiRuntime, "verify", std::move(hmac_verify));
+
+  jsi::Object CMAC = jsi::Object(jsiRuntime);
+  CMAC.setProperty(jsiRuntime, "generate", std::move(cmac_generate));
+  CMAC.setProperty(jsiRuntime, "verify", std::move(cmac_verify));
+
+  /*
+   * Key Derivation Functions
+   */
   auto pkcs5_pbkdf1 = jsi::Function::createFromHostFunction(
       jsiRuntime, jsi::PropNameID::forAscii(jsiRuntime, "pkcs5_pbkdf1"), 4,
       [](jsi::Runtime &rt, const jsi::Value &thisValue, const jsi::Value *args,
@@ -525,6 +571,8 @@ void rncryptopp_install(jsi::Runtime &jsiRuntime) {
   module.setProperty(jsiRuntime, "Twofish", std::move(Twofish));
   module.setProperty(jsiRuntime, "Serpent", std::move(Serpent));
   module.setProperty(jsiRuntime, "CAST256", std::move(CAST256));
+  module.setProperty(jsiRuntime, "HMAC", std::move(HMAC));
+  module.setProperty(jsiRuntime, "CMAC", std::move(CMAC));
   module.setProperty(jsiRuntime, "RSA", std::move(RSA));
   module.setProperty(jsiRuntime, "hashFunctions", std::move(hashFunctions));
   module.setProperty(jsiRuntime, "insecure", std::move(insecure));
