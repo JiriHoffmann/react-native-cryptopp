@@ -15,7 +15,7 @@
     "lib": [
       "esnext"
     ],
-    "module": "commonjs",
+    "module": "esnext",
     "moduleResolution": "node",
     "noFallthroughCasesInSwitch": true,
     "noImplicitReturns": true,
@@ -29,7 +29,6 @@
     "target": "esnext"
   },
   "exclude": [
-    "example",
     "lib",
     "docs"
   ],

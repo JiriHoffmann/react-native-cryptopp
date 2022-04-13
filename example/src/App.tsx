@@ -86,6 +86,18 @@ export default function App() {
         rsa_time = timeDelta(rsa_start, PerformanceNow());
       }
 
+      const hmac_start = PerformanceNow();
+      // AES encrypt and decrypt
+      const hmac = Cryptopp.HMAC.generate(str, key, 'SHA256', 'hex');
+      const hmac_verify = Cryptopp.HMAC.verify(
+        str,
+        key,
+        'SHA256',
+        hmac,
+        'hex'
+      ).toString();
+      const hmac_time = timeDelta(hmac_start, PerformanceNow());
+
       // Hashes
       const hashes_start = PerformanceNow();
       const BLAKE2b = Cryptopp.hashFunctions.BLAKE2b(str);
@@ -162,6 +174,9 @@ export default function App() {
         rsa_signature,
         rsa_verify,
         rsa_time,
+        hmac,
+        hmac_verify,
+        hmac_time,
         BLAKE2b,
         BLAKE2s,
         Keccak,
