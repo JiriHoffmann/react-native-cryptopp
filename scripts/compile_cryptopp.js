@@ -23,18 +23,13 @@ const zipDirectories = (sourceDirs, outPath) => {
   });
 };
 
-// Remove all compiled files
+// // Remove all compiled files
 execSync(`rm -rf ${moduleDir}/cpp/ios`);
-execSync(`rm -rf ${moduleDir}/cpp/adnroid`);
+execSync(`rm -rf ${moduleDir}/cpp/android`);
 execSync(`rm -rf ${moduleDir}/cpp/cryptopp`);
 
 // Compile iOS
-const compile_cryptopp_ios = `${moduleDir}/scripts/compile_cryptopp_ios.sh`;
-execSync(`sh ${compile_cryptopp_ios}`);
-
-// remove single architecture builds since
-// we have the fat lib
-execSync(`rm -f ${moduleDir}/cpp/ios/libcryptopp_*.a`);
+execSync(`sh ${moduleDir}/scripts/compile_cryptopp_ios.sh`);
 
 // Compile Android
 if (!process.env.ANDROID_NDK_ROOT) {
@@ -47,23 +42,22 @@ if (!process.env.ANDROID_SDK_ROOT) {
   exit(1);
 }
 
-const compile_cryptopp_android = `${moduleDir}/scripts/compile_cryptopp_android.sh`;
-
+const android_script = `${moduleDir}/scripts/compile_cryptopp_android.sh`;
 const platform = 'android-21';
-
 const sdk = process.env.ANDROID_SDK_ROOT;
 const ndk = process.env.ANDROID_NDK_ROOT;
 
-execSync(
-  `sh ${compile_cryptopp_android} ${platform} ${moduleDir} ${sdk} ${ndk}`
-);
+execSync(`sh ${android_script} ${platform} ${moduleDir} ${sdk} ${ndk}`);
 
 // Create a single zip file that will be attached to the release.
 zipDirectories(
   [
     { dir: `${moduleDir}/cpp/cryptopp`, dest: 'cryptopp' },
     { dir: `${moduleDir}/cpp/android`, dest: 'android' },
-    { dir: `${moduleDir}/cpp/ios`, dest: 'ios' },
+    {
+      dir: `${moduleDir}/cpp/ios/libcryptopp.xcframework`,
+      dest: 'ios/libcryptopp.xcframework',
+    },
   ],
   'cryptopp.zip'
 );

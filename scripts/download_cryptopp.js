@@ -50,7 +50,7 @@ const compiledFiles = [
   `${moduleDir}/cpp/android/libcryptopp_armeabi-v7a.a`,
   `${moduleDir}/cpp/android/libcryptopp_x86_64.a`,
   `${moduleDir}/cpp/android/libcryptopp_x86.a`,
-  `${moduleDir}/cpp/ios/libcryptopp.a`,
+  `${moduleDir}/cpp/ios/libcryptopp.xcframework`,
 ];
 
 // Check if all files exist and archive version matches
@@ -66,7 +66,6 @@ if (
 }
 
 // Clean up old archives
-// execSync(`rm -f ${moduleDir}/cryptopp_*.zip`);
 rimraf.sync(`${moduleDir}/cryptopp_*.zip`);
 
 // example: https://github.com/JiriHoffmann/react-native-cryptopp/releases/download/cryptopp_8.6.0/cryptopp.zip

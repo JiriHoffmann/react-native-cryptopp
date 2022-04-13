@@ -29,7 +29,6 @@
     "target": "esnext"
   },
   "exclude": [
-    "example",
     "lib",
     "docs"
   ],
