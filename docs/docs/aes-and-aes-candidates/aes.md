@@ -9,8 +9,8 @@ AES block size will be determined be the size of the key. Here are the block siz
 | Key size | Block size |
 | -------- | ---------- |
 | 16 bytes | 128 bits   |
-| 24 bytes | 128 bits   |
-| 32 bytes | 128 bits   |
+| 24 bytes | 192 bits   |
+| 32 bytes | 256 bits   |
 
 **IV must be 16 bytes long.**
 
