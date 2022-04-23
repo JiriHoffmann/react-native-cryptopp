@@ -102,16 +102,16 @@ export default function App() {
       const hashes_start = PerformanceNow();
       const BLAKE2b = Cryptopp.hashFunctions.BLAKE2b(str);
       const BLAKE2s = Cryptopp.hashFunctions.BLAKE2s(str);
-      const Keccak = Cryptopp.hashFunctions.Keccak(str, '256');
-      const LSH = Cryptopp.hashFunctions.LSH(str, '256');
+      const Keccak_256 = Cryptopp.hashFunctions.Keccak(str, '256');
+      const LSH_256 = Cryptopp.hashFunctions.LSH(str, '256');
       const sha = Cryptopp.hashFunctions.SHA1(str);
-      const sha2 = Cryptopp.hashFunctions.SHA2(str, '512');
-      const sha3 = Cryptopp.hashFunctions.SHA3(str, '512');
-      const SHAKE = Cryptopp.hashFunctions.SHAKE(str, '128');
-      const SipHash = Cryptopp.hashFunctions.SipHash(str, '2_4_64');
+      const sha2_512 = Cryptopp.hashFunctions.SHA2(str, '512');
+      const sha3_512 = Cryptopp.hashFunctions.SHA3(str, '512');
+      const SHAKE_128 = Cryptopp.hashFunctions.SHAKE(str, '128');
+      const SipHash_2_4_64 = Cryptopp.hashFunctions.SipHash(str, '2_4_64');
       const SM3 = Cryptopp.hashFunctions.SM3(str);
       const Tiger = Cryptopp.hashFunctions.Tiger(str);
-      const RIPEMD = Cryptopp.hashFunctions.RIPEMD(str, '128');
+      const RIPEMD_128 = Cryptopp.hashFunctions.RIPEMD(str, '128');
       const Whirlpool = Cryptopp.hashFunctions.WHIRLPOOL(str);
 
       // Insecure hashes
@@ -179,16 +179,16 @@ export default function App() {
         hmac_time,
         BLAKE2b,
         BLAKE2s,
-        Keccak,
-        LSH,
+        // Keccak_256,
+        // LSH_256,
         sha,
-        sha2,
-        sha3,
-        SHAKE,
-        SipHash,
-        SM3,
-        Tiger,
-        RIPEMD,
+        // sha2_512,
+        sha3_512,
+        // SHAKE_128,
+        // SipHash_2_4_64,
+        // SM3,
+        // Tiger,
+        // RIPEMD_128,
         Whirlpool,
         md2,
         md4,
@@ -217,14 +217,14 @@ export default function App() {
         onChangeText={setTextInput}
         style={styles.textInput}
       />
-      <Text style={styles.noteText}>
+      {/* <Text style={styles.noteText}>
         Note: Only text input results are diplayed since rendering is slow for
         extremely long texts. Times are measures for all operations in category,
         i.e. the RSA time taken is for encryption, decryption, signature and
         verification.
-      </Text>
+      </Text> */}
 
-      <View style={styles.inputButtonsContainer}>
+      {/* <View style={styles.inputButtonsContainer}>
         <TouchableOpacity
           style={styles.button}
           onPress={() => setTextInput('')}
@@ -234,8 +234,8 @@ export default function App() {
         <TouchableOpacity style={styles.button} onPress={_openImagePicker}>
           <Text style={styles.buttonText}>Open image picker</Text>
         </TouchableOpacity>
-      </View>
-      <Text style={styles.header}>All results:</Text>
+      </View> */}
+      <Text style={styles.header}>Results:</Text>
       <ScrollView
         style={styles.resultsContainer}
         contentContainerStyle={styles.resultsContentContainer}
