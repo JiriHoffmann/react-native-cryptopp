@@ -131,12 +131,12 @@ bool valueToDouble(const jsi::Value &value, double *res) {
  * 3: Base64Url encoding
  */
 int getEncodingFromArgs(jsi::Runtime &rt, const jsi::Value *args,
-                        size_t argCount, int index, int defaultValue,
+                        size_t argCount, int argIndex, int defaultValue,
                         bool allowUTF8) {
-  if (index >= (int)argCount)
+  if (argIndex >= (int)argCount)
     return defaultValue;
 
-  std::string encoding = args[index].asString(rt).utf8(rt);
+  std::string encoding = args[argIndex].asString(rt).utf8(rt);
   if (encoding == "utf8" && allowUTF8)
     return 0;
   if (encoding == "hex")

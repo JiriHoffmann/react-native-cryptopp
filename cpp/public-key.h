@@ -1,5 +1,5 @@
-#ifndef CRYPTOPPEXAMPLE_PUBLIC_KEY_H
-#define CRYPTOPPEXAMPLE_PUBLIC_KEY_H
+#ifndef REACT_NATIVE_CRYPTOPP_PUBLIC_KEY_H
+#define REACT_NATIVE_CRYPTOPP_PUBLIC_KEY_H
 
 #include <jsi/jsi.h>
 #include <jsi/jsilib.h>
@@ -33,4 +33,4 @@ void verify(jsi::Runtime &rt, const jsi::Value *args, bool *result);
 void recover(jsi::Runtime &rt, const jsi::Value *args, std::string *result);
 } // namespace RSA
 } // namespace rncryptopp
-#endif // CRYPTOPPEXAMPLE_PUBLIC_KEY_H
+#endif // REACT_NATIVE_CRYPTOPP_PUBLIC_KEY_H

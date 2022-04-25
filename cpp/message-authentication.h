@@ -9,6 +9,7 @@
 #include "cryptopp/blake2.h"
 #include "cryptopp/filters.h"
 #include "cryptopp/hex.h"
+#include "cryptopp/hmac.h"
 #include "cryptopp/keccak.h"
 #include "cryptopp/lsh.h"
 #include "cryptopp/ripemd.h"
@@ -18,7 +19,6 @@
 #include "cryptopp/sm3.h"
 #include "cryptopp/tiger.h"
 #include "cryptopp/whrlpool.h"
-#include <cryptopp/hmac.h>
 
 #include "cryptopp/aria.h"
 #include "cryptopp/blowfish.h"
@@ -49,14 +49,23 @@ using namespace CryptoPP;
 
 namespace rncryptopp {
 namespace hmac {
-void generate(jsi::Runtime &rt, const jsi::Value *args, std::string *result);
 
-void verify(jsi::Runtime &rt, const jsi::Value *args, bool *result);
+void generate(jsi::Runtime &rt, const jsi::Value *args, size_t argCount,
+              std::string *result);
+
+void verify(jsi::Runtime &rt, const jsi::Value *args, size_t argCount,
+            bool *result);
+
 } // namespace hmac
-namespace cmac {
-void generate(jsi::Runtime &rt, const jsi::Value *args, std::string *result);
 
-void verify(jsi::Runtime &rt, const jsi::Value *args, bool *result);
+namespace cmac {
+
+void generate(jsi::Runtime &rt, const jsi::Value *args, size_t argCount,
+              std::string *result);
+
+void verify(jsi::Runtime &rt, const jsi::Value *args, size_t argCount,
+            bool *result);
+
 } // namespace cmac
 } // namespace rncryptopp
 #endif // REACT_NATIVE_CRYPTOPP_MESSAGE_AUTHENTICATION_H

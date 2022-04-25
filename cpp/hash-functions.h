@@ -1,5 +1,5 @@
-#ifndef CRYPTOPPEXAMPLE_HASH_FUNCTIONS_H
-#define CRYPTOPPEXAMPLE_HASH_FUNCTIONS_H
+#ifndef REACT_NATIVE_CRYPTOPP_HASH_FUNCTIONS_H
+#define REACT_NATIVE_CRYPTOPP_HASH_FUNCTIONS_H
 
 #include <jsi/jsi.h>
 #include <jsi/jsilib.h>
@@ -54,4 +54,4 @@ void whirlpool(jsi::Runtime &rt, const jsi::Value *args, std::string *result);
 } // namespace hash
 } // namespace rncryptopp
 
-#endif // CRYPTOPPEXAMPLE_HASH_FUNCTIONS_H
+#endif // REACT_NATIVE_CRYPTOPP_HASH_FUNCTIONS_H

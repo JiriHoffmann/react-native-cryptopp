@@ -1,23 +1,11 @@
-#ifndef CRYPTOPPEXAMPLE_KEY_DERIVATION_H
-#define CRYPTOPPEXAMPLE_KEY_DERIVATION_H
+#ifndef REACT_NATIVE_CRYPTOPP_KEY_DERIVATION_H
+#define REACT_NATIVE_CRYPTOPP_KEY_DERIVATION_H
 
 #include <jsi/jsi.h>
 #include <jsi/jsilib.h>
 
-#include "cryptopp/blake2.h"
-#include "cryptopp/filters.h"
-#include "cryptopp/hex.h"
 #include "cryptopp/hkdf.h"
-#include "cryptopp/keccak.h"
-#include "cryptopp/lsh.h"
 #include "cryptopp/pwdbased.h"
-#include "cryptopp/ripemd.h"
-#include "cryptopp/sha.h"
-#include "cryptopp/sha3.h"
-#include "cryptopp/shake.h"
-#include "cryptopp/sm3.h"
-#include "cryptopp/tiger.h"
-#include "cryptopp/whrlpool.h"
 
 #include "helpers.h"
 
@@ -37,4 +25,4 @@ void pkcs5_pbkdf2(jsi::Runtime &rt, const jsi::Value *args,
                   std::string *result);
 } // namespace rncryptopp
 
-#endif // CRYPTOPPEXAMPLE_KEY_DERIVATION_H
+#endif // REACT_NATIVE_CRYPTOPP_KEY_DERIVATION_H
