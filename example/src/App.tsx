@@ -179,16 +179,16 @@ export default function App() {
         hmac_time,
         BLAKE2b,
         BLAKE2s,
-        // Keccak_256,
-        // LSH_256,
+        Keccak_256,
+        LSH_256,
         sha,
-        // sha2_512,
+        sha2_512,
         sha3_512,
-        // SHAKE_128,
-        // SipHash_2_4_64,
-        // SM3,
-        // Tiger,
-        // RIPEMD_128,
+        SHAKE_128,
+        SipHash_2_4_64,
+        SM3,
+        Tiger,
+        RIPEMD_128,
         Whirlpool,
         md2,
         md4,
@@ -217,14 +217,14 @@ export default function App() {
         onChangeText={setTextInput}
         style={styles.textInput}
       />
-      {/* <Text style={styles.noteText}>
+      <Text style={styles.noteText}>
         Note: Only text input results are diplayed since rendering is slow for
         extremely long texts. Times are measures for all operations in category,
         i.e. the RSA time taken is for encryption, decryption, signature and
         verification.
-      </Text> */}
+      </Text>
 
-      {/* <View style={styles.inputButtonsContainer}>
+      <View style={styles.inputButtonsContainer}>
         <TouchableOpacity
           style={styles.button}
           onPress={() => setTextInput('')}
@@ -234,7 +234,7 @@ export default function App() {
         <TouchableOpacity style={styles.button} onPress={_openImagePicker}>
           <Text style={styles.buttonText}>Open image picker</Text>
         </TouchableOpacity>
-      </View> */}
+      </View>
       <Text style={styles.header}>Results:</Text>
       <ScrollView
         style={styles.resultsContainer}
