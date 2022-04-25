@@ -1,7 +1,7 @@
 {
   "name": "react-native-cryptopp",
   "version": "0.2.0",
-  "cryptoppVersion": "8.6.0",
+  "cryptoppVersion": "8.6.0framework",
   "description": "React Native Cryptopp",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
@@ -95,9 +95,9 @@
     "typescript": "^4.6.3"
   },
   "peerDependencies": {
+    "extract-zip": "*",
     "react": "*",
     "react-native": "*",
-    "extract-zip": "*",
     "rimraf": "*"
   },
   "jest": {
