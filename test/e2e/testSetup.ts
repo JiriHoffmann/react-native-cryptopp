@@ -1,4 +1,5 @@
-import {cleanup, init} from 'detox';
+/* eslint-disable no-undef */
+import { cleanup, init } from 'detox';
 const adapter = require('detox/runners/jest/adapter');
 const config = require('../package.json').detox;
 
@@ -6,7 +7,7 @@ jest.setTimeout(120000);
 jasmine.getEnv().addReporter(adapter);
 
 beforeAll(async () => {
-  await init(config, {initGlobals: false});
+  await init(config, { initGlobals: false });
 });
 
 beforeEach(async () => {
