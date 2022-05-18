@@ -38,7 +38,7 @@ const hashes: { [key: string]: string } = {
     '942E86F54F7AC3143BFE03CCEB40CB1D4E5779C17B37BCA69C7F7ECDDE1A5802905C8D477A6FB3BB',
 };
 
-// Input: 'Yoda said, Do or do not. There is no try.'
+// Input: 'abc'
 // Expected results based on: https://en.wikipedia.org/wiki/LSH_(hash_function)
 const lshHashes = {
   LSH224: 'F7C53BA4034E708E74FBA42E55997CA5126BB7623688F85342F73732',
