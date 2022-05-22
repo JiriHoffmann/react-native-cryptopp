@@ -1,5 +1,5 @@
 // jest.config.js
-const {defaults: tsjPreset} = require('ts-jest/presets');
+const { defaults: tsjPreset } = require('ts-jest/presets');
 
 module.exports = {
   ...tsjPreset,

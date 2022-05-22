@@ -43,6 +43,7 @@ android.iml
 # Cocoapods
 #
 example/ios/Pods
+test/ios/Pods
 
 # node.js
 #
@@ -64,8 +65,8 @@ android/keystores/debug.keystore
 lib/
 cpp/ios/libcryptopp.a
 example/yarn.lock
-example/yarn.lock
 example/package-lock.json
+test/yarn.lock
 
 # Ignore compiled files
 cpp/android
@@ -76,3 +77,5 @@ cryptopp_*.zip
 # Docs
 docs/.docusaurus/
 cryptopp.zip
+
+
