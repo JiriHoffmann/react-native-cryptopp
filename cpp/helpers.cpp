@@ -2,107 +2,60 @@
 
 namespace rncryptopp {
 
-// Returns false if the passed value is not a string.
-bool stringValueToString(jsi::Runtime &rt, const jsi::Value &value,
-                         std::string *str) {
-  if (value.isString()) {
-    *str = value.asString(rt).utf8(rt);
-    return true;
-  }
-  return false;
-}
-/*
- * Returns false if the passed value is not a string or an ArrayBuffer.
- * String and ArrayBuffer encoding types:
- * 0: No encoding
- * 1: Hex encoding
- * 2: Base64 encoding
- * 3: Base64Url encoding
- */
-bool binaryLikeValueToString(jsi::Runtime &rt, const jsi::Value &value,
-                             std::string *str, int stringEncoding,
-                             int bufferEncoding) {
+InputType stringValueToString(jsi::Runtime &rt, const jsi::Value &value,
+                              std::string *out, StringEncoding stringEncoding) {
   if (value.isString()) {
     std::string utf8 = value.asString(rt).utf8(rt);
-    switch (stringEncoding) {
-    case 1:
-      hexDecode(utf8, *str);
-      break;
-    case 2:
-      base64Decode(utf8, *str);
-      break;
-    case 3:
-      base64UrlDecode(utf8, *str);
-      break;
-    default:
-      *str = utf8;
-    }
-    return true;
+    decodeString(&utf8, out, stringEncoding);
+    return INP_STRING;
   }
+  return INP_UNKNOWN;
+}
+
+InputType binaryLikeValueToString(jsi::Runtime &rt, const jsi::Value &value,
+                                  std::string *out,
+                                  StringEncoding stringEncoding) {
   if (value.isObject()) {
     auto obj = value.asObject(rt);
-    if (!obj.isArrayBuffer(rt)) {
-      return false;
+    if (obj.isArrayBuffer(rt)) {
+      auto buf = obj.getArrayBuffer(rt);
+      *out = std::string((char *)buf.data(rt), buf.size(rt));
+      return INP_ARRAYBUFFER;
     }
-    auto buf = obj.getArrayBuffer(rt);
-    std::string utf8 = std::string((char *)buf.data(rt), buf.size(rt));
-    switch (bufferEncoding) {
-    case 1:
-      hexDecode(utf8, *str);
-      break;
-    case 2:
-      base64Decode(utf8, *str);
-      break;
-    case 3:
-      base64UrlDecode(utf8, *str);
-    default:
-      *str = utf8;
-    }
-    return true;
   }
-
-  return false;
+  return stringValueToString(rt, value, out, stringEncoding);
 }
 
-/*
- * Encode string, otherwise just set pointer
- * 1: Hex encoding
- * 2: Base64 encoding
- * 3: Base64Url encoding
- */
-void encode(std::string *in, std::string *out, int encoding) {
-  if (encoding == 1)
-    hexEncode(*in, *out);
-  else if (encoding == 2)
-    base64Encode(*in, *out);
-  else if (encoding == 3)
-    base64UrlEncode(*in, *out);
-  else
-    *in = *out;
+void encodeString(std::string *in, std::string *out, StringEncoding encoding) {
+  switch (encoding) {
+  case ENCODING_HEX:
+    StringSource(*in, true, new HexEncoder(new StringSink(*out)));
+    break;
+  case ENCODING_BASE64:
+    StringSource(*in, true, new Base64Encoder(new StringSink(*out)));
+    break;
+  case ENCODING_BASE64URL:
+    StringSource(*in, true, new Base64URLEncoder(new StringSink(*out)));
+    break;
+  default:
+    *out = *in;
+  }
 }
 
-void hexEncode(std::string &in, std::string &out) {
-  StringSource(in, true, new HexEncoder(new StringSink(out)));
-}
-
-void hexDecode(std::string &in, std::string &out) {
-  StringSource(in, true, new HexDecoder(new StringSink(out)));
-}
-
-void base64Encode(std::string &in, std::string &out) {
-  StringSource(in, true, new Base64Encoder(new StringSink(out)));
-}
-
-void base64Decode(std::string &in, std::string &out) {
-  StringSource(in, true, new Base64Decoder(new StringSink(out)));
-}
-
-void base64UrlEncode(std::string &in, std::string &out) {
-  StringSource(in, true, new Base64URLEncoder(new StringSink(out)));
-}
-
-void base64UrlDecode(std::string &in, std::string &out) {
-  StringSource(in, true, new Base64URLDecoder(new StringSink(out)));
+void decodeString(std::string *in, std::string *out, StringEncoding encoding) {
+  switch (encoding) {
+  case ENCODING_HEX:
+    StringSource(*in, true, new HexDecoder(new StringSink(*out)));
+    break;
+  case ENCODING_BASE64:
+    StringSource(*in, true, new Base64Decoder(new StringSink(*out)));
+    break;
+  case ENCODING_BASE64URL:
+    StringSource(*in, true, new Base64URLDecoder(new StringSink(*out)));
+    break;
+  default:
+    *out = *in;
+  }
 }
 
 bool valueToInt(const jsi::Value &value, int *res) {
@@ -130,21 +83,22 @@ bool valueToDouble(const jsi::Value &value, double *res) {
  * 2: Base64 encoding
  * 3: Base64Url encoding
  */
-int getEncodingFromArgs(jsi::Runtime &rt, const jsi::Value *args,
-                        size_t argCount, int argIndex, int defaultValue,
-                        bool allowUTF8) {
+StringEncoding getEncodingFromArgs(jsi::Runtime &rt, const jsi::Value *args,
+                                   size_t argCount, int argIndex,
+                                   StringEncoding defaultValue,
+                                   bool allowUTF8) {
   if (argIndex >= (int)argCount)
     return defaultValue;
 
   std::string encoding = args[argIndex].asString(rt).utf8(rt);
   if (encoding == "utf8" && allowUTF8)
-    return 0;
+    return ENCODING_UTF8;
   if (encoding == "hex")
-    return 1;
+    return ENCODING_HEX;
   if (encoding == "base64")
-    return 2;
+    return ENCODING_BASE64;
   if (encoding == "base64url")
-    return 3;
+    return ENCODING_BASE64URL;
   return defaultValue;
 }
 } // namespace rncryptopp

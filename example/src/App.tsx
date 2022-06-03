@@ -21,8 +21,14 @@ export default function App() {
   const [result, setResult] = useState<any>({});
   const aes_key = useMemo(() => Cryptopp.utils.randomBytes(32), []);
   const aes_iv = useMemo(() => Cryptopp.utils.randomBytes(16), []);
-  const rsa_keypair = useMemo(() => Cryptopp.RSA.generateKeyPair(2048), []);
-  const rsa_keypair2 = useMemo(() => Cryptopp.RSA.generateKeyPair(2048), []);
+  const rsa_keypair = useMemo(
+    () => Cryptopp.RSA.generateKeyPair(2048, 65537),
+    []
+  );
+  const rsa_keypair2 = useMemo(
+    () => Cryptopp.RSA.generateKeyPair(2048, 65537),
+    []
+  );
 
   useEffect(() => {
     if (textInput.length > 0) {
@@ -45,6 +51,7 @@ export default function App() {
   const _processData = useCallback(
     (str: string, key: BinaryLike, iv: BinaryLike, isImage: boolean) => {
       const aes_start = PerformanceNow();
+
       // AES encrypt and decrypt
       const aes_encrypted = Cryptopp.AES.encrypt(str, key, iv, 'cbc');
       const aes_decrypted = Cryptopp.AES.decrypt(aes_encrypted, key, iv, 'cbc');
@@ -86,15 +93,26 @@ export default function App() {
         rsa_time = timeDelta(rsa_start, PerformanceNow());
       }
 
+      const cmac_start = PerformanceNow();
+      // AES encrypt and decrypt
+      const cmac = Cryptopp.CMAC.generate(str, key, 'AES', 'hex');
+      const cmac_verify = Cryptopp.CMAC.verify(
+        str,
+        key,
+        'AES',
+        cmac,
+        'hex'
+      ).toString();
+      const cmac_time = timeDelta(cmac_start, PerformanceNow());
+
       const hmac_start = PerformanceNow();
       // AES encrypt and decrypt
-      const hmac = Cryptopp.HMAC.generate(str, key, 'SHA256', 'hex');
+      const hmac = Cryptopp.HMAC.generate(str, key, 'SHA256');
       const hmac_verify = Cryptopp.HMAC.verify(
         str,
         key,
         'SHA256',
-        hmac,
-        'hex'
+        hmac
       ).toString();
       const hmac_time = timeDelta(hmac_start, PerformanceNow());
 
@@ -113,6 +131,7 @@ export default function App() {
       const Tiger = Cryptopp.hashFunctions.Tiger(str);
       const RIPEMD_128 = Cryptopp.hashFunctions.RIPEMD(str, '128');
       const Whirlpool = Cryptopp.hashFunctions.WHIRLPOOL(str);
+      const CRC32 = Cryptopp.hashFunctions.CRC32(str);
 
       // Insecure hashes
       const md2 = Cryptopp.insecure.md2(str);
@@ -177,6 +196,9 @@ export default function App() {
         hmac,
         hmac_verify,
         hmac_time,
+        cmac,
+        cmac_verify,
+        cmac_time,
         BLAKE2b,
         BLAKE2s,
         Keccak_256,
@@ -190,6 +212,7 @@ export default function App() {
         Tiger,
         RIPEMD_128,
         Whirlpool,
+        CRC32,
         md2,
         md4,
         md5,

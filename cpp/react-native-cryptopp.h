@@ -4,9 +4,7 @@
 #include <jsi/jsi.h>
 #include <jsi/jsilib.h>
 
-#include "cryptopp/osrng.h"
-
-#include "aes-candidates.h"
+#include "aes-candidates.hpp"
 #include "hash-functions.h"
 #include "helpers.h"
 #include "insecure.h"
@@ -18,7 +16,5 @@
 using namespace facebook;
 
 void rncryptopp_install(jsi::Runtime &jsiRuntime);
-
-void rncryptopp_cleanup();
 
 #endif /* REACT_NATIVE_CRYPTOPP_H */

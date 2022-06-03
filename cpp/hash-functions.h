@@ -1,6 +1,9 @@
 #ifndef REACT_NATIVE_CRYPTOPP_HASH_FUNCTIONS_H
 #define REACT_NATIVE_CRYPTOPP_HASH_FUNCTIONS_H
 
+#include <iostream>
+#include <sstream>
+
 #include <jsi/jsi.h>
 #include <jsi/jsilib.h>
 
@@ -17,6 +20,7 @@
 #include "cryptopp/sm3.h"
 #include "cryptopp/tiger.h"
 #include "cryptopp/whrlpool.h"
+#include "cryptopp/crc.h"
 
 #include "helpers.h"
 
@@ -24,34 +28,48 @@ using namespace facebook;
 using namespace facebook::jsi::detail;
 using namespace CryptoPP;
 
-namespace rncryptopp {
-namespace hash {
-void blake2b(jsi::Runtime &rt, const jsi::Value *args, std::string *result);
+namespace rncryptopp::hash {
+jsi::Value blake2b(jsi::Runtime &rt, const jsi::Value &thisValue,
+                   const jsi::Value *args, size_t count);
 
-void blake2s(jsi::Runtime &rt, const jsi::Value *args, std::string *result);
+jsi::Value blake2s(jsi::Runtime &rt, const jsi::Value &thisValue,
+                   const jsi::Value *args, size_t count);
 
-void keccak(jsi::Runtime &rt, const jsi::Value *args, std::string *result);
+jsi::Value keccak(jsi::Runtime &rt, const jsi::Value &thisValue,
+                  const jsi::Value *args, size_t count);
 
-void lsh(jsi::Runtime &rt, const jsi::Value *args, std::string *result);
+jsi::Value lsh(jsi::Runtime &rt, const jsi::Value &thisValue,
+               const jsi::Value *args, size_t count);
 
-void sha1(jsi::Runtime &rt, const jsi::Value *args, std::string *result);
+jsi::Value sha1(jsi::Runtime &rt, const jsi::Value &thisValue,
+                const jsi::Value *args, size_t count);
 
-void sha2(jsi::Runtime &rt, const jsi::Value *args, std::string *result);
+jsi::Value sha2(jsi::Runtime &rt, const jsi::Value &thisValue,
+                const jsi::Value *args, size_t count);
 
-void sha3(jsi::Runtime &rt, const jsi::Value *args, std::string *result);
+jsi::Value sha3(jsi::Runtime &rt, const jsi::Value &thisValue,
+                const jsi::Value *args, size_t count);
 
-void shake(jsi::Runtime &rt, const jsi::Value *args, std::string *result);
+jsi::Value shake(jsi::Runtime &rt, const jsi::Value &thisValue,
+                 const jsi::Value *args, size_t count);
 
-void sipHash(jsi::Runtime &rt, const jsi::Value *args, std::string *result);
+jsi::Value sipHash(jsi::Runtime &rt, const jsi::Value &thisValue,
+                   const jsi::Value *args, size_t count);
 
-void sm3(jsi::Runtime &rt, const jsi::Value *args, std::string *result);
+jsi::Value sm3(jsi::Runtime &rt, const jsi::Value &thisValue,
+               const jsi::Value *args, size_t count);
 
-void tiger(jsi::Runtime &rt, const jsi::Value *args, std::string *result);
+jsi::Value tiger(jsi::Runtime &rt, const jsi::Value &thisValue,
+                 const jsi::Value *args, size_t count);
 
-void ripemd(jsi::Runtime &rt, const jsi::Value *args, std::string *result);
+jsi::Value ripemd(jsi::Runtime &rt, const jsi::Value &thisValue,
+                  const jsi::Value *args, size_t count);
 
-void whirlpool(jsi::Runtime &rt, const jsi::Value *args, std::string *result);
-} // namespace hash
-} // namespace rncryptopp
+jsi::Value whirlpool(jsi::Runtime &rt, const jsi::Value &thisValue,
+                     const jsi::Value *args, size_t count);
+
+jsi::Value crc32(jsi::Runtime &rt, const jsi::Value &thisValue,
+                         const jsi::Value *args, size_t count);
+} // namespace rncryptopp::hash
 
 #endif // REACT_NATIVE_CRYPTOPP_HASH_FUNCTIONS_H

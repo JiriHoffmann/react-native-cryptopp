@@ -15,12 +15,15 @@ using namespace facebook;
 using namespace facebook::jsi::detail;
 using namespace CryptoPP;
 
-namespace rncryptopp {
-void md2(jsi::Runtime &rt, const jsi::Value *args, std::string *result);
+namespace rncryptopp::insecure {
+jsi::Value md2(jsi::Runtime &rt, const jsi::Value &thisValue,
+               const jsi::Value *args, size_t count);
 
-void md4(jsi::Runtime &rt, const jsi::Value *args, std::string *result);
+jsi::Value md4(jsi::Runtime &rt, const jsi::Value &thisValue,
+               const jsi::Value *args, size_t count);
 
-void md5(jsi::Runtime &rt, const jsi::Value *args, std::string *result);
-} // namespace rncryptopp
+jsi::Value md5(jsi::Runtime &rt, const jsi::Value &thisValue,
+               const jsi::Value *args, size_t count);
+} // namespace rncryptopp::insecure
 
 #endif // REACT_NATIVE_CRYPTOPP_INSECURE_H

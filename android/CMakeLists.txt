@@ -20,6 +20,7 @@ execute_process(
 )
 
 file(GLOB RN_CRYPTOPP_FILES "../cpp/*.cpp")
+file(GLOB RN_CRYPTOPP_HPP_FILES "../cpp/*.hpp")
 file(GLOB RN_CRYPTOPP_HEADERS "../cpp")
 file(GLOB LIBRN_DIR "${BUILD_DIR}/react-native-0*/jni/${ANDROID_ABI}")
 
@@ -51,6 +52,7 @@ if (EXISTS "${LIBRN_DIR}/libjsi.so")
           ${PACKAGE_NAME}
           SHARED
           ${RN_CRYPTOPP_FILES}
+          ${RN_CRYPTOPP_HPP_FILES}
           ./cpp-adapter.cpp
   )
 else()
@@ -59,6 +61,7 @@ else()
           ${PACKAGE_NAME}
           SHARED
           ${RN_CRYPTOPP_FILES}
+          ${RN_CRYPTOPP_HPP_FILES}
           ${NODE_MODULES_DIR}/react-native/ReactCommon/jsi/jsi/jsi.cpp
           ./cpp-adapter.cpp
   )

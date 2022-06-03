@@ -55,34 +55,37 @@ using namespace facebook::jsi::detail;
 using namespace CryptoPP;
 
 namespace rncryptopp {
-bool stringValueToString(jsi::Runtime &runtime, const jsi::Value &value,
-                         std::string *str);
 
-bool binaryLikeValueToString(jsi::Runtime &rt, const jsi::Value &value,
-                             std::string *str, int stringEncoding = 0,
-                             int bufferEncoding = 0);
+enum InputType { INP_UNKNOWN, INP_STRING, INP_ARRAYBUFFER };
+
+enum StringEncoding {
+  ENCODING_UTF8,
+  ENCODING_HEX,
+  ENCODING_BASE64,
+  ENCODING_BASE64URL
+};
+
+InputType stringValueToString(jsi::Runtime &rt, const jsi::Value &value,
+                              std::string *str,
+                              StringEncoding stringEncoding = ENCODING_UTF8);
+
+InputType
+binaryLikeValueToString(jsi::Runtime &rt, const jsi::Value &value,
+                        std::string *str,
+                        StringEncoding stringEncoding = ENCODING_UTF8);
 
 bool valueToInt(const jsi::Value &value, int *res);
 
 bool valueToDouble(const jsi::Value &value, double *res);
 
-void encode(std::string *in, std::string *out, int encoding);
+void encodeString(std::string *in, std::string *out, StringEncoding encoding);
 
-void hexEncode(std::string &in, std::string &out);
+void decodeString(std::string *in, std::string *out, StringEncoding encoding);
 
-void hexDecode(std::string &in, std::string &out);
-
-void base64Decode(std::string &in, std::string &out);
-
-void base64Encode(std::string &in, std::string &out);
-
-void base64UrlDecode(std::string &in, std::string &out);
-
-void base64UrlEncode(std::string &in, std::string &out);
-
-int getEncodingFromArgs(jsi::Runtime &rt, const jsi::Value *args,
-                        size_t argCount, int index, int defaultValue = 0,
-                        bool allowUTF8 = true);
+StringEncoding getEncodingFromArgs(jsi::Runtime &rt, const jsi::Value *args,
+                                   size_t argCount, int index,
+                                   StringEncoding defaultValue = ENCODING_UTF8,
+                                   bool allowUTF8 = true);
 
 template <template <typename> class F> struct invokeWithHash {
   template <typename... R> bool operator()(std::string &hash, R... rest) const {

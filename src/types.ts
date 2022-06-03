@@ -152,20 +152,24 @@ export type Cryptopp = {
     BLAKE2s: (data: BinaryLike) => string;
     Keccak: (data: BinaryLike, size: BitSize) => string;
     LSH: (data: BinaryLike, size: BitSize) => string;
-    SHA1: (data: string) => string;
-    SHA2: (data: string, size: BitSize) => string;
-    SHA3: (data: string, size: BitSize) => string;
-    SHAKE: (data: string, size: SHAKE_Size) => string;
-    SipHash: (data: string, type: SipHash_Type) => string;
-    SM3: (data: string) => string;
-    Tiger: (data: string) => string;
-    RIPEMD: (data: string, size: RIPEMD_Size) => string;
-    WHIRLPOOL: (data: string) => string;
+    SHA1: (data: BinaryLike) => string;
+    SHA2: (data: BinaryLike, size: BitSize) => string;
+    SHA3: (data: BinaryLike, size: BitSize) => string;
+    SHAKE: (data: BinaryLike, size: SHAKE_Size) => string;
+    SipHash: (data: BinaryLike, type: SipHash_Type) => string;
+    SM3: (data: BinaryLike) => string;
+    Tiger: (data: BinaryLike) => string;
+    RIPEMD: (data: BinaryLike, size: RIPEMD_Size) => string;
+    WHIRLPOOL: (data: BinaryLike) => string;
+    CRC32: (data: BinaryLike) => string;
   };
 
   // Public-key cryptography
   RSA: {
-    generateKeyPair: (keySize: number) => {
+    generateKeyPair: (
+      keySize: number,
+      publicKeyExponent: number
+    ) => {
       public: string;
       private: string;
       params: {

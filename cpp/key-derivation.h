@@ -13,16 +13,18 @@ using namespace facebook;
 using namespace facebook::jsi::detail;
 using namespace CryptoPP;
 
-namespace rncryptopp {
-void hkdf(jsi::Runtime &rt, const jsi::Value *args, std::string *result);
+namespace rncryptopp::keyderivation {
+jsi::Value hkdf(jsi::Runtime &rt, const jsi::Value &thisValue,
+                const jsi::Value *args, size_t argCount);
 
-void pbkdf12(jsi::Runtime &rt, const jsi::Value *args, std::string *result);
+jsi::Value pbkdf12(jsi::Runtime &rt, const jsi::Value &thisValue,
+                   const jsi::Value *args, size_t argCount);
 
-void pkcs5_pbkdf1(jsi::Runtime &rt, const jsi::Value *args,
-                  std::string *result);
+jsi::Value pkcs5_pbkdf1(jsi::Runtime &rt, const jsi::Value &thisValue,
+                        const jsi::Value *args, size_t argCount);
 
-void pkcs5_pbkdf2(jsi::Runtime &rt, const jsi::Value *args,
-                  std::string *result);
-} // namespace rncryptopp
+jsi::Value pkcs5_pbkdf2(jsi::Runtime &rt, const jsi::Value &thisValue,
+                        const jsi::Value *args, size_t argCount);
+} // namespace rncryptopp::keyderivation
 
 #endif // REACT_NATIVE_CRYPTOPP_KEY_DERIVATION_H

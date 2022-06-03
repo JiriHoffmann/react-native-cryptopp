@@ -40,9 +40,4 @@ RCT_EXPORT_BLOCKING_SYNCHRONOUS_METHOD(install)
     return @true;
 }
 
-
-- (void)invalidate {
-   rncryptopp_cleanup();
-}
-
 @end

@@ -50,21 +50,21 @@ using namespace CryptoPP;
 namespace rncryptopp {
 namespace hmac {
 
-void generate(jsi::Runtime &rt, const jsi::Value *args, size_t argCount,
-              std::string *result);
+jsi::Value generate(jsi::Runtime &rt, const jsi::Value &thisValue,
+                    const jsi::Value *args, size_t argCount);
 
-void verify(jsi::Runtime &rt, const jsi::Value *args, size_t argCount,
-            bool *result);
+jsi::Value verify(jsi::Runtime &rt, const jsi::Value &thisValue,
+                  const jsi::Value *args, size_t argCount);
 
 } // namespace hmac
 
 namespace cmac {
 
-void generate(jsi::Runtime &rt, const jsi::Value *args, size_t argCount,
-              std::string *result);
+jsi::Value generate(jsi::Runtime &rt, const jsi::Value &thisValue,
+                    const jsi::Value *args, size_t argCount);
 
-void verify(jsi::Runtime &rt, const jsi::Value *args, size_t argCount,
-            bool *result);
+jsi::Value verify(jsi::Runtime &rt, const jsi::Value &thisValue,
+                  const jsi::Value *args, size_t argCount);
 
 } // namespace cmac
 } // namespace rncryptopp
