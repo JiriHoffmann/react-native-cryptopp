@@ -67,20 +67,20 @@ type BlockCiphers =
   | 'XTEA';
 
 type AES_and_Candidates = {
-  encrypt: (
-    data: BinaryLike,
+  encrypt: <T extends BinaryLike>(
+    data: T,
     key: BinaryLike,
     iv: BinaryLike,
     mode: AES_Modes,
     encodeTo?: BinaryLikeEncodingOutput
-  ) => string;
-  decrypt: (
-    data: BinaryLike,
+  ) => T;
+  decrypt: <T extends BinaryLike>(
+    data: T,
     key: BinaryLike,
     iv: BinaryLike,
     mode: AES_Modes,
-    dataEncoding?: BinaryLikeEncodingInput
-  ) => string;
+    dataStringEncoding?: BinaryLikeEncodingInput
+  ) => T;
 };
 
 export type BitSize = '224' | '256' | '384' | '512';
@@ -116,33 +116,33 @@ export type Cryptopp = {
 
   // Message authentication codes
   CMAC: {
-    generate: (
-      data: BinaryLike,
+    generate: <T extends BinaryLike>(
+      data: T,
       key: BinaryLike,
       cipher: AESBlockCiphers | BlockCiphers,
       encodeTo?: BinaryLikeEncodingOutput
-    ) => string;
+    ) => T;
     verify: (
       data: BinaryLike,
       key: BinaryLike,
       cipher: AESBlockCiphers | BlockCiphers,
       mac: BinaryLike,
-      macEncoding?: BinaryLikeEncodingInput
+      macStringEncoding?: BinaryLikeEncodingInput
     ) => boolean;
   };
   HMAC: {
-    generate: (
-      data: BinaryLike,
+    generate: <T extends BinaryLike>(
+      data: T,
       key: BinaryLike,
       hash: CryptoppHashes,
       encodeTo?: BinaryLikeEncodingOutput
-    ) => string;
+    ) => T;
     verify: (
       data: BinaryLike,
       key: BinaryLike,
       hash: CryptoppHashes,
       mac: BinaryLike,
-      macEncoding?: BinaryLikeEncodingInput
+      macStringEncoding?: BinaryLikeEncodingInput
     ) => boolean;
   };
 
@@ -180,18 +180,18 @@ export type Cryptopp = {
         e: string;
       };
     };
-    encrypt: (
+    encrypt: <T extends BinaryLike>(
       data: BinaryLike,
       publicKey: string,
       encryptionScheme: RSA_EncryptionScheme
-    ) => string;
-    decrypt: (
-      data: BinaryLike,
+    ) => T;
+    decrypt: <T extends BinaryLike>(
+      data: T,
       privateKey: string,
       encryptionScheme: RSA_EncryptionScheme
-    ) => string;
-    sign: (
-      data: BinaryLike,
+    ) => T;
+    sign: <T extends BinaryLike>(
+      data: T,
       privateKey: string,
       signatureScheme: RSA_SignatureScheme
     ) => string;
@@ -201,37 +201,37 @@ export type Cryptopp = {
       signatureScheme: RSA_SSA,
       signature: string
     ) => boolean;
-    recover: (
-      signature: string,
+    recover: <T extends BinaryLike>(
+      signature: T,
       publicKey: string,
       signatureScheme: RSA_PSSR
-    ) => boolean;
+    ) => T;
   };
   keyDerivation: {
-    pbkdf12: (
+    pbkdf12: <T extends BinaryLike>(
       password: BinaryLike,
       salt: BinaryLike,
       hash: KeyDerivationHash,
       iterations: number
-    ) => string;
-    pkcs5_pbkdf1: (
+    ) => T;
+    pkcs5_pbkdf1: <T extends BinaryLike>(
       password: BinaryLike,
       salt: BinaryLike,
       hash: KeyDerivationHash,
       iterations: number
-    ) => string;
-    pkcs5_pbkdf2: (
+    ) => T;
+    pkcs5_pbkdf2: <T extends BinaryLike>(
       password: BinaryLike,
       salf: BinaryLike,
       hash: KeyDerivationHash,
       iterations: number
-    ) => string;
-    hkdf: (
+    ) => T;
+    hkdf: <T extends BinaryLike>(
       password: BinaryLike,
       salt: BinaryLike,
       hash: KeyDerivationHash,
       info: BinaryLike
-    ) => string;
+    ) => T;
   };
 
   // Insecure or obsolescent algorithms retained for backwards compatibility and historical value
@@ -253,19 +253,19 @@ export type Cryptopp = {
     // Encoding manipulation
     toBase64: (
       input: BinaryLike,
-      inputEncoding?: BinaryLikeEncodingInput
+      stringEncoding?: BinaryLikeEncodingInput
     ) => string;
     toBase64Url: (
       input: BinaryLike,
-      inputEncoding?: BinaryLikeEncodingInput
+      stringEncoding?: BinaryLikeEncodingInput
     ) => string;
     toHex: (
       data: BinaryLike,
-      inputEncoding?: BinaryLikeEncodingInput
+      stringEncoding?: BinaryLikeEncodingInput
     ) => string;
     toUtf8: (
       input: BinaryLike,
-      inputEncoding?: BinaryLikeEncodingInput
+      stringEncoding?: BinaryLikeEncodingInput
     ) => string;
   };
 };
