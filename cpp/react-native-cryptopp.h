@@ -4,6 +4,7 @@
 #include <jsi/jsi.h>
 #include <jsi/jsilib.h>
 
+#include "host_objects/hash-functions.h"
 #include "aes-candidates.hpp"
 #include "hash-functions.h"
 #include "helpers.h"

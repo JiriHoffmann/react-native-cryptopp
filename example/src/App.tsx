@@ -117,21 +117,25 @@ export default function App() {
       const hmac_time = timeDelta(hmac_start, PerformanceNow());
 
       // Hashes
+      const hash = Cryptopp.hash.create('BLAKE2b');
+      Array.from(str).forEach((c) => hash.update(c));
+      const BLAKE2b_progressive = hash.finalize();
+
       const hashes_start = PerformanceNow();
-      const BLAKE2b = Cryptopp.hashFunctions.BLAKE2b(str);
-      const BLAKE2s = Cryptopp.hashFunctions.BLAKE2s(str);
-      const Keccak_256 = Cryptopp.hashFunctions.Keccak(str, '256');
-      const LSH_256 = Cryptopp.hashFunctions.LSH(str, '256');
-      const sha = Cryptopp.hashFunctions.SHA1(str);
-      const sha2_512 = Cryptopp.hashFunctions.SHA2(str, '512');
-      const sha3_512 = Cryptopp.hashFunctions.SHA3(str, '512');
-      const SHAKE_128 = Cryptopp.hashFunctions.SHAKE(str, '128');
-      const SipHash_2_4_64 = Cryptopp.hashFunctions.SipHash(str, '2_4_64');
-      const SM3 = Cryptopp.hashFunctions.SM3(str);
-      const Tiger = Cryptopp.hashFunctions.Tiger(str);
-      const RIPEMD_128 = Cryptopp.hashFunctions.RIPEMD(str, '128');
-      const Whirlpool = Cryptopp.hashFunctions.WHIRLPOOL(str);
-      const CRC32 = Cryptopp.hashFunctions.CRC32(str);
+      const BLAKE2b = Cryptopp.hash.BLAKE2b(str);
+      const BLAKE2s = Cryptopp.hash.BLAKE2s(str);
+      const Keccak_256 = Cryptopp.hash.Keccak(str, '256');
+      const LSH_256 = Cryptopp.hash.LSH(str, '256');
+      const sha = Cryptopp.hash.SHA1(str);
+      const sha2_512 = Cryptopp.hash.SHA2(str, '512');
+      const sha3_512 = Cryptopp.hash.SHA3(str, '512');
+      const SHAKE_128 = Cryptopp.hash.SHAKE(str, '128');
+      const SipHash_2_4_64 = Cryptopp.hash.SipHash(str, '2_4_64');
+      const SM3 = Cryptopp.hash.SM3(str);
+      const Tiger = Cryptopp.hash.Tiger(str);
+      const RIPEMD_128 = Cryptopp.hash.RIPEMD(str, '128');
+      const Whirlpool = Cryptopp.hash.WHIRLPOOL(str);
+      const CRC32 = Cryptopp.hash.CRC32(str);
 
       // Insecure hashes
       const md2 = Cryptopp.insecure.md2(str);
@@ -199,6 +203,7 @@ export default function App() {
         cmac,
         cmac_verify,
         cmac_time,
+        BLAKE2b_progressive,
         BLAKE2b,
         BLAKE2s,
         Keccak_256,

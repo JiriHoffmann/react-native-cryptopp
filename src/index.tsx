@@ -1,5 +1,5 @@
 import { NativeModules, Platform } from 'react-native';
-import type { Cryptopp } from './types';
+import type { Cryptopp } from './Cryptopp';
 
 const cppinstall = NativeModules.Cryptopp;
 

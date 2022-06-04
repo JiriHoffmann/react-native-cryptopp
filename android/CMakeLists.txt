@@ -19,9 +19,13 @@ execute_process(
         ERROR_FILE ${CMAKE_CURRENT_SOURCE_DIR}/build/cryptopp_error.txt
 )
 
-file(GLOB RN_CRYPTOPP_FILES "../cpp/*.cpp")
-file(GLOB RN_CRYPTOPP_HPP_FILES "../cpp/*.hpp")
+# TODO: find a way to include headers only,
+# TODO: this includes everything,
+# TODO: even headers in cpp/cryptopp
 file(GLOB RN_CRYPTOPP_HEADERS "../cpp")
+file(GLOB RN_CRYPTOPP_FILES "../cpp/*.cpp")
+file(GLOB RN_CRYPTOPP_HO_FILES "../cpp/host_objects/*.cpp")
+file(GLOB RN_CRYPTOPP_HPP_FILES "../cpp/*.hpp")
 file(GLOB LIBRN_DIR "${BUILD_DIR}/react-native-0*/jni/${ANDROID_ABI}")
 
 
@@ -31,10 +35,6 @@ include_directories(
   "${NODE_MODULES_DIR}/react-native/React"
   "${NODE_MODULES_DIR}/react-native/React/Base"
   "${NODE_MODULES_DIR}/react-native/ReactCommon/jsi"
-
-  # TODO: find a way to include headers only,
-  # TODO: this includes everything,
-  # TODO: even headers in cpp/cryptopp
   ${RN_CRYPTOPP_HEADERS}
 )
 
@@ -53,6 +53,7 @@ if (EXISTS "${LIBRN_DIR}/libjsi.so")
           SHARED
           ${RN_CRYPTOPP_FILES}
           ${RN_CRYPTOPP_HPP_FILES}
+          ${RN_CRYPTOPP_HO_FILES}
           ./cpp-adapter.cpp
   )
 else()
@@ -62,6 +63,7 @@ else()
           SHARED
           ${RN_CRYPTOPP_FILES}
           ${RN_CRYPTOPP_HPP_FILES}
+          ${RN_CRYPTOPP_HO_FILES}
           ${NODE_MODULES_DIR}/react-native/ReactCommon/jsi/jsi/jsi.cpp
           ./cpp-adapter.cpp
   )

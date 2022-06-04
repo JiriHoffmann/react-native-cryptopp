@@ -5,6 +5,15 @@ void rncryptopp_install(jsi::Runtime &jsiRuntime) {
   Hash functions
   */
   jsi::Object hashFunctions = jsi::Object(jsiRuntime);
+
+  // Host object
+  hashFunctions.setProperty(
+      jsiRuntime, "create",
+      jsi::Function::createFromHostFunction(
+          jsiRuntime, jsi::PropNameID::forAscii(jsiRuntime, "create"), 1,
+          rncryptopp::HostObjects::createHashHostObject));
+
+  // Individual hashes
   hashFunctions.setProperty(
       jsiRuntime, "BLAKE2b",
       jsi::Function::createFromHostFunction(
@@ -71,11 +80,11 @@ void rncryptopp_install(jsi::Runtime &jsiRuntime) {
           jsiRuntime, jsi::PropNameID::forAscii(jsiRuntime, "WHIRLPOOL"), 1,
           rncryptopp::hash::whirlpool));
 
-  hashFunctions.setProperty(
-          jsiRuntime, "CRC32",
-          jsi::Function::createFromHostFunction(
-                  jsiRuntime, jsi::PropNameID::forAscii(jsiRuntime, "CRC32"), 1,
-                  rncryptopp::hash::crc32));
+  hashFunctions.setProperty(jsiRuntime, "CRC32",
+                            jsi::Function::createFromHostFunction(
+                                jsiRuntime,
+                                jsi::PropNameID::forAscii(jsiRuntime, "CRC32"),
+                                1, rncryptopp::hash::crc32));
   /*
   AES and AES candidates
   */
@@ -305,7 +314,7 @@ void rncryptopp_install(jsi::Runtime &jsiRuntime) {
   module.setProperty(jsiRuntime, "HMAC", std::move(HMAC));
   module.setProperty(jsiRuntime, "CMAC", std::move(CMAC));
   module.setProperty(jsiRuntime, "RSA", std::move(RSA));
-  module.setProperty(jsiRuntime, "hashFunctions", std::move(hashFunctions));
+  module.setProperty(jsiRuntime, "hash", std::move(hashFunctions));
   module.setProperty(jsiRuntime, "insecure", std::move(insecure));
   module.setProperty(jsiRuntime, "keyDerivation", std::move(keyDerivation));
   module.setProperty(jsiRuntime, "utils", std::move(utils));
