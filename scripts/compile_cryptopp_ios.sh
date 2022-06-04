@@ -3,7 +3,8 @@ TEMP_IOS="TEMP_IOS"
 CWD=$(pwd -P)
 
 # Do not compile if the library already exists
-if [ -e "$CWD/cpp/ios/libcryptopp.xcframework" ]
+# if [ -e "$CWD/cpp/ios/libcryptopp.xcframework" ]
+if [ -e "$CWD/cpp/ios/libcryptopp.a" ]
 then
     exit 0
 fi
@@ -14,10 +15,12 @@ function build_cryptopp_ios
 
     make -f GNUmakefile-cross static
     make install -f GNUmakefile-cross PREFIX="$TEMP_IOS"
+      mv "$TEMP_IOS/lib/libcryptopp.a" "../cpp/ios/libcryptopp_$2.a"
+    mv -f "$TEMP_IOS/include/cryptopp" "../cpp"
 
     # Create folder for each build target and copy over
-    mkdir -p "$TEMP_IOS/lib/$1_$2/"
-    mv "$TEMP_IOS/lib/libcryptopp.a" "$TEMP_IOS/lib/$1_$2/libcryptopp.a"
+    # mkdir -p "$TEMP_IOS/lib/$1_$2/"
+    # mv "$TEMP_IOS/lib/libcryptopp.a" "$TEMP_IOS/lib/$1_$2/libcryptopp.a"
 }
 
 # #########################################
@@ -46,8 +49,8 @@ replace="-DCRYPTOPP_DISABLE_SSSE3"
 sed -i  -e "s/$search/$replace/g" "setenv-ios.sh"
 
 # Add arm64 iPhoneSimulator
-add='elif [[ "${IOS_SDK}" == "iPhoneSimulator" && "${IOS_CPU}" == "arm64" ]]; then MIN_VER=-miphonesimulator-version-min=6'
-sed -i "174i $add" "setenv-ios.sh"
+# add='elif [[ "${IOS_SDK}" == "iPhoneSimulator" && "${IOS_CPU}" == "arm64" ]]; then MIN_VER=-miphonesimulator-version-min=6'
+# sed -i "174i $add" "setenv-ios.sh"
 
 # #########################################
 # #####             Build             #####
@@ -62,23 +65,28 @@ make clean
 build_cryptopp_ios iPhoneSimulator x86_64
 make clean
 
-build_cryptopp_ios iPhoneSimulator arm64
-make clean
+rm -rf "$TEMP_IOS"
+popd
+# build_cryptopp_ios iPhoneSimulator arm64
+# make clean
 
 
 # Create fat lib
-lipo -create "$TEMP_IOS/lib/iPhoneSimulator_x86_64/libcryptopp.a" \
-             "$TEMP_IOS/lib/iPhoneSimulator_arm64/libcryptopp.a" \
-     -output "$TEMP_IOS/lib/libcryptopp.a"
+lipo -create cpp/ios/libcryptopp_arm64.a \
+             cpp/ios/libcryptopp_x86_64.a \
+     -output cpp/ios/libcryptopp.a
+# lipo -create "$TEMP_IOS/lib/iPhoneSimulator_x86_64/libcryptopp.a" \
+#              "$TEMP_IOS/lib/iPhoneSimulator_arm64/libcryptopp.a" \
+#      -output "$TEMP_IOS/lib/libcryptopp.a"
 
-# Create xcframework
-xcodebuild -create-xcframework -library "$TEMP_IOS/lib/libcryptopp.a" \
-                               -library "$TEMP_IOS/lib/iPhoneOS_arm64/libcryptopp.a" \
-                               -output  "$TEMP_IOS/lib/libcryptopp.xcframework"
+# # Create xcframework
+# xcodebuild -create-xcframework -library "$TEMP_IOS/lib/libcryptopp.a" \
+#                                -library "$TEMP_IOS/lib/iPhoneOS_arm64/libcryptopp.a" \
+#                                -output  "$TEMP_IOS/lib/libcryptopp.xcframework"
 
-# Mode headers and framework
-mv -f "$TEMP_IOS/include/cryptopp" "../cpp"
-mv -f "$TEMP_IOS/lib/libcryptopp.xcframework" "../cpp/ios/libcryptopp.xcframework"
+# # Move headers and framework
+# mv -f "$TEMP_IOS/include/cryptopp" "../cpp"
+# mv -f "$TEMP_IOS/lib/libcryptopp.xcframework" "../cpp/ios/libcryptopp.xcframework"
 
 # rm -rf "$TEMP_IOS"
 popd

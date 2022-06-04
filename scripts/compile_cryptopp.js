@@ -54,10 +54,11 @@ zipDirectories(
   [
     { dir: `${moduleDir}/cpp/cryptopp`, dest: 'cryptopp' },
     { dir: `${moduleDir}/cpp/android`, dest: 'android' },
-    {
-      dir: `${moduleDir}/cpp/ios/libcryptopp.xcframework`,
-      dest: 'ios/libcryptopp.xcframework',
-    },
+    { dir: `${moduleDir}/cpp/ios`, dest: 'ios' },
+    // {
+    //   dir: `${moduleDir}/cpp/ios/libcryptopp.xcframework`,
+    //   dest: 'ios/libcryptopp.xcframework',
+    // },
   ],
   'cryptopp.zip'
 );
