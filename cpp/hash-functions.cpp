@@ -236,8 +236,8 @@ jsi::Value crc32(jsi::Runtime &rt, const jsi::Value &thisValue,
           reinterpret_cast<byte const*>(data.c_str()),
           data.size()
   );
-    std::stringstream ss;
-    ss << std::hex << digest;
-    return jsi::String::createFromUtf8(rt, ss.str());
+  std::stringstream ss;
+  ss << std::hex << digest;
+  return jsi::String::createFromUtf8(rt, ss.str());
 }
 } // namespace rncryptopp::hash
