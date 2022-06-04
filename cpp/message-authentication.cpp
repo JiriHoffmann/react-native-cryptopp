@@ -70,13 +70,13 @@ jsi::Value generate(jsi::Runtime &rt, const jsi::Value &thisValue,
     throwJSError(rt, "RNCryptopp: HMAC generate, hash is not a string");
 
   if (!invokeWithHash<runGenerateWrapperHMAC>()(hash, &key, &data, &result))
-        throwJSError(rt, "RNCryptopp: HMAC generate, invalid hash value");
+    throwJSError(rt, "RNCryptopp: HMAC generate, invalid hash value");
 
   // Return string
   if (dataInputType == INP_STRING) {
-      std::string encoded;
-      encodeString(&result, &encoded, ENCODING_HEX);
-      return jsi::String::createFromUtf8(rt, encoded);
+    std::string encoded;
+    encodeString(&result, &encoded, ENCODING_HEX);
+    return jsi::String::createFromUtf8(rt, encoded);
   }
 
   // Return ArrayBuffer
@@ -138,15 +138,15 @@ jsi::Value generate(jsi::Runtime &rt, const jsi::Value &thisValue,
   if (!stringValueToString(rt, args[2], &cipher))
     throwJSError(rt, "RNCryptopp: CMAC generate, hash is not a string");
 
-  if (!invokeWithBlockCipher<runGenerateWrapperCMAC>()(
-          cipher, true, true, &key, &data, &result))
+  if (!invokeWithBlockCipher<runGenerateWrapperCMAC>()(cipher, true, true, &key,
+                                                       &data, &result))
     throwJSError(rt, "RNCryptopp: CMAC generate, invalid hash value");
 
   // Return string
   if (dataInputType == INP_STRING) {
-        std::string encoded;
-        encodeString(&result, &encoded, ENCODING_HEX);
-        return jsi::String::createFromUtf8(rt, encoded);
+    std::string encoded;
+    encodeString(&result, &encoded, ENCODING_HEX);
+    return jsi::String::createFromUtf8(rt, encoded);
   }
 
   // Return ArrayBuffer

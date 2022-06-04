@@ -8,6 +8,7 @@
 #include <jsi/jsilib.h>
 
 #include "cryptopp/blake2.h"
+#include "cryptopp/crc.h"
 #include "cryptopp/filters.h"
 #include "cryptopp/hex.h"
 #include "cryptopp/keccak.h"
@@ -20,7 +21,6 @@
 #include "cryptopp/sm3.h"
 #include "cryptopp/tiger.h"
 #include "cryptopp/whrlpool.h"
-#include "cryptopp/crc.h"
 
 #include "helpers.h"
 
@@ -69,7 +69,7 @@ jsi::Value whirlpool(jsi::Runtime &rt, const jsi::Value &thisValue,
                      const jsi::Value *args, size_t count);
 
 jsi::Value crc32(jsi::Runtime &rt, const jsi::Value &thisValue,
-                         const jsi::Value *args, size_t count);
+                 const jsi::Value *args, size_t count);
 } // namespace rncryptopp::hash
 
 #endif // REACT_NATIVE_CRYPTOPP_HASH_FUNCTIONS_H

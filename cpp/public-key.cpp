@@ -12,8 +12,9 @@ jsi::Value generateKeyPair(jsi::Runtime &rt, const jsi::Value &thisValue,
 
   int public_e;
   if (!valueToInt(args[1], &public_e))
-    throwJSError(rt,
-                 "RNCryptopp: RSA generateKeyPair public_e is not a number, use 65537");
+    throwJSError(
+        rt,
+        "RNCryptopp: RSA generateKeyPair public_e is not a number, use 65537");
 
   // Generate Parameters
   AutoSeededRandomPool rng;

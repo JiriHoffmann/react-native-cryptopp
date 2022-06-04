@@ -27,16 +27,16 @@ template <template <class> class T_Mode, class T_BlockCipher>
               std::string *result, ExecType execType) {
     if (execType == ENCRYPT) {
         typename T_Mode<T_BlockCipher>::Encryption e;
-        e.SetKeyWithIV(reinterpret_cast<const byte *>(key->data()), key->size(),
-                       reinterpret_cast<const byte *>(iv->data()), iv->size());
+        e.SetKeyWithIV(reinterpret_cast<const CryptoPP::byte *>(key->data()), key->size(),
+                       reinterpret_cast<const CryptoPP::byte *>(iv->data()), iv->size());
         std::string encrypted;
         StringSource _(*data, true,
                        new StreamTransformationFilter(e, new StringSink(*result)));
     }
     if (execType == DECRYPT) {
         typename T_Mode<T_BlockCipher>::Decryption d;
-        d.SetKeyWithIV(reinterpret_cast<const byte *>(key->data()), key->size(),
-                       reinterpret_cast<const byte *>(iv->data()), iv->size());
+        d.SetKeyWithIV(reinterpret_cast<const CryptoPP::byte *>(key->data()), key->size(),
+                       reinterpret_cast<const CryptoPP::byte *>(iv->data()), iv->size());
         StringSource s(*data, true,
                        new StreamTransformationFilter(d, new StringSink(*result)));
     }

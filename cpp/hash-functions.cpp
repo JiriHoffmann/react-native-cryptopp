@@ -223,19 +223,16 @@ jsi::Value whirlpool(jsi::Runtime &rt, const jsi::Value &thisValue,
 }
 
 jsi::Value crc32(jsi::Runtime &rt, const jsi::Value &thisValue,
-                       const jsi::Value *args, size_t count) {
-    std::string data;
-    if (!binaryLikeValueToString(rt, args[0], &data))
-      throwJSError(rt,
-                   "RNCryptopp: CRC32 data is not a string or ArrayBuffer");
+                 const jsi::Value *args, size_t count) {
+  std::string data;
+  if (!binaryLikeValueToString(rt, args[0], &data))
+    throwJSError(rt, "RNCryptopp: CRC32 data is not a string or ArrayBuffer");
 
   CRC32 hash;
   word32 digest = 0;
-  hash.CalculateDigest(
-          reinterpret_cast<byte*>( &digest ),
-          reinterpret_cast<byte const*>(data.c_str()),
-          data.size()
-  );
+  hash.CalculateDigest(reinterpret_cast<byte *>(&digest),
+                       reinterpret_cast<byte const *>(data.c_str()),
+                       data.size());
   std::stringstream ss;
   ss << std::hex << digest;
   return jsi::String::createFromUtf8(rt, ss.str());
