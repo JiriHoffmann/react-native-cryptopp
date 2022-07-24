@@ -32,8 +32,8 @@
   ],
   "scripts": {
     "test": "jest",
-    "typescript": "tsc --noEmit",
-    "lint": "eslint \"**/*.{js,ts,tsx}\" --fix",
+    "typescript": "tsc --noEmit -p tsconfig.build.json",
+    "lint": "eslint \"**/*.{js,ts,tsx}\"",
     "postinstall": "husky install",
     "prepare": "bob build",
     "release": "release-it",
@@ -146,7 +146,8 @@
   },
   "eslintIgnore": [
     "node_modules/",
-    "lib/"
+    "lib/",
+    "test/"
   ],
   "prettier": {
     "quoteProps": "consistent",
