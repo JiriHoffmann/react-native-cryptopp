@@ -1,5 +1,4 @@
-#ifndef REACT_NATIVE_CRYPTOPP_KEY_DERIVATION_H
-#define REACT_NATIVE_CRYPTOPP_KEY_DERIVATION_H
+#pragma once
 
 #include <jsi/jsi.h>
 #include <jsi/jsilib.h>
@@ -26,5 +25,3 @@ jsi::Value pkcs5_pbkdf1(jsi::Runtime &rt, const jsi::Value &thisValue,
 jsi::Value pkcs5_pbkdf2(jsi::Runtime &rt, const jsi::Value &thisValue,
                         const jsi::Value *args, size_t argCount);
 } // namespace rncryptopp::keyderivation
-
-#endif // REACT_NATIVE_CRYPTOPP_KEY_DERIVATION_H

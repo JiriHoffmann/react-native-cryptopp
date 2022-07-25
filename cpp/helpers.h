@@ -1,5 +1,4 @@
-#ifndef REACT_NATIVE_CRYPTOPP_HELPERS_H
-#define REACT_NATIVE_CRYPTOPP_HELPERS_H
+#pragma once
 
 #include <jsi/jsi.h>
 #include <jsi/jsilib.h>
@@ -232,5 +231,3 @@ template <template <typename T> class F> struct invokeWithBlockCipher {
   }
 };
 } // namespace rncryptopp
-
-#endif // REACT_NATIVE_CRYPTOPP_HELPERS_H

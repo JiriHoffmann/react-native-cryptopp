@@ -1,5 +1,4 @@
-#ifndef REACT_NATIVE_CRYPTOPP_INSECURE_H
-#define REACT_NATIVE_CRYPTOPP_INSECURE_H
+#pragma once
 
 #include <jsi/jsi.h>
 #include <jsi/jsilib.h>
@@ -25,5 +24,3 @@ jsi::Value md4(jsi::Runtime &rt, const jsi::Value &thisValue,
 jsi::Value md5(jsi::Runtime &rt, const jsi::Value &thisValue,
                const jsi::Value *args, size_t count);
 } // namespace rncryptopp::insecure
-
-#endif // REACT_NATIVE_CRYPTOPP_INSECURE_H

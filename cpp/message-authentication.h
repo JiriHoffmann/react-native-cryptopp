@@ -1,5 +1,4 @@
-#ifndef REACT_NATIVE_CRYPTOPP_MESSAGE_AUTHENTICATION_H
-#define REACT_NATIVE_CRYPTOPP_MESSAGE_AUTHENTICATION_H
+#pragma once
 
 #include <jsi/jsi.h>
 #include <jsi/jsilib.h>
@@ -68,4 +67,3 @@ jsi::Value verify(jsi::Runtime &rt, const jsi::Value &thisValue,
 
 } // namespace cmac
 } // namespace rncryptopp
-#endif // REACT_NATIVE_CRYPTOPP_MESSAGE_AUTHENTICATION_H

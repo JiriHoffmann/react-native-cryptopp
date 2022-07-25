@@ -1,5 +1,4 @@
-#ifndef REACT_NATIVE_CRYPTOPP_H
-#define REACT_NATIVE_CRYPTOPP_H
+#pragma once
 
 #include <jsi/jsi.h>
 #include <jsi/jsilib.h>
@@ -17,5 +16,3 @@
 using namespace facebook;
 
 void rncryptopp_install(jsi::Runtime &jsiRuntime);
-
-#endif /* REACT_NATIVE_CRYPTOPP_H */

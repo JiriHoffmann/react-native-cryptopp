@@ -1,5 +1,4 @@
-#ifndef REACT_NATIVE_CRYPTOPP_PUBLIC_KEY_H
-#define REACT_NATIVE_CRYPTOPP_PUBLIC_KEY_H
+#pragma once
 
 #include <jsi/jsi.h>
 #include <jsi/jsilib.h>
@@ -36,4 +35,3 @@ jsi::Value verify(jsi::Runtime &rt, const jsi::Value &thisValue,
 jsi::Value recover(jsi::Runtime &rt, const jsi::Value &thisValue,
                    const jsi::Value *args, size_t argCount);
 } // namespace rncryptopp::rsa
-#endif // REACT_NATIVE_CRYPTOPP_PUBLIC_KEY_H

@@ -1,5 +1,4 @@
-#ifndef REACT_NATIVE_CRYPTOPP_UTILS_H
-#define REACT_NATIVE_CRYPTOPP_UTILS_H
+#pragma once
 
 #include <jsi/jsi.h>
 #include <jsi/jsilib.h>
@@ -32,4 +31,3 @@ jsi::Value stringToBytes(jsi::Runtime &rt, const jsi::Value &thisValue,
                          const jsi::Value *args, size_t argCount);
 
 } // namespace rncryptopp::utils
-#endif // REACT_NATIVE_CRYPTOPP_UTILS_H

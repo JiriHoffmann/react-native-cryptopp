@@ -1,5 +1,4 @@
-#ifndef REACT_NATIVE_CRYPTOPP_HASH_FUNCTIONS_H
-#define REACT_NATIVE_CRYPTOPP_HASH_FUNCTIONS_H
+#pragma once
 
 #include <iostream>
 #include <sstream>
@@ -71,5 +70,3 @@ jsi::Value whirlpool(jsi::Runtime &rt, const jsi::Value &thisValue,
 jsi::Value crc32(jsi::Runtime &rt, const jsi::Value &thisValue,
                  const jsi::Value *args, size_t count);
 } // namespace rncryptopp::hash
-
-#endif // REACT_NATIVE_CRYPTOPP_HASH_FUNCTIONS_H

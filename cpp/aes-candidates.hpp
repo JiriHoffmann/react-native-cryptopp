@@ -1,5 +1,4 @@
-#ifndef REACT_NATIVE_CRYPTOPP_AES_CANDIDATES_HPP
-#define REACT_NATIVE_CRYPTOPP_AES_CANDIDATES_HPP
+#pragma once
 
 #include <jsi/jsi.h>
 #include <jsi/jsilib.h>
@@ -154,4 +153,3 @@ jsi::Value decrypt(jsi::Runtime &rt, const jsi::Value &thisValue, const jsi::Val
 
 
 } // namespace rncryptopp::aescandidates
-#endif // REACT_NATIVE_CRYPTOPP_AES_CANDIDATES_HPP
