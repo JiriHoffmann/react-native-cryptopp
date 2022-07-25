@@ -1,10 +1,9 @@
-#include "hash-functions.h"
+#include "hash-functions-ho.h"
 
 using namespace std;
 using namespace facebook;
 
 namespace rncryptopp::HostObjects {
-
 template <class T_hash> HashHostObject<T_hash>::HashHostObject() {
   T_hash hash;
   hashInstance = hash;

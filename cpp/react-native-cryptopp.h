@@ -4,9 +4,9 @@
 #include <jsi/jsilib.h>
 
 #include "aes-candidates.hpp"
+#include "hash-functions-ho.h"
 #include "hash-functions.h"
 #include "helpers.h"
-#include "host_objects/hash-functions.h"
 #include "insecure.h"
 #include "key-derivation.h"
 #include "message-authentication.h"
