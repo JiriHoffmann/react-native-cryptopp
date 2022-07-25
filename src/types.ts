@@ -87,8 +87,9 @@ export type KeyDerivationHash = CryptoppHashes;
 
 export type RSA_EncryptionScheme = 'OAEP_SHA1' | 'OAEP_SHA256' | 'PKCS1v15';
 export type RSA_SSA = 'PKCS1v15_SHA1' | 'PKCS1v15_SHA256';
+export type RSA_PSS = 'PSS_SHA1' | 'PSS_SHA256' | 'PSS_Whirlpool';
 export type RSA_PSSR = 'PSSR_SHA1' | 'PSSR_SHA256' | 'PSSR_Whirlpool';
-export type RSA_SignatureScheme = RSA_SSA | RSA_PSSR;
+export type RSA_SignatureScheme = RSA_SSA | RSA_PSS | RSA_PSSR;
 
 export type AES_and_Candidates = {
   encrypt: <T extends BinaryLike>(

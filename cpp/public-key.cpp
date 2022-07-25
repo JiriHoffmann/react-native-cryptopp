@@ -174,12 +174,13 @@ jsi::Value decrypt(jsi::Runtime &rt, const jsi::Value &thisValue,
 
 template <class SCHEME>
 void exec_sign(std::string *data, CryptoPP::RSA::PrivateKey *privateKey,
-               std::string *result) {
+               std::string *result, bool putMessage = false) {
   AutoSeededRandomPool rng;
   typename SCHEME::Signer signer(*privateKey);
 
-  StringSource(*data, true,
-               new SignerFilter(rng, signer, new StringSink(*result)));
+  StringSource(
+      *data, true,
+      new SignerFilter(rng, signer, new StringSink(*result), putMessage));
 }
 
 jsi::Value sign(jsi::Runtime &rt, const jsi::Value &thisValue,
@@ -203,12 +204,20 @@ jsi::Value sign(jsi::Runtime &rt, const jsi::Value &thisValue,
     exec_sign<RSASS<PKCS1v15, SHA1>>(&data, &privateKey, &result);
   else if (signScheme == "PKCS1v15_SHA256")
     exec_sign<RSASS<PKCS1v15, SHA256>>(&data, &privateKey, &result);
+  // PSSR
   else if (signScheme == "PSSR_SHA1")
-    exec_sign<RSASS<PSSR, SHA1>>(&data, &privateKey, &result);
+    exec_sign<RSASS<PSSR, SHA1>>(&data, &privateKey, &result, true);
   else if (signScheme == "PSSR_SHA256")
-    exec_sign<RSASS<PSSR, SHA256>>(&data, &privateKey, &result);
+    exec_sign<RSASS<PSSR, SHA256>>(&data, &privateKey, &result, true);
   else if (signScheme == "PSSR_Whirlpool")
-    exec_sign<RSASS<PSSR, Whirlpool>>(&data, &privateKey, &result);
+    exec_sign<RSASS<PSSR, Whirlpool>>(&data, &privateKey, &result, true);
+  // PSS
+  else if (signScheme == "PSS_SHA1")
+    exec_sign<RSASS<PSS, SHA1>>(&data, &privateKey, &result);
+  else if (signScheme == "PSS_SHA256")
+    exec_sign<RSASS<PSS, SHA256>>(&data, &privateKey, &result);
+  else if (signScheme == "PSS_Whirlpool")
+    exec_sign<RSASS<PSS, Whirlpool>>(&data, &privateKey, &result);
   else
     throwJSError(rt, "RNCryptopp: RSA sign invalid scheme");
 
@@ -259,6 +268,23 @@ jsi::Value verify(jsi::Runtime &rt, const jsi::Value &thisValue,
                                     signature.size());
   } else if (signScheme == "PKCS1v15_SHA256") {
     RSASS<PKCS1v15, SHA256>::Verifier verifier(publicKey);
+    result = verifier.VerifyMessage((const byte *)data.data(), data.size(),
+                                    (const byte *)signature.data(),
+                                    signature.size());
+  }
+  // PSS
+  else if (signScheme == "PSS_SHA1") {
+    RSASS<PSS, SHA1>::Verifier verifier(publicKey);
+    result = verifier.VerifyMessage((const byte *)data.data(), data.size(),
+                                    (const byte *)signature.data(),
+                                    signature.size());
+  } else if (signScheme == "PSS_SHA256") {
+    RSASS<PSS, SHA256>::Verifier verifier(publicKey);
+    result = verifier.VerifyMessage((const byte *)data.data(), data.size(),
+                                    (const byte *)signature.data(),
+                                    signature.size());
+  } else if (signScheme == "PSS_Whirlpool") {
+    RSASS<PSS, Whirlpool>::Verifier verifier(publicKey);
     result = verifier.VerifyMessage((const byte *)data.data(), data.size(),
                                     (const byte *)signature.data(),
                                     signature.size());
