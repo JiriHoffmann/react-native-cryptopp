@@ -23,15 +23,12 @@ const zipDirectories = (sourceDirs, outPath) => {
   });
 };
 
-// // Remove all compiled files
+// Remove all compiled files
 execSync(`rm -rf ${moduleDir}/cpp/ios`);
 execSync(`rm -rf ${moduleDir}/cpp/android`);
 execSync(`rm -rf ${moduleDir}/cpp/cryptopp`);
 
-// Compile iOS
-execSync(`sh ${moduleDir}/scripts/compile_cryptopp_ios.sh`);
-
-// Compile Android
+// Validate env variables
 if (!process.env.ANDROID_NDK_ROOT) {
   console.log('ANDROID_NDK_ROOT missing.');
   exit(1);
@@ -42,6 +39,10 @@ if (!process.env.ANDROID_SDK_ROOT) {
   exit(1);
 }
 
+// Compile iOS
+execSync(`sh ${moduleDir}/scripts/compile_cryptopp_ios.sh`);
+
+// Compile Android
 const android_script = `${moduleDir}/scripts/compile_cryptopp_android.sh`;
 const platform = 'android-21';
 const sdk = process.env.ANDROID_SDK_ROOT;
@@ -54,11 +55,10 @@ zipDirectories(
   [
     { dir: `${moduleDir}/cpp/cryptopp`, dest: 'cryptopp' },
     { dir: `${moduleDir}/cpp/android`, dest: 'android' },
-    { dir: `${moduleDir}/cpp/ios`, dest: 'ios' },
-    // {
-    //   dir: `${moduleDir}/cpp/ios/libcryptopp.xcframework`,
-    //   dest: 'ios/libcryptopp.xcframework',
-    // },
+    {
+      dir: `${moduleDir}/cpp/ios/libcryptopp.xcframework`,
+      dest: 'ios/libcryptopp.xcframework',
+    },
   ],
   'cryptopp.zip'
 );

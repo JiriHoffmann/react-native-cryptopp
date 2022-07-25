@@ -16,10 +16,9 @@ Pod::Spec.new do |s|
   s.source_files = "ios/**/*.{h,m,mm}" , "cpp/*.{h,hpp,cpp}", "cpp/cryptopp/*.h"
 
   s.prepare_command = "sh scripts/compile_cryptopp_ios.sh"
-  s.vendored_libraries = "cpp/ios/libcryptopp.a"
-  # s.ios.vendored_frameworks = [
-  #   'cpp/ios/libcryptopp.xcframework', 
-  # ]
+  s.ios.vendored_frameworks = [
+    'cpp/ios/libcryptopp.xcframework', 
+  ]
 
   s.dependency "React-Core"
 end
