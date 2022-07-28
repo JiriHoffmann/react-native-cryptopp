@@ -12,6 +12,7 @@ import type {
   KeyDerivationHash,
   RIPEMD_Size,
   RSA_EncryptionScheme,
+  RSA_PSS,
   RSA_PSSR,
   RSA_SignatureScheme,
   RSA_SSA,
@@ -113,7 +114,7 @@ export interface Cryptopp {
     verify: (
       data: BinaryLike,
       publicKey: string,
-      signatureScheme: RSA_SSA,
+      signatureScheme: RSA_SSA | RSA_PSS,
       signature: string
     ) => boolean;
     recover: <T extends BinaryLike>(
