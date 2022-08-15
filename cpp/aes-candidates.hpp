@@ -16,6 +16,7 @@
 using namespace facebook;
 using namespace facebook::jsi::detail;
 using namespace CryptoPP;
+using namespace rncryptopp::jsiHelper;
 
 namespace rncryptopp::aescandidates {
 
@@ -63,93 +64,72 @@ bool getModeAndExec(std::string &mode, R... rest) {
 }
 
 template <typename T_BlockCipher>
-jsi::Value encrypt(jsi::Runtime &rt, const jsi::Value &thisValue, const jsi::Value *args, size_t argCount){
-    std::string data, key, iv, mode, result;
-    auto dataInputType = binaryLikeValueToString(rt, args[0], &data);
-    if(dataInputType == INP_UNKNOWN)
-        throwJSError(rt,
-                     "RNCryptopp: aes & candidates encrypt data is not a string");
+void encrypt(jsi::Runtime &rt, CppArgs *args, std::string *target, QuickDataType *targetType, StringEncoding *targetEncoding){
+    if(args->size() < 5)
+        throwJSError(rt, "RNCryptopp: aes & candidates encrypt invalid number of arguments");
 
-    if (binaryLikeValueToString(rt, args[1], &key, ENCODING_HEX) == INP_UNKNOWN)
-        throwJSError(rt, "RNCryptopp: aes & candidates encrypt key is not a string "
-                         "or ArrayBuffer");
+    if(!isDataStringOrAB(args->at(1)))
+        throwJSError(rt, "RNCryptopp: aes & candidates encrypt data is not a string or ArrayBuffer");
+    
+    if(!isDataStringOrAB(args->at(2)))
+        throwJSError(rt, "RNCryptopp: aes & candidates encrypt key is not a string or ArrayBuffer");
 
-    if (binaryLikeValueToString(rt, args[2], &iv, ENCODING_HEX) == INP_UNKNOWN)
-        throwJSError(rt, "RNCryptopp: aes & candidates encrypt iv is not a string "
-                         "or ArrayBuffer");
+    if(!isDataStringOrAB(args->at(3)))
+        throwJSError(rt, "RNCryptopp: aes & candidates encrypt iv is not a string or ArrayBuffer");
 
-    if (stringValueToString(rt, args[3], &mode) == INP_UNKNOWN)
+    if(!isDataString(args->at(4)))
         throwJSError(rt,
                      "RNCryptopp: aes & candidates encrypt mode is not a string");
 
+    std::string data = args->at(1).stringValue;
+    std::string mode = args->at(4).stringValue;
+    std::string key, iv;
+    decodeJSIString(args->at(2), &key, ENCODING_HEX);
+    decodeJSIString(args->at(3), &iv, ENCODING_HEX);
+
     // Encrypt
-    if (!getModeAndExec<T_BlockCipher>(mode,&key, &iv, &data, &result, ENCRYPT))
+    if (!getModeAndExec<T_BlockCipher>(mode, &key, &iv, &data, target, ENCRYPT))
         throwJSError(
                 rt, "RNCryptopp: aes & candidates encrypt mode is not a valid mode");
 
-    // Return string
-    if(dataInputType == INP_STRING){
-        std::string encoded;
-        auto encodeTo =
-                rncryptopp::getEncodingFromArgs(rt, args, argCount, 4, ENCODING_BASE64, false);
-        encodeString(&result, &encoded, encodeTo);
-        return jsi::String::createFromUtf8(rt, encoded);
-    }
-   // Return ArrayBuffer
-    int size = (int)result.size();
-    jsi::Function array_buffer_ctor =
-            rt.global().getPropertyAsFunction(rt, "ArrayBuffer");
-    jsi::Object obj =
-            array_buffer_ctor.callAsConstructor(rt, size).getObject(rt);
-    jsi::ArrayBuffer buff = obj.getArrayBuffer(rt);
-    // FIXME: see https://github.com/facebook/hermes/issues/564.
-    memcpy(buff.data(rt), result.data(), size);
-
-    return obj;
-    }
+    *targetType = args->at(1).dataType;
+    *targetEncoding =
+            getEncodingFromArgs(rt, args, 5, ENCODING_BASE64, false);
+}
 
 template <typename T_BlockCipher>
-jsi::Value decrypt(jsi::Runtime &rt, const jsi::Value &thisValue, const jsi::Value *args, size_t argCount){
-    auto dataEncoding = rncryptopp::getEncodingFromArgs(rt, args, argCount, 4,ENCODING_BASE64, false);
+void decrypt(jsi::Runtime &rt, CppArgs *args, std::string *target, QuickDataType *targetType, StringEncoding *targetEncoding){
+    if(args->size() < 5)
+        throwJSError(rt, "RNCryptopp: aes & candidates decrypt invalid number of arguments");
 
-    std::string data, key, iv, mode, result;
-    auto dataInputType = binaryLikeValueToString(rt, args[0], &data, dataEncoding);
-    if(dataInputType == INP_UNKNOWN)
+    if(!isDataStringOrAB(args->at(1)))
         throwJSError(rt,
                      "RNCryptopp: aes & candidates decrypt data is not a string");
 
-    if (binaryLikeValueToString(rt, args[1], &key, ENCODING_HEX) == INP_UNKNOWN)
-        throwJSError(rt,
-                     "RNCryptopp: aes & candidates decrypt key is not a string");
+    if(!isDataStringOrAB(args->at(2)))
+        throwJSError(rt, "RNCryptopp: aes & candidates decrypt key is not a string or ArrayBuffer");
 
-    if (binaryLikeValueToString(rt, args[2], &iv, ENCODING_HEX) == INP_UNKNOWN)
-        throwJSError(rt, "RNCryptopp: aes & candidates decrypt iv is not a string");
+    if(!isDataStringOrAB(args->at(3)))
+        throwJSError(rt, "RNCryptopp: aes & candidates decrypt iv is not a string or ArrayBuffer");
 
-    if (stringValueToString(rt, args[3], &mode) == INP_UNKNOWN)
-        throwJSError(rt,
-                     "RNCryptopp: aes & candidates decrypt mode is not a string");
+    if(!isDataString(args->at(4)))
+        throwJSError(rt, "RNCryptopp: aes & candidates decrypt mode is not a string");
+
+    auto dataEncoding =
+            getEncodingFromArgs(rt, args, 5, ENCODING_BASE64, false);
+    std::string data, key, iv;
+    decodeJSIString(args->at(1), &data, dataEncoding);
+    decodeJSIString(args->at(2), &key, ENCODING_HEX);
+    decodeJSIString(args->at(3), &iv, ENCODING_HEX);
+    std::string mode = args->at(4).stringValue;
 
     // Decrypt
-    if (!getModeAndExec<T_BlockCipher>(mode, &key, &iv, &data, &result, DECRYPT))
+    if (!getModeAndExec<T_BlockCipher>(mode, &key, &iv, &data, target, DECRYPT))
         throwJSError(
                 rt, "RNCryptopp: aes & candidates decrypt mode is not a valid mode");
 
-    // Return string
-    if(dataInputType == INP_STRING){
-        return jsi::String::createFromUtf8(rt, result);
-    }
-    // Return ArrayBuffer
-    int size = (int)result.size();
-    jsi::Function array_buffer_ctor =
-            rt.global().getPropertyAsFunction(rt, "ArrayBuffer");
-    jsi::Object obj =
-            array_buffer_ctor.callAsConstructor(rt, size).getObject(rt);
-    jsi::ArrayBuffer buff = obj.getArrayBuffer(rt);
-    // FIXME: see https://github.com/facebook/hermes/issues/564.
-    memcpy(buff.data(rt), result.data(), size);
-
-    return obj;
-    }
-
-
+    *targetType = args->at(1).dataType;
+    *targetEncoding =
+                getEncodingFromArgs(rt, args, 5, ENCODING_UTF8, true);
+ }
 } // namespace rncryptopp::aescandidates

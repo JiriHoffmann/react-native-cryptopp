@@ -2,30 +2,6 @@
 
 namespace rncryptopp {
 
-InputType stringValueToString(jsi::Runtime &rt, const jsi::Value &value,
-                              std::string *out, StringEncoding stringEncoding) {
-  if (value.isString()) {
-    std::string utf8 = value.asString(rt).utf8(rt);
-    decodeString(&utf8, out, stringEncoding);
-    return INP_STRING;
-  }
-  return INP_UNKNOWN;
-}
-
-InputType binaryLikeValueToString(jsi::Runtime &rt, const jsi::Value &value,
-                                  std::string *out,
-                                  StringEncoding stringEncoding) {
-  if (value.isObject()) {
-    auto obj = value.asObject(rt);
-    if (obj.isArrayBuffer(rt)) {
-      auto buf = obj.getArrayBuffer(rt);
-      *out = std::string((char *)buf.data(rt), buf.size(rt));
-      return INP_ARRAYBUFFER;
-    }
-  }
-  return stringValueToString(rt, value, out, stringEncoding);
-}
-
 void encodeString(std::string *in, std::string *out, StringEncoding encoding) {
   switch (encoding) {
   case ENCODING_HEX:
@@ -42,55 +18,40 @@ void encodeString(std::string *in, std::string *out, StringEncoding encoding) {
   }
 }
 
-void decodeString(std::string *in, std::string *out, StringEncoding encoding) {
+void decodeJSIString(QuickValue &jsiValue, std::string *out,
+                     StringEncoding encoding) {
+  if (jsiValue.dataType == ARRAY_BUFFER) {
+    *out = jsiValue.stringValue;
+    return;
+  }
   switch (encoding) {
   case ENCODING_HEX:
-    StringSource(*in, true, new HexDecoder(new StringSink(*out)));
+    StringSource(jsiValue.stringValue, true,
+                 new HexDecoder(new StringSink(*out)));
     break;
   case ENCODING_BASE64:
-    StringSource(*in, true, new Base64Decoder(new StringSink(*out)));
+    StringSource(jsiValue.stringValue, true,
+                 new Base64Decoder(new StringSink(*out)));
     break;
   case ENCODING_BASE64URL:
-    StringSource(*in, true, new Base64URLDecoder(new StringSink(*out)));
+    StringSource(jsiValue.stringValue, true,
+                 new Base64URLDecoder(new StringSink(*out)));
     break;
   default:
-    *out = *in;
+    *out = jsiValue.stringValue;
   }
 }
 
-bool valueToInt(const jsi::Value &value, int *res) {
-  if (!value.isNumber())
-    return false;
-
-  *res = (int)value.asNumber();
-  return true;
-}
-
-bool valueToDouble(const jsi::Value &value, double *res) {
-  if (!value.isNumber())
-    return false;
-
-  *res = value.asNumber();
-  return true;
-}
-
 /*
- * Int encoding from a JS string. Uses argCount to check
- * if index is out of JS array bounds
- * Returns:
- * 0: No encoding (uft8), if not allowed returns default value
- * 1: Hex encoding
- * 2: Base64 encoding
- * 3: Base64Url encoding
+ * Encoding from a JS string.
  */
-StringEncoding getEncodingFromArgs(jsi::Runtime &rt, const jsi::Value *args,
-                                   size_t argCount, int argIndex,
-                                   StringEncoding defaultValue,
+StringEncoding getEncodingFromArgs(jsi::Runtime &rt, CppArgs *args,
+                                   int argIndex, StringEncoding defaultValue,
                                    bool allowUTF8) {
-  if (argIndex >= (int)argCount)
+  if (argIndex >= args->size())
     return defaultValue;
 
-  std::string encoding = args[argIndex].asString(rt).utf8(rt);
+  std::string encoding = args->at(argIndex).stringValue;
   if (encoding == "utf8" && allowUTF8)
     return ENCODING_UTF8;
   if (encoding == "hex")
@@ -100,5 +61,26 @@ StringEncoding getEncodingFromArgs(jsi::Runtime &rt, const jsi::Value *args,
   if (encoding == "base64url")
     return ENCODING_BASE64URL;
   return defaultValue;
+}
+
+jsi::Value returnStringOrArrayBuffer(jsi::Runtime &rt, std::string &input,
+                                     QuickDataType &ouputType,
+                                     StringEncoding &outputEncoding) {
+  if (ouputType == STRING) {
+    std::string encoded;
+    encodeString(&input, &encoded, outputEncoding);
+    return jsi::String::createFromUtf8(rt, encoded);
+  }
+
+  // Return ArrayBuffer
+  int size = (int)input.size();
+  jsi::Function array_buffer_ctor =
+      rt.global().getPropertyAsFunction(rt, "ArrayBuffer");
+  jsi::Object obj = array_buffer_ctor.callAsConstructor(rt, size).getObject(rt);
+  jsi::ArrayBuffer buff = obj.getArrayBuffer(rt);
+  // FIXME: see https://github.com/facebook/hermes/issues/564.
+  memcpy(buff.data(rt), input.data(), size);
+
+  return obj;
 }
 } // namespace rncryptopp

@@ -1,323 +1,318 @@
 #include "react-native-cryptopp.h"
 
-void rncryptopp_install(jsi::Runtime &jsiRuntime) {
+#include <utility>
+
+std::shared_ptr<react::CallInvoker> invoker;
+
+void execCppFunction(jsi::Runtime &rt, CppArgs *args, std::string &fnName,
+                     bool *boolTarget, std::string *stringTarget,
+                     QuickDataType *targetType,
+                     StringEncoding *targetEncoding) {
   /*
-  Hash functions
+  Hashes
   */
-  jsi::Object hashFunctions = jsi::Object(jsiRuntime);
-
-  // Host object
-  hashFunctions.setProperty(
-      jsiRuntime, "create",
-      jsi::Function::createFromHostFunction(
-          jsiRuntime, jsi::PropNameID::forAscii(jsiRuntime, "create"), 1,
-          rncryptopp::HostObjects::createHashHostObject));
-
-  // Individual hashes
-  hashFunctions.setProperty(
-      jsiRuntime, "BLAKE2b",
-      jsi::Function::createFromHostFunction(
-          jsiRuntime, jsi::PropNameID::forAscii(jsiRuntime, "BLAKE2b"), 1,
-          rncryptopp::hash::blake2b));
-  hashFunctions.setProperty(
-      jsiRuntime, "BLAKE2s",
-      jsi::Function::createFromHostFunction(
-          jsiRuntime, jsi::PropNameID::forAscii(jsiRuntime, "BLAKE2s"), 1,
-          rncryptopp::hash::blake2s));
-  hashFunctions.setProperty(jsiRuntime, "Keccak",
-                            jsi::Function::createFromHostFunction(
-                                jsiRuntime,
-                                jsi::PropNameID::forAscii(jsiRuntime, "Keccak"),
-                                2, rncryptopp::hash::keccak));
-  hashFunctions.setProperty(jsiRuntime, "LSH",
-                            jsi::Function::createFromHostFunction(
-                                jsiRuntime,
-                                jsi::PropNameID::forAscii(jsiRuntime, "LSH"), 2,
-                                rncryptopp::hash::lsh));
-  hashFunctions.setProperty(jsiRuntime, "SHA1",
-                            jsi::Function::createFromHostFunction(
-                                jsiRuntime,
-                                jsi::PropNameID::forAscii(jsiRuntime, "SHA1"),
-                                1, rncryptopp::hash::sha1));
-  hashFunctions.setProperty(jsiRuntime, "SHA2",
-                            jsi::Function::createFromHostFunction(
-                                jsiRuntime,
-                                jsi::PropNameID::forAscii(jsiRuntime, "SHA2"),
-                                2, rncryptopp::hash::sha2));
-  hashFunctions.setProperty(jsiRuntime, "SHA3",
-                            jsi::Function::createFromHostFunction(
-                                jsiRuntime,
-                                jsi::PropNameID::forAscii(jsiRuntime, "SHA3"),
-                                2, rncryptopp::hash::sha3));
-  hashFunctions.setProperty(jsiRuntime, "SHAKE",
-                            jsi::Function::createFromHostFunction(
-                                jsiRuntime,
-                                jsi::PropNameID::forAscii(jsiRuntime, "SHAKE"),
-                                2, rncryptopp::hash::shake));
-  hashFunctions.setProperty(
-      jsiRuntime, "SipHash",
-      jsi::Function::createFromHostFunction(
-          jsiRuntime, jsi::PropNameID::forAscii(jsiRuntime, "SipHash"), 2,
-          rncryptopp::hash::sipHash));
-  hashFunctions.setProperty(jsiRuntime, "SM3",
-                            jsi::Function::createFromHostFunction(
-                                jsiRuntime,
-                                jsi::PropNameID::forAscii(jsiRuntime, "SM3"), 1,
-                                rncryptopp::hash::sm3));
-  hashFunctions.setProperty(jsiRuntime, "Tiger",
-                            jsi::Function::createFromHostFunction(
-                                jsiRuntime,
-                                jsi::PropNameID::forAscii(jsiRuntime, "Tiger"),
-                                1, rncryptopp::hash::tiger));
-  hashFunctions.setProperty(jsiRuntime, "RIPEMD",
-                            jsi::Function::createFromHostFunction(
-                                jsiRuntime,
-                                jsi::PropNameID::forAscii(jsiRuntime, "RIPEMD"),
-                                2, rncryptopp::hash::ripemd));
-  hashFunctions.setProperty(
-      jsiRuntime, "WHIRLPOOL",
-      jsi::Function::createFromHostFunction(
-          jsiRuntime, jsi::PropNameID::forAscii(jsiRuntime, "WHIRLPOOL"), 1,
-          rncryptopp::hash::whirlpool));
-
-  hashFunctions.setProperty(jsiRuntime, "CRC32",
-                            jsi::Function::createFromHostFunction(
-                                jsiRuntime,
-                                jsi::PropNameID::forAscii(jsiRuntime, "CRC32"),
-                                1, rncryptopp::hash::crc32));
+  if (fnName == "hash")
+    rncryptopp::hash::hash(rt, args, stringTarget);
   /*
   AES and AES candidates
   */
-  jsi::Object AES = jsi::Object(jsiRuntime);
-  AES.setProperty(jsiRuntime, "encrypt",
-                  jsi::Function::createFromHostFunction(
-                      jsiRuntime,
-                      jsi::PropNameID::forAscii(jsiRuntime, "encrypt"), 5,
-                      rncryptopp::aescandidates::encrypt<CryptoPP::AES>));
-  AES.setProperty(jsiRuntime, "decrypt",
-                  jsi::Function::createFromHostFunction(
-                      jsiRuntime,
-                      jsi::PropNameID::forAscii(jsiRuntime, "decrypt"), 5,
-                      rncryptopp::aescandidates::decrypt<CryptoPP::AES>));
-
-  jsi::Object RC6 = jsi::Object(jsiRuntime);
-  RC6.setProperty(jsiRuntime, "encrypt",
-                  jsi::Function::createFromHostFunction(
-                      jsiRuntime,
-                      jsi::PropNameID::forAscii(jsiRuntime, "encrypt"), 5,
-                      rncryptopp::aescandidates::encrypt<CryptoPP::RC6>));
-  RC6.setProperty(jsiRuntime, "decrypt",
-                  jsi::Function::createFromHostFunction(
-                      jsiRuntime,
-                      jsi::PropNameID::forAscii(jsiRuntime, "decrypt"), 5,
-                      rncryptopp::aescandidates::decrypt<CryptoPP::RC6>));
-
-  jsi::Object MARS = jsi::Object(jsiRuntime);
-  MARS.setProperty(jsiRuntime, "encrypt",
-                   jsi::Function::createFromHostFunction(
-                       jsiRuntime,
-                       jsi::PropNameID::forAscii(jsiRuntime, "encrypt"), 5,
-                       rncryptopp::aescandidates::encrypt<CryptoPP::MARS>));
-  MARS.setProperty(jsiRuntime, "decrypt",
-                   jsi::Function::createFromHostFunction(
-                       jsiRuntime,
-                       jsi::PropNameID::forAscii(jsiRuntime, "decrypt"), 5,
-                       rncryptopp::aescandidates::decrypt<CryptoPP::MARS>));
-
-  jsi::Object Twofish = jsi::Object(jsiRuntime);
-  Twofish.setProperty(
-      jsiRuntime, "encrypt",
-      jsi::Function::createFromHostFunction(
-          jsiRuntime, jsi::PropNameID::forAscii(jsiRuntime, "encrypt"), 5,
-          rncryptopp::aescandidates::encrypt<CryptoPP::Twofish>));
-  Twofish.setProperty(
-      jsiRuntime, "decrypt",
-      jsi::Function::createFromHostFunction(
-          jsiRuntime, jsi::PropNameID::forAscii(jsiRuntime, "decrypt"), 5,
-          rncryptopp::aescandidates::decrypt<CryptoPP::Twofish>));
-
-  jsi::Object Serpent = jsi::Object(jsiRuntime);
-  Serpent.setProperty(
-      jsiRuntime, "encrypt",
-      jsi::Function::createFromHostFunction(
-          jsiRuntime, jsi::PropNameID::forAscii(jsiRuntime, "encrypt"), 5,
-          rncryptopp::aescandidates::encrypt<CryptoPP::Serpent>));
-  Serpent.setProperty(
-      jsiRuntime, "decrypt",
-      jsi::Function::createFromHostFunction(
-          jsiRuntime, jsi::PropNameID::forAscii(jsiRuntime, "decrypt"), 5,
-          rncryptopp::aescandidates::decrypt<CryptoPP::Serpent>));
-
-  jsi::Object CAST256 = jsi::Object(jsiRuntime);
-  CAST256.setProperty(
-      jsiRuntime, "encrypt",
-      jsi::Function::createFromHostFunction(
-          jsiRuntime, jsi::PropNameID::forAscii(jsiRuntime, "encrypt"), 5,
-          rncryptopp::aescandidates::encrypt<CryptoPP::CAST256>));
-  CAST256.setProperty(
-      jsiRuntime, "decrypt",
-      jsi::Function::createFromHostFunction(
-          jsiRuntime, jsi::PropNameID::forAscii(jsiRuntime, "decrypt"), 5,
-          rncryptopp::aescandidates::decrypt<CryptoPP::CAST256>));
-
+  else if (fnName == "AES_encrypt")
+    rncryptopp::aescandidates::encrypt<CryptoPP::AES>(
+        rt, args, stringTarget, targetType, targetEncoding);
+  else if (fnName == "AES_decrypt")
+    rncryptopp::aescandidates::decrypt<CryptoPP::AES>(
+        rt, args, stringTarget, targetType, targetEncoding);
+  else if (fnName == "RC6_encrypt")
+    rncryptopp::aescandidates::encrypt<CryptoPP::RC6>(
+        rt, args, stringTarget, targetType, targetEncoding);
+  else if (fnName == "RC6_decrypt")
+    rncryptopp::aescandidates::decrypt<CryptoPP::RC6>(
+        rt, args, stringTarget, targetType, targetEncoding);
+  else if (fnName == "MARS_encrypt")
+    rncryptopp::aescandidates::encrypt<CryptoPP::MARS>(
+        rt, args, stringTarget, targetType, targetEncoding);
+  else if (fnName == "MARS_decrypt")
+    rncryptopp::aescandidates::decrypt<CryptoPP::MARS>(
+        rt, args, stringTarget, targetType, targetEncoding);
+  else if (fnName == "Twofish_encrypt")
+    rncryptopp::aescandidates::encrypt<CryptoPP::Twofish>(
+        rt, args, stringTarget, targetType, targetEncoding);
+  else if (fnName == "Twofish_decrypt")
+    rncryptopp::aescandidates::decrypt<CryptoPP::Twofish>(
+        rt, args, stringTarget, targetType, targetEncoding);
+  else if (fnName == "Serpent_encrypt")
+    rncryptopp::aescandidates::encrypt<CryptoPP::Serpent>(
+        rt, args, stringTarget, targetType, targetEncoding);
+  else if (fnName == "Serpent_decrypt")
+    rncryptopp::aescandidates::decrypt<CryptoPP::Serpent>(
+        rt, args, stringTarget, targetType, targetEncoding);
+  else if (fnName == "CAST256_encrypt")
+    rncryptopp::aescandidates::encrypt<CryptoPP::CAST256>(
+        rt, args, stringTarget, targetType, targetEncoding);
+  else if (fnName == "CAST256_decrypt")
+    rncryptopp::aescandidates::decrypt<CryptoPP::CAST256>(
+        rt, args, stringTarget, targetType, targetEncoding);
   /*
   Insecure
   */
-  jsi::Object insecure = jsi::Object(jsiRuntime);
-  insecure.setProperty(jsiRuntime, "md2",
-                       jsi::Function::createFromHostFunction(
-                           jsiRuntime,
-                           jsi::PropNameID::forAscii(jsiRuntime, "md2"), 1,
-                           rncryptopp::insecure::md2));
-  insecure.setProperty(jsiRuntime, "md4",
-                       jsi::Function::createFromHostFunction(
-                           jsiRuntime,
-                           jsi::PropNameID::forAscii(jsiRuntime, "md4"), 1,
-                           rncryptopp::insecure::md4));
-  insecure.setProperty(jsiRuntime, "md5",
-                       jsi::Function::createFromHostFunction(
-                           jsiRuntime,
-                           jsi::PropNameID::forAscii(jsiRuntime, "md5"), 1,
-                           rncryptopp::insecure::md5));
+  else if (fnName == "insecure_md2")
+    rncryptopp::insecure::md2(rt, args, *stringTarget);
+  else if (fnName == "insecure_md4")
+    rncryptopp::insecure::md4(rt, args, *stringTarget);
+  else if (fnName == "insecure_md5")
+    rncryptopp::insecure::md5(rt, args, *stringTarget);
 
   /*
    * Message authentication codes
    */
-  jsi::Object HMAC = jsi::Object(jsiRuntime);
-  HMAC.setProperty(jsiRuntime, "generate",
-                   jsi::Function::createFromHostFunction(
-                       jsiRuntime,
-                       jsi::PropNameID::forAscii(jsiRuntime, "generate"), 4,
-                       rncryptopp::hmac::generate));
-  HMAC.setProperty(jsiRuntime, "verify",
-                   jsi::Function::createFromHostFunction(
-                       jsiRuntime,
-                       jsi::PropNameID::forAscii(jsiRuntime, "verify"), 5,
-                       rncryptopp::hmac::verify));
+  else if (fnName == "HMAC_generate")
+    rncryptopp::hmac::generate(rt, args, stringTarget, targetType,
+                               targetEncoding);
+  else if (fnName == "HMAC_verify")
+    rncryptopp::hmac::verify(rt, args, boolTarget, targetType);
+  else if (fnName == "CMAC_generate")
+    rncryptopp::cmac::generate(rt, args, stringTarget, targetType,
+                               targetEncoding);
+  else if (fnName == "CMAC_verify")
+    rncryptopp::cmac::verify(rt, args, boolTarget, targetType);
 
-  jsi::Object CMAC = jsi::Object(jsiRuntime);
-  CMAC.setProperty(jsiRuntime, "generate",
-                   jsi::Function::createFromHostFunction(
-                       jsiRuntime,
-                       jsi::PropNameID::forAscii(jsiRuntime, "generate"), 4,
-                       rncryptopp::cmac::generate));
-  CMAC.setProperty(jsiRuntime, "verify",
-                   jsi::Function::createFromHostFunction(
-                       jsiRuntime,
-                       jsi::PropNameID::forAscii(jsiRuntime, "verify"), 5,
-                       rncryptopp::cmac::verify));
+  /*
+  Utils
+  */
+  else if (fnName == "utils_toBase64")
+    rncryptopp::utils::toBase64(rt, args, stringTarget, targetEncoding);
+  else if (fnName == "utils_toBase64Url")
+    rncryptopp::utils::toBase64Url(rt, args, stringTarget, targetEncoding);
+  else if (fnName == "utils_toHex")
+    rncryptopp::utils::toHex(rt, args, stringTarget, targetEncoding);
+  else if (fnName == "utils_toUtf8")
+    rncryptopp::utils::toUtf8(rt, args, stringTarget, targetEncoding);
+  else if (fnName == "utils_randomBytes")
+    rncryptopp::utils::randomBytes(rt, args, stringTarget, targetType);
+  else if (fnName == "utils_stringToBytes")
+    rncryptopp::utils::stringToBytes(rt, args, stringTarget, targetType);
 
   /*
    * Public Key Derivation Functions
    */
-  jsi::Object keyDerivation = jsi::Object(jsiRuntime);
-  keyDerivation.setProperty(jsiRuntime, "hkdf",
-                            jsi::Function::createFromHostFunction(
-                                jsiRuntime,
-                                jsi::PropNameID::forAscii(jsiRuntime, "hkdf"),
-                                4, rncryptopp::keyderivation::hkdf));
-  keyDerivation.setProperty(
-      jsiRuntime, "pbkdf12",
-      jsi::Function::createFromHostFunction(
-          jsiRuntime, jsi::PropNameID::forAscii(jsiRuntime, "pbkdf12"), 4,
-          rncryptopp::keyderivation::pbkdf12));
-  keyDerivation.setProperty(
-      jsiRuntime, "pkcs5_pbkdf1",
-      jsi::Function::createFromHostFunction(
-          jsiRuntime, jsi::PropNameID::forAscii(jsiRuntime, "pkcs5_pbkdf1"), 4,
-          rncryptopp::keyderivation::pkcs5_pbkdf1));
-  keyDerivation.setProperty(
-      jsiRuntime, "pkcs5_pbkdf2",
-      jsi::Function::createFromHostFunction(
-          jsiRuntime, jsi::PropNameID::forAscii(jsiRuntime, "pkcs5_pbkdf2"), 4,
-          rncryptopp::keyderivation::pkcs5_pbkdf2));
+  else if (fnName == "key_derivation_hkdf")
+    rncryptopp::keyderivation::hkdf(rt, args, stringTarget, targetType,
+                                    targetEncoding);
+  else if (fnName == "key_derivation_pbkdf12")
+    rncryptopp::keyderivation::pbkdf12(rt, args, stringTarget, targetType,
+                                       targetEncoding);
+  else if (fnName == "key_derivation_pkcs5_pbkdf1")
+    rncryptopp::keyderivation::pkcs5_pbkdf1(rt, args, stringTarget, targetType,
+                                            targetEncoding);
+  else if (fnName == "key_derivation_pkcs5_pbkdf2")
+    rncryptopp::keyderivation::pkcs5_pbkdf2(rt, args, stringTarget, targetType,
+                                            targetEncoding);
+  else if (fnName == "key_derivation_scrypt")
+    rncryptopp::keyderivation::scrypt(rt, args, stringTarget, targetType,
+                                      targetEncoding);
 
   /*
   Public-key cryptography
   */
+  else if (fnName == "rsa_encrypt")
+    rncryptopp::rsa::encrypt(rt, args, stringTarget, targetType,
+                             targetEncoding);
+  else if (fnName == "rsa_decrypt")
+    rncryptopp::rsa::decrypt(rt, args, stringTarget, targetType);
+  else if (fnName == "rsa_sign")
+    rncryptopp::rsa::sign(rt, args, stringTarget, targetType, targetEncoding);
+  else if (fnName == "rsa_verify")
+    rncryptopp::rsa::verify(rt, args, boolTarget, targetType);
+  else if (fnName == "rsa_recover")
+    rncryptopp::rsa::recover(rt, args, stringTarget, targetType,
+                             targetEncoding);
+}
 
-  jsi::Object RSA = jsi::Object(jsiRuntime);
-  RSA.setProperty(jsiRuntime, "generateKeyPair",
-                  jsi::Function::createFromHostFunction(
-                      jsiRuntime,
-                      jsi::PropNameID::forAscii(jsiRuntime, "generateKeyPair"),
-                      1, rncryptopp::rsa::generateKeyPair));
-  RSA.setProperty(jsiRuntime, "encrypt",
-                  jsi::Function::createFromHostFunction(
-                      jsiRuntime,
-                      jsi::PropNameID::forAscii(jsiRuntime, "encrypt"), 2,
-                      rncryptopp::rsa::encrypt));
-  RSA.setProperty(jsiRuntime, "decrypt",
-                  jsi::Function::createFromHostFunction(
-                      jsiRuntime,
-                      jsi::PropNameID::forAscii(jsiRuntime, "decrypt"), 2,
-                      rncryptopp::rsa::decrypt));
-  RSA.setProperty(jsiRuntime, "sign",
-                  jsi::Function::createFromHostFunction(
-                      jsiRuntime, jsi::PropNameID::forAscii(jsiRuntime, "sign"),
-                      3, rncryptopp::rsa::sign));
-  RSA.setProperty(jsiRuntime, "verify",
-                  jsi::Function::createFromHostFunction(
-                      jsiRuntime,
-                      jsi::PropNameID::forAscii(jsiRuntime, "verify"), 4,
-                      rncryptopp::rsa::verify));
-  RSA.setProperty(jsiRuntime, "recover",
-                  jsi::Function::createFromHostFunction(
-                      jsiRuntime,
-                      jsi::PropNameID::forAscii(jsiRuntime, "recover"), 3,
-                      rncryptopp::rsa::recover));
-  /*
-  Utils
-  */
-  jsi::Object utils = jsi::Object(jsiRuntime);
-  utils.setProperty(jsiRuntime, "toBase64",
-                    jsi::Function::createFromHostFunction(
-                        jsiRuntime,
-                        jsi::PropNameID::forAscii(jsiRuntime, "toBase64"), 2,
-                        rncryptopp::utils::toBase64));
-  utils.setProperty(jsiRuntime, "toBase64Url",
-                    jsi::Function::createFromHostFunction(
-                        jsiRuntime,
-                        jsi::PropNameID::forAscii(jsiRuntime, "toBase64Url"), 2,
-                        rncryptopp::utils::toBase64Url));
-  utils.setProperty(jsiRuntime, "toHex",
-                    jsi::Function::createFromHostFunction(
-                        jsiRuntime,
-                        jsi::PropNameID::forAscii(jsiRuntime, "toHex"), 2,
-                        rncryptopp::utils::toHex));
-  utils.setProperty(jsiRuntime, "toUtf8",
-                    jsi::Function::createFromHostFunction(
-                        jsiRuntime,
-                        jsi::PropNameID::forAscii(jsiRuntime, "toUtf8"), 2,
-                        rncryptopp::utils::toUtf8));
-  utils.setProperty(jsiRuntime, "randomBytes",
-                    jsi::Function::createFromHostFunction(
-                        jsiRuntime,
-                        jsi::PropNameID::forAscii(jsiRuntime, "randomBytes"), 1,
-                        rncryptopp::utils::randomBytes));
-  utils.setProperty(jsiRuntime, "stringToBytes",
-                    jsi::Function::createFromHostFunction(
-                        jsiRuntime,
-                        jsi::PropNameID::forAscii(jsiRuntime, "stringToBytes"),
-                        2, rncryptopp::utils::stringToBytes));
+void rncryptopp_install(jsi::Runtime &jsiRuntime,
+                        std::shared_ptr<react::CallInvoker> jsCallInvoker) {
+  auto pool = std::make_shared<ThreadPool>();
+  invoker = std::move(jsCallInvoker);
 
-  /*
-  Cryptopp module
-  */
+  // Module containing all functionality added to global namespace
   jsi::Object module = jsi::Object(jsiRuntime);
-  module.setProperty(jsiRuntime, "AES", std::move(AES));
-  module.setProperty(jsiRuntime, "RC6", std::move(RC6));
-  module.setProperty(jsiRuntime, "MARS", std::move(MARS));
-  module.setProperty(jsiRuntime, "Twofish", std::move(Twofish));
-  module.setProperty(jsiRuntime, "Serpent", std::move(Serpent));
-  module.setProperty(jsiRuntime, "CAST256", std::move(CAST256));
-  module.setProperty(jsiRuntime, "HMAC", std::move(HMAC));
-  module.setProperty(jsiRuntime, "CMAC", std::move(CMAC));
-  module.setProperty(jsiRuntime, "RSA", std::move(RSA));
-  module.setProperty(jsiRuntime, "hash", std::move(hashFunctions));
-  module.setProperty(jsiRuntime, "insecure", std::move(insecure));
-  module.setProperty(jsiRuntime, "keyDerivation", std::move(keyDerivation));
-  module.setProperty(jsiRuntime, "utils", std::move(utils));
+
+  // Host objects
+  module.setProperty(jsiRuntime, "createHash",
+                     jsi::Function::createFromHostFunction(
+                         jsiRuntime,
+                         jsi::PropNameID::forAscii(jsiRuntime, "createHash"), 1,
+                         rncryptopp::HostObjects::createHashHostObject));
+
+  // Individual hashes
+  module.setProperty(
+      jsiRuntime, "exec",
+      jsi::Function::createFromHostFunction(
+          jsiRuntime, jsi::PropNameID::forAscii(jsiRuntime, "exec_sync"), 5,
+          [](jsi::Runtime &rt, const jsi::Value &thisValue,
+             const jsi::Value *functionArgs, size_t count) -> jsi::Value {
+            // Parse arguments from JS function call
+            CppArgs args;
+            parseJSIArgs(rt, functionArgs, count, &args);
+            if (args[0].dataType != STRING)
+              throwJSError(rt, "RNCryptopp: invalid function name");
+            std::string fnName = args[0].stringValue;
+
+            // Create result values returned to JS
+            StringEncoding resultEncoding = ENCODING_UTF8;
+            QuickDataType resultType = STRING;
+            std::string stringResult;
+            bool booleanResult;
+
+            // RSA key pair generation is the only function returning an Object
+            if (fnName == "rsa_generateKeyPair") {
+              auto keyPair = rncryptopp::rsa::generateKeyPair(rt, &args);
+              jsi::Object params = jsi::Object(rt);
+              params.setProperty(rt, "n", keyPair.n);
+              params.setProperty(rt, "p", keyPair.p);
+              params.setProperty(rt, "q", keyPair.q);
+              params.setProperty(rt, "d", keyPair.d);
+              params.setProperty(rt, "e", keyPair.e);
+
+              jsi::Object result = jsi::Object(rt);
+              result.setProperty(rt, "public", keyPair.public_key);
+              result.setProperty(rt, "private", keyPair.private_key);
+              result.setProperty(rt, "params", params);
+              return result;
+            }
+
+            // All other functionality executed here:
+            execCppFunction(rt, &args, fnName, &booleanResult, &stringResult,
+                            &resultType, &resultEncoding);
+
+            if (resultType == jsiHelper::BOOLEAN)
+              return jsi::Value(booleanResult);
+
+            return returnStringOrArrayBuffer(rt, stringResult, resultType,
+                                             resultEncoding);
+          }));
+
+  /*************************************************************************************************
+  Async
+  *************************************************************************************************/
+
+  module.setProperty(
+      jsiRuntime, "exec_async",
+      jsi::Function::createFromHostFunction(
+          jsiRuntime, jsi::PropNameID::forAscii(jsiRuntime, "exec_async"), 1,
+          [pool](jsi::Runtime &rt, const jsi::Value &thisValue,
+                 const jsi::Value *functionArgs, size_t count) -> jsi::Value {
+            CppArgs args;
+            parseJSIArgs(rt, functionArgs, count, &args);
+            auto sharedArgs = std::make_shared<CppArgs>(args);
+            auto argCount = std::make_shared<size_t>(count);
+            auto promiseContructor =
+                rt.global().getPropertyAsFunction(rt, "Promise");
+            auto promise = promiseContructor.callAsConstructor(
+                rt,
+                jsi::Function::createFromHostFunction(
+                    rt, jsi::PropNameID::forAscii(rt, "Promise"), 2,
+                    [pool, sharedArgs,
+                     argCount](jsi::Runtime &rt, const jsi::Value &thisValue,
+                               const jsi::Value *promiseArgs,
+                               size_t promiseCount) -> jsi::Value {
+                      auto resolve =
+                          std::make_shared<jsi::Value>(rt, promiseArgs[0]);
+                      auto reject =
+                          std::make_shared<jsi::Value>(rt, promiseArgs[1]);
+
+                      auto task = [&rt, resolve, reject, sharedArgs,
+                                   argCount]() {
+                        try {
+                          auto args = *sharedArgs.get();
+                          if (args[0].dataType != STRING)
+                            throwJSError(rt,
+                                         "RNCryptopp: invalid function name");
+                          std::string fnName = args[0].stringValue;
+
+                          // Create result values returned to JS
+                          StringEncoding resultEncoding = ENCODING_UTF8;
+                          QuickDataType resultType = STRING;
+                          std::string stringResult;
+                          bool booleanResult;
+
+                          // RSA key pair generation is the only function
+                          // returning an Object
+                          if (fnName == "rsa_generateKeyPair") {
+                            auto keyPair =
+                                rncryptopp::rsa::generateKeyPair(rt, &args);
+                            auto sharedKeyPair =
+                                std::make_shared<RSAKeyPair>(keyPair);
+
+                            invoker->invokeAsync([&rt, resolve, sharedKeyPair] {
+                              jsi::Object params = jsi::Object(rt);
+                              params.setProperty(rt, "n",
+                                                 (*sharedKeyPair.get()).n);
+                              params.setProperty(rt, "p",
+                                                 (*sharedKeyPair.get()).p);
+                              params.setProperty(rt, "q",
+                                                 (*sharedKeyPair.get()).q);
+                              params.setProperty(rt, "d",
+                                                 (*sharedKeyPair.get()).d);
+                              params.setProperty(rt, "e",
+                                                 (*sharedKeyPair.get()).e);
+
+                              jsi::Object result = jsi::Object(rt);
+                              result.setProperty(
+                                  rt, "public",
+                                  (*sharedKeyPair.get()).public_key);
+                              result.setProperty(
+                                  rt, "private",
+                                  (*sharedKeyPair.get()).private_key);
+                              result.setProperty(rt, "params", params);
+
+                              resolve->asObject(rt).asFunction(rt).call(rt,
+                                                                        result);
+                            });
+                          }
+
+                          // All other functionality executed here:
+                          execCppFunction(rt, &args, fnName, &booleanResult,
+                                          &stringResult, &resultType,
+                                          &resultEncoding);
+
+                          auto sharedResultEncoding =
+                              std::make_shared<StringEncoding>(resultEncoding);
+                          auto sharedResultType =
+                              std::make_shared<QuickDataType>(resultType);
+                          auto sharedStringResult =
+                              std::make_shared<std::string>(stringResult);
+                          auto sharedBooleanResult =
+                              std::make_shared<bool>(booleanResult);
+
+                          invoker->invokeAsync([&rt, resolve,
+                                                sharedResultEncoding,
+                                                sharedResultType,
+                                                sharedStringResult,
+                                                sharedBooleanResult] {
+                            if (*sharedResultType.get() == jsiHelper::BOOLEAN) {
+                              resolve->asObject(rt).asFunction(rt).call(
+                                  rt, jsi::Value(*sharedBooleanResult.get()));
+                            }
+
+                            resolve->asObject(rt).asFunction(rt).call(
+                                rt, returnStringOrArrayBuffer(
+                                        rt, *sharedStringResult.get(),
+                                        *sharedResultType.get(),
+                                        *sharedResultEncoding.get()));
+                          });
+                        } catch (std::exception &exc) {
+                          invoker->invokeAsync([&rt, reject, &exc] {
+                            reject->asObject(rt).asFunction(rt).call(
+                                rt,
+                                jsi::String::createFromUtf8(rt, exc.what()));
+                          });
+                        }
+                      };
+                      pool->queueWork(task);
+                      return {};
+                    }));
+            return promise;
+          }));
 
   jsiRuntime.global().setProperty(jsiRuntime, "cryptoppModule",
                                   std::move(module));

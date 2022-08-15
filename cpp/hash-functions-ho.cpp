@@ -1,8 +1,5 @@
 #include "hash-functions-ho.h"
 
-using namespace std;
-using namespace facebook;
-
 namespace rncryptopp::HostObjects {
 template <class T_hash> HashHostObject<T_hash>::HashHostObject() {
   T_hash hash;
@@ -28,14 +25,15 @@ jsi::Value HashHostObject<T_hash>::get(jsi::Runtime &runtime,
     return jsi::Function::createFromHostFunction(
         runtime, jsi::PropNameID::forAscii(runtime, funcName), 1,
         [this](jsi::Runtime &rt, const jsi::Value &thisVal,
-               const jsi::Value *args, size_t count) -> jsi::Value {
-          if (count != 1)
-            throw jsi::JSError(rt, "RNCryptopp: update() expects 1 argument");
+               const jsi::Value *functionArgs, size_t count) -> jsi::Value {
+          CppArgs args;
+          parseJSIArgs(rt, functionArgs, count, &args);
 
-          std::string data;
-          if (!binaryLikeValueToString(rt, args[0], &data))
-            throwJSError(
-                rt, "RNCryptopp: update() data is not a string or ArrayBuffer");
+          if (args.size() < 1 || args.at(0).dataType != STRING)
+            throw jsi::JSError(rt,
+                               "RNCryptopp: update() expects 1 argument: data");
+
+          std::string data = args.at(0).stringValue;
 
           hashInstance.Update((const CryptoPP::byte *)data.data(), data.size());
           return jsi::Value(0);
@@ -67,35 +65,32 @@ jsi::Value HashHostObject<T_hash>::get(jsi::Runtime &runtime,
 
 // TODO: clean-up
 jsi::Value createHashHostObject(jsi::Runtime &rt, const jsi::Value &thisValue,
-                                const jsi::Value *args, size_t count) {
-  if (count != 1)
-    throw jsi::JSError(rt, "RNCryptopp: create() expects 1 argument");
+                                const jsi::Value *functionArgs, size_t count) {
+  CppArgs args;
+  parseJSIArgs(rt, functionArgs, count, &args);
 
-  std::string hash;
-  if (!stringValueToString(rt, args[0], &hash))
-    throwJSError(rt, "RNCryptopp: Hash type is not a string");
+  if (args.size() < 1 || args.at(0).dataType != STRING)
+    throw jsi::JSError(rt, "RNCryptopp: create() expects 1 argument: name");
+
+  std::string hash = args.at(0).stringValue;
 
   if (hash == "BLAKE2b") {
     auto instance =
         std::make_shared<rncryptopp::HostObjects::HashHostObject<BLAKE2b>>();
     return jsi::Object::createFromHostObject(rt, instance);
-  } else if (hash == "BLAKE2b") {
+  } else if (hash == "BLAKE2s") {
     auto instance =
-        std::make_shared<rncryptopp::HostObjects::HashHostObject<BLAKE2b>>();
+        std::make_shared<rncryptopp::HostObjects::HashHostObject<BLAKE2s>>();
     return jsi::Object::createFromHostObject(rt, instance);
-  } else if (hash == "BLAKE2b") {
-    auto instance =
-        std::make_shared<rncryptopp::HostObjects::HashHostObject<BLAKE2b>>();
-    return jsi::Object::createFromHostObject(rt, instance);
-  } else if (hash == "Keccak_256") {
+  } else if (hash == "Keccak256") {
     auto instance =
         std::make_shared<rncryptopp::HostObjects::HashHostObject<Keccak_256>>();
     return jsi::Object::createFromHostObject(rt, instance);
-  } else if (hash == "Keccak_384") {
+  } else if (hash == "Keccak384") {
     auto instance =
         std::make_shared<rncryptopp::HostObjects::HashHostObject<Keccak_384>>();
     return jsi::Object::createFromHostObject(rt, instance);
-  } else if (hash == "Keccak_512") {
+  } else if (hash == "Keccak512") {
     auto instance =
         std::make_shared<rncryptopp::HostObjects::HashHostObject<Keccak_512>>();
     return jsi::Object::createFromHostObject(rt, instance);
@@ -188,7 +183,7 @@ jsi::Value createHashHostObject(jsi::Runtime &rt, const jsi::Value &thisValue,
         std::make_shared<rncryptopp::HostObjects::HashHostObject<CRC32>>();
     return jsi::Object::createFromHostObject(rt, instance);
   }
-  throwJSError(rt, "RNCryptopp: Hash type is not valid");
+  throwJSError(rt, "RNCryptopp: Hash name is not valid");
   return jsi::Value::undefined();
 }
 } // namespace rncryptopp::HostObjects

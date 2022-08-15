@@ -45,25 +45,26 @@
 using namespace facebook;
 using namespace facebook::jsi::detail;
 using namespace CryptoPP;
+using namespace rncryptopp::jsiHelper;
 
 namespace rncryptopp {
 namespace hmac {
 
-jsi::Value generate(jsi::Runtime &rt, const jsi::Value &thisValue,
-                    const jsi::Value *args, size_t argCount);
+void generate(jsi::Runtime &rt, CppArgs *args, std::string *target,
+              QuickDataType *targetType, StringEncoding *targetEncoding);
 
-jsi::Value verify(jsi::Runtime &rt, const jsi::Value &thisValue,
-                  const jsi::Value *args, size_t argCount);
+void verify(jsi::Runtime &rt, CppArgs *args, bool *target,
+            QuickDataType *targetType);
 
 } // namespace hmac
 
 namespace cmac {
 
-jsi::Value generate(jsi::Runtime &rt, const jsi::Value &thisValue,
-                    const jsi::Value *args, size_t argCount);
+void generate(jsi::Runtime &rt, CppArgs *args, std::string *target,
+              QuickDataType *targetType, StringEncoding *targetEncoding);
 
-jsi::Value verify(jsi::Runtime &rt, const jsi::Value &thisValue,
-                  const jsi::Value *args, size_t argCount);
+void verify(jsi::Runtime &rt, CppArgs *args, bool *target,
+            QuickDataType *targetType);
 
 } // namespace cmac
 } // namespace rncryptopp

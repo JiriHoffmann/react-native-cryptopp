@@ -1,86 +1,86 @@
 #include "utils.h"
 
 namespace rncryptopp::utils {
-jsi::Value toBase64(jsi::Runtime &rt, const jsi::Value &thisValue,
-                    const jsi::Value *args, size_t argCount) {
-  std::string in, out;
-  auto encoding = getEncodingFromArgs(rt, args, argCount, 1);
-  if (binaryLikeValueToString(rt, args[0], &in, encoding) == INP_UNKNOWN)
+void toBase64(jsi::Runtime &rt, CppArgs *args, std::string *target,
+              StringEncoding *targetEncoding) {
+  if (args->size() < 2)
+    throwJSError(rt, "RNCryptopp: toBase64 invalid number of arguments");
+
+  if (!isDataStringOrAB(args->at(1)))
     throw jsi::JSError(
         rt, "RNCryptopp: toBase64 data is not a string or ArrayBuffer");
-  encodeString(&in, &out, ENCODING_BASE64);
-  return jsi::String::createFromUtf8(rt, out);
+  auto inputEncoding = getEncodingFromArgs(rt, args, 2);
+  decodeJSIString(args->at(1), target, inputEncoding);
+  *targetEncoding = ENCODING_BASE64;
 }
 
-jsi::Value toBase64Url(jsi::Runtime &rt, const jsi::Value &thisValue,
-                       const jsi::Value *args, size_t argCount) {
-  std::string in, out;
-  auto encoding = getEncodingFromArgs(rt, args, argCount, 1);
-  if (binaryLikeValueToString(rt, args[0], &in, encoding) == INP_UNKNOWN)
+void toBase64Url(jsi::Runtime &rt, CppArgs *args, std::string *target,
+                 StringEncoding *targetEncoding) {
+  if (args->size() < 2)
+    throwJSError(rt, "RNCryptopp: toBase64Url invalid number of arguments");
+
+  if (!isDataStringOrAB(args->at(1)))
     throw jsi::JSError(
         rt, "RNCryptopp: toBase64Url data is not a string or ArrayBuffer");
-  encodeString(&in, &out, ENCODING_BASE64URL);
-  return jsi::String::createFromUtf8(rt, out);
+  auto inputEncoding = getEncodingFromArgs(rt, args, 2);
+  decodeJSIString(args->at(1), target, inputEncoding);
+  *targetEncoding = ENCODING_BASE64URL;
 }
 
-jsi::Value toHex(jsi::Runtime &rt, const jsi::Value &thisValue,
-                 const jsi::Value *args, size_t argCount) {
-  std::string in, out;
-  auto encoding = getEncodingFromArgs(rt, args, argCount, 1);
-  if (binaryLikeValueToString(rt, args[0], &in, encoding) == INP_UNKNOWN)
+void toHex(jsi::Runtime &rt, CppArgs *args, std::string *target,
+           StringEncoding *targetEncoding) {
+  if (args->size() < 2)
+    throwJSError(rt, "RNCryptopp: toHex invalid number of arguments");
+
+  if (!isDataStringOrAB(args->at(1)))
     throw jsi::JSError(rt,
                        "RNCryptopp: toHex data is not a string or ArrayBuffer");
-  encodeString(&in, &out, ENCODING_HEX);
-  return jsi::String::createFromUtf8(rt, out);
+  auto inputEncoding = getEncodingFromArgs(rt, args, 2);
+  decodeJSIString(args->at(1), target, inputEncoding);
+  *targetEncoding = ENCODING_HEX;
 }
 
-jsi::Value toUtf8(jsi::Runtime &rt, const jsi::Value &thisValue,
-                  const jsi::Value *args, size_t argCount) {
-  std::string out;
-  auto encoding = getEncodingFromArgs(rt, args, argCount, 1);
-  if (binaryLikeValueToString(rt, args[0], &out, encoding) == INP_UNKNOWN)
+void toUtf8(jsi::Runtime &rt, CppArgs *args, std::string *target,
+            StringEncoding *targetEncoding) {
+  if (args->size() < 2)
+    throwJSError(rt, "RNCryptopp: toUtf8 invalid number of arguments");
+
+  if (!isDataStringOrAB(args->at(1)))
     throw jsi::JSError(
         rt, "RNCryptopp: toUtf8 data is not a string or ArrayBuffer");
-  return jsi::String::createFromUtf8(rt, out);
+  auto inputEncoding = getEncodingFromArgs(rt, args, 2);
+  decodeJSIString(args->at(1), target, inputEncoding);
+  *targetEncoding = ENCODING_UTF8;
 }
 
-jsi::Value randomBytes(jsi::Runtime &rt, const jsi::Value &thisValue,
-                       const jsi::Value *args, size_t argCount) {
-  int size;
-  if (!rncryptopp::valueToInt(args[0], &size))
-    throwJSError(rt, "RNCryptopp: randomBytes size is not a number");
+void randomBytes(jsi::Runtime &rt, CppArgs *args, std::string *target,
+                 QuickDataType *targetType) {
+  if (args->size() != 2)
+    throwJSError(rt, "RNCryptopp: randomBytes invalid number of arguments");
 
-  jsi::Function array_buffer_ctor =
-      rt.global().getPropertyAsFunction(rt, "ArrayBuffer");
-  jsi::Object obj = array_buffer_ctor.callAsConstructor(rt, size).getObject(rt);
-  jsi::ArrayBuffer buff = obj.getArrayBuffer(rt);
+  if (!isDataInteger(args->at(1)))
+    throwJSError(rt, "RNCryptopp: randomBytes size is not a number");
+  int size = (int)args->at(1).doubleOrIntValue;
 
   AutoSeededRandomPool prng;
   SecByteBlock random(size);
   prng.GenerateBlock(random, random.size());
 
-  // FIXME: see https://github.com/facebook/hermes/issues/564.
-  memcpy(buff.data(rt), random.data(), size);
-  return obj;
+  *target = std::string((const char *)random.data(), random.size());
+  *targetType = ARRAY_BUFFER;
 }
 
-jsi::Value stringToBytes(jsi::Runtime &rt, const jsi::Value &thisValue,
-                         const jsi::Value *args, size_t argCount) {
-  auto encoding = rncryptopp::getEncodingFromArgs(rt, args, argCount, 1);
+void stringToBytes(jsi::Runtime &rt, CppArgs *args, std::string *target,
+                   QuickDataType *targetType) {
+  if (args->size() < 2)
+    throwJSError(rt, "RNCryptopp: stringToBytes invalid number of arguments");
 
-  std::string bytes;
-  if (stringValueToString(rt, args[0], &bytes, encoding) == INP_UNKNOWN)
+  if (!isDataString(args->at(1)))
     throw jsi::JSError(rt, "RNCryptopp: stringToBytes data is not a string");
 
-  int size = (int)bytes.size();
-
-  jsi::Function array_buffer_ctor =
-      rt.global().getPropertyAsFunction(rt, "ArrayBuffer");
-  jsi::Object obj = array_buffer_ctor.callAsConstructor(rt, size).getObject(rt);
-  jsi::ArrayBuffer buff = obj.getArrayBuffer(rt);
-
-  // FIXME: see https://github.com/facebook/hermes/issues/564.
-  memcpy(buff.data(rt), bytes.data(), size);
-  return obj;
+  std::string decoded;
+  auto encoding = rncryptopp::getEncodingFromArgs(rt, args, 2);
+  decodeJSIString(args->at(1), target, encoding);
+  *targetType = ARRAY_BUFFER;
 }
 } // namespace rncryptopp::utils

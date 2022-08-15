@@ -22,8 +22,8 @@
 
 #include "helpers.h"
 
-using namespace std;
 using namespace facebook;
+using namespace rncryptopp::jsiHelper;
 
 namespace rncryptopp::HostObjects {
 template <class T_hash>

@@ -124,16 +124,16 @@ export default function App() {
       const hashes_start = PerformanceNow();
       const BLAKE2b = Cryptopp.hash.BLAKE2b(str);
       const BLAKE2s = Cryptopp.hash.BLAKE2s(str);
-      const Keccak_256 = Cryptopp.hash.Keccak(str, '256');
-      const LSH_256 = Cryptopp.hash.LSH(str, '256');
+      const Keccak_256 = Cryptopp.hash.Keccak256(str);
+      const LSH_256 = Cryptopp.hash.LSH256(str);
       const sha = Cryptopp.hash.SHA1(str);
-      const sha2_512 = Cryptopp.hash.SHA2(str, '512');
-      const sha3_512 = Cryptopp.hash.SHA3(str, '512');
-      const SHAKE_128 = Cryptopp.hash.SHAKE(str, '128');
-      const SipHash_2_4_64 = Cryptopp.hash.SipHash(str, '2_4_64');
+      const sha2_512 = Cryptopp.hash.SHA512(str);
+      const sha3_512 = Cryptopp.hash.SHA3_512(str);
+      const SHAKE_128 = Cryptopp.hash.SHAKE128(str);
+      const SipHash_2_4_64 = Cryptopp.hash.SipHash_2_4_64(str);
       const SM3 = Cryptopp.hash.SM3(str);
       const Tiger = Cryptopp.hash.Tiger(str);
-      const RIPEMD_128 = Cryptopp.hash.RIPEMD(str, '128');
+      const RIPEMD_128 = Cryptopp.hash.RIPEMD128(str);
       const Whirlpool = Cryptopp.hash.WHIRLPOOL(str);
       const CRC32 = Cryptopp.hash.CRC32(str);
 
@@ -174,8 +174,16 @@ export default function App() {
       const hkdf = Cryptopp.keyDerivation.hkdf(
         str,
         'salt',
-        'SHA1',
-        'HKDF key derivation'
+        'HKDF key derivation',
+        'SHA1'
+      );
+      const scrypt = Cryptopp.keyDerivation.scrypt(
+        str,
+        'NaCl',
+        1024,
+        8,
+        16,
+        16
       );
       const key_padding_time = timeDelta(key_padding_start, PerformanceNow());
 
@@ -231,6 +239,7 @@ export default function App() {
         pkbdf1,
         pkbdf2,
         hkdf,
+        scrypt,
         key_padding_time,
       };
     },

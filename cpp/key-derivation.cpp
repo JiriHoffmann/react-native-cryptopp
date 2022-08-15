@@ -26,44 +26,35 @@ template <typename T> struct deriveHKDF_wrapper {
   }
 };
 
-jsi::Value hkdf(jsi::Runtime &rt, const jsi::Value &thisValue,
-                const jsi::Value *args, size_t argCount) {
-  std::string pass, salt, hash, info, result;
-  auto dataInputType = binaryLikeValueToString(rt, args[0], &pass);
-  if (dataInputType == INP_UNKNOWN)
+void hkdf(jsi::Runtime &rt, CppArgs *args, std::string *target,
+          QuickDataType *targetType, StringEncoding *targetEncoding) {
+  if (args->size() != 5)
+    throwJSError(rt, "RNCryptopp: hkdf invalid number of arguments");
+
+  if (!isDataStringOrAB(args->at(1)))
     throwJSError(rt,
                  "RNCryptopp: hkdf password is not a string or ArrayBuffer");
 
-  if (binaryLikeValueToString(rt, args[1], &salt) == INP_UNKNOWN)
+  if (!isDataStringOrAB(args->at(2)))
     throwJSError(rt, "RNCryptopp: hkdf salt is not a string or ArrayBuffer");
 
-  if (stringValueToString(rt, args[2], &hash) == INP_UNKNOWN)
-    throwJSError(rt, "RNCryptopp: hkdf hash is not a string");
-
-  if (binaryLikeValueToString(rt, args[3], &info) == INP_UNKNOWN)
+  if (!isDataStringOrAB(args->at(3)))
     throwJSError(rt, "RNCryptopp: hkdf info is not a string or ArrayBuffer");
 
+  if (!isDataString(args->at(4)))
+    throwJSError(rt, "RNCryptopp: hkdf hash is not a string");
+
+  std::string pass = args->at(1).stringValue;
+  std::string salt = args->at(2).stringValue;
+  std::string info = args->at(3).stringValue;
+  std::string hash = args->at(4).stringValue;
+
   //  Derive
-  if (!invokeWithHash<deriveHKDF_wrapper>()(hash, &pass, &salt, &info, &result))
+  if (!invokeWithHash<deriveHKDF_wrapper>()(hash, &pass, &salt, &info, target))
     throwJSError(rt, "RNCryptopp: hkdf hash invalid hash value");
 
-  // Return string
-  if (dataInputType == INP_STRING) {
-    std::string encoded;
-    encodeString(&result, &encoded, ENCODING_HEX);
-    return jsi::String::createFromUtf8(rt, encoded);
-  }
-
-  // Return ArrayBuffer
-  int size = (int)result.size();
-  jsi::Function array_buffer_ctor =
-      rt.global().getPropertyAsFunction(rt, "ArrayBuffer");
-  jsi::Object obj = array_buffer_ctor.callAsConstructor(rt, size).getObject(rt);
-  jsi::ArrayBuffer buff = obj.getArrayBuffer(rt);
-  // FIXME: see https://github.com/facebook/hermes/issues/564.
-  memcpy(buff.data(rt), result.data(), size);
-
-  return obj;
+  *targetType = args->at(1).dataType;
+  *targetEncoding = ENCODING_HEX;
 }
 
 /**
@@ -73,8 +64,8 @@ jsi::Value hkdf(jsi::Runtime &rt, const jsi::Value &thisValue,
  * @tparam T_hash HashTransformation class
  */
 template <template <class> class T_func, class T_hash>
-void derivePBKDF(std::string *secret, std::string *salt,
-                 unsigned int iterations, std::string *result) {
+void derivePBKDF(std::string *secret, std::string *salt, int iterations,
+                 std::string *result) {
   T_func<T_hash> func;
   byte derived[T_hash::DIGESTSIZE];
   size_t derivedLen = sizeof(derived);
@@ -105,126 +96,143 @@ template <typename T> struct derivePKCS5_PBKDF2_HMAC_wrapper {
   }
 };
 
-jsi::Value pbkdf12(jsi::Runtime &rt, const jsi::Value &thisValue,
-                   const jsi::Value *args, size_t argCount) {
-  std::string pass, salt, hash, result;
-  auto dataInputType = binaryLikeValueToString(rt, args[0], &pass);
-  if (dataInputType == INP_UNKNOWN)
+void pbkdf12(jsi::Runtime &rt, CppArgs *args, std::string *target,
+             QuickDataType *targetType, StringEncoding *targetEncoding) {
+  if (args->size() != 5)
+    throwJSError(rt, "RNCryptopp: pbkdf12 invalid number of arguments");
+
+  if (!isDataStringOrAB(args->at(1)))
     throwJSError(rt,
                  "RNCryptopp: pbkdf12 password is not a string or ArrayBuffer");
 
-  if (binaryLikeValueToString(rt, args[1], &salt) == INP_UNKNOWN)
+  if (!isDataStringOrAB(args->at(2)))
     throwJSError(rt, "RNCryptopp: pbkdf12 salt is not a string or ArrayBuffer");
 
-  if (stringValueToString(rt, args[2], &hash) == INP_UNKNOWN)
+  if (!isDataString(args->at(3)))
     throwJSError(rt, "RNCryptopp: pbkdf12 hash is not a string");
 
-  int numIter;
-  if (!valueToInt(args[3], &numIter))
+  if (!isDataInteger(args->at(4)))
     throwJSError(rt, "RNCryptopp: pbkdf12 numIter in not a number");
+
+  std::string pass = args->at(1).stringValue;
+  std::string salt = args->at(2).stringValue;
+  std::string hash = args->at(3).stringValue;
+  int numIter = args->at(4).doubleOrIntValue;
 
   // Derive
   if (!invokeWithHash<derivePKCS12_PBKDF_wrapper>()(hash, &pass, &salt, numIter,
-                                                    &result))
+                                                    target))
     throwJSError(rt, "RNCryptopp: pbkdf12 hash invalid hash value");
 
-  // Return string
-  if (dataInputType == INP_STRING) {
-    std::string encoded;
-    encodeString(&result, &encoded, ENCODING_HEX);
-    return jsi::String::createFromUtf8(rt, encoded);
-  }
-
-  // Return ArrayBuffer
-  int size = (int)result.size();
-  jsi::Function array_buffer_ctor =
-      rt.global().getPropertyAsFunction(rt, "ArrayBuffer");
-  jsi::Object obj = array_buffer_ctor.callAsConstructor(rt, size).getObject(rt);
-  jsi::ArrayBuffer buff = obj.getArrayBuffer(rt);
-  // FIXME: see https://github.com/facebook/hermes/issues/564.
-  memcpy(buff.data(rt), result.data(), size);
-  return obj;
+  *targetType = args->at(1).dataType;
+  *targetEncoding = ENCODING_HEX;
 }
 
-jsi::Value pkcs5_pbkdf1(jsi::Runtime &rt, const jsi::Value &thisValue,
-                        const jsi::Value *args, size_t argCount) {
-  std::string pass, salt, hash, result;
-  auto dataInputType = binaryLikeValueToString(rt, args[0], &pass);
-  if (dataInputType == INP_UNKNOWN)
+void pkcs5_pbkdf1(jsi::Runtime &rt, CppArgs *args, std::string *target,
+                  QuickDataType *targetType, StringEncoding *targetEncoding) {
+  if (args->size() != 5)
+    throwJSError(rt, "RNCryptopp: pkcs5_pbkdf1 invalid number of arguments");
+
+  if (!isDataStringOrAB(args->at(1)))
     throwJSError(
         rt, "RNCryptopp: pkcs5_pbkdf1 password is not a string or ArrayBuffer");
 
-  if (binaryLikeValueToString(rt, args[1], &salt) == INP_UNKNOWN)
+  if (!isDataStringOrAB(args->at(2)))
     throwJSError(
         rt, "RNCryptopp: pkcs5_pbkdf1 salt is not a string or ArrayBuffer");
 
-  if (stringValueToString(rt, args[2], &hash) == INP_UNKNOWN)
+  if (!isDataString(args->at(3)))
     throwJSError(rt, "RNCryptopp: pkcs5_pbkdf1 hash is not a string");
 
-  int numIter;
-  if (!valueToInt(args[3], &numIter))
+  if (!isDataInteger(args->at(4)))
     throwJSError(rt, "RNCryptopp: pkcs5_pbkdf1 numIter in not a number");
 
+  std::string pass = args->at(1).stringValue;
+  std::string salt = args->at(2).stringValue;
+  std::string hash = args->at(3).stringValue;
+  int numIter = args->at(4).doubleOrIntValue;
+
   if (!invokeWithHash<derivePKCS5_PBKDF1_wrapper>()(hash, &pass, &salt, numIter,
-                                                    &result))
+                                                    target))
     throwJSError(rt, "RNCryptopp: pkcs5_pbkdf1 hash invalid hash value");
 
-  // Return string
-  if (dataInputType == INP_STRING) {
-    std::string encoded;
-    encodeString(&result, &encoded, ENCODING_HEX);
-    return jsi::String::createFromUtf8(rt, encoded);
-  }
-
-  // Return ArrayBuffer
-  int size = (int)result.size();
-  jsi::Function array_buffer_ctor =
-      rt.global().getPropertyAsFunction(rt, "ArrayBuffer");
-  jsi::Object obj = array_buffer_ctor.callAsConstructor(rt, size).getObject(rt);
-  jsi::ArrayBuffer buff = obj.getArrayBuffer(rt);
-  // FIXME: see https://github.com/facebook/hermes/issues/564.
-  memcpy(buff.data(rt), result.data(), size);
-  return obj;
+  *targetType = args->at(1).dataType;
+  *targetEncoding = ENCODING_HEX;
 }
 
-jsi::Value pkcs5_pbkdf2(jsi::Runtime &rt, const jsi::Value &thisValue,
-                        const jsi::Value *args, size_t argCount) {
-  std::string pass, salt, hash, result;
-  auto dataInputType = binaryLikeValueToString(rt, args[0], &pass);
-  if (dataInputType == INP_UNKNOWN)
+void pkcs5_pbkdf2(jsi::Runtime &rt, CppArgs *args, std::string *target,
+                  QuickDataType *targetType, StringEncoding *targetEncoding) {
+  if (args->size() != 5)
+    throwJSError(rt, "RNCryptopp: pkcs5_pbkdf2 invalid number of arguments");
+
+  if (!isDataStringOrAB(args->at(1)))
     throwJSError(
         rt, "RNCryptopp: pkcs5_pbkdf2 password is not a string or ArrayBuffer");
 
-  if (binaryLikeValueToString(rt, args[1], &salt) == INP_UNKNOWN)
+  if (!isDataStringOrAB(args->at(2)))
     throwJSError(
         rt, "RNCryptopp: pkcs5_pbkdf2 salt is not a string or ArrayBuffer");
 
-  if (stringValueToString(rt, args[2], &hash) == INP_UNKNOWN)
+  if (!isDataString(args->at(3)))
     throwJSError(rt, "RNCryptopp: pkcs5_pbkdf2 hash is not a string");
 
-  int numIter;
-  if (!valueToInt(args[3], &numIter))
+  if (!isDataInteger(args->at(4)))
     throwJSError(rt, "RNCryptopp: pkcs5_pbkdf2 numIter in not a number");
 
+  std::string pass = args->at(1).stringValue;
+  std::string salt = args->at(2).stringValue;
+  std::string hash = args->at(3).stringValue;
+  int numIter = args->at(4).doubleOrIntValue;
+
   if (!invokeWithHash<derivePKCS5_PBKDF2_HMAC_wrapper>()(hash, &pass, &salt,
-                                                         numIter, &result))
-    throwJSError(rt, "RNCryptopp: pkcs5_pbkdf2 hash invalid hash value");
+                                                         numIter, target))
+    throwJSError(rt, "RNCryptopp: pkcs5_pbkdf1 hash invalid hash value");
 
-  // Return string
-  if (dataInputType == INP_STRING) {
-    std::string encoded;
-    encodeString(&result, &encoded, ENCODING_HEX);
-    return jsi::String::createFromUtf8(rt, encoded);
-  }
+  *targetType = args->at(1).dataType;
+  *targetEncoding = ENCODING_HEX;
+}
 
-  // Return ArrayBuffer
-  int size = (int)result.size();
-  jsi::Function array_buffer_ctor =
-      rt.global().getPropertyAsFunction(rt, "ArrayBuffer");
-  jsi::Object obj = array_buffer_ctor.callAsConstructor(rt, size).getObject(rt);
-  jsi::ArrayBuffer buff = obj.getArrayBuffer(rt);
-  // FIXME: see https://github.com/facebook/hermes/issues/564.
-  memcpy(buff.data(rt), result.data(), size);
-  return obj;
+void scrypt(jsi::Runtime &rt, CppArgs *args, std::string *target,
+            QuickDataType *targetType, StringEncoding *targetEncoding) {
+  if (args->size() != 7)
+    throwJSError(rt, "RNCryptopp: scrypt invalid number of arguments");
+
+  if (!isDataStringOrAB(args->at(1)))
+    throwJSError(rt,
+                 "RNCryptopp: scrypt password is not a string or ArrayBuffer");
+
+  if (!isDataStringOrAB(args->at(2)))
+    throwJSError(rt, "RNCryptopp: scrypt salt is not a string or ArrayBuffer");
+
+  if (!isDataInteger(args->at(3)))
+    throwJSError(rt, "RNCryptopp: scrypt N is not a string");
+
+  if (!isDataInteger(args->at(4)))
+    throwJSError(rt, "RNCryptopp: scrypt r in not a number");
+
+  if (!isDataInteger(args->at(5)))
+    throwJSError(rt, "RNCryptopp: scrypt p in not a number");
+
+  if (!isDataInteger(args->at(6)))
+    throwJSError(rt, "RNCryptopp: scrypt dkLen in not a number");
+
+  std::string pass = args->at(1).stringValue;
+  std::string salt = args->at(2).stringValue;
+  int N = args->at(3).doubleOrIntValue;
+  int r = args->at(4).doubleOrIntValue;
+  int p = args->at(5).doubleOrIntValue;
+  int dkLen = args->at(6).doubleOrIntValue;
+
+  SecByteBlock derived(dkLen);
+
+  Scrypt scrypt;
+  scrypt.DeriveKey(derived, derived.size(),
+                   reinterpret_cast<const byte *>(pass.data()), pass.size(),
+                   reinterpret_cast<const byte *>(salt.data()), salt.size(), N,
+                   r, p);
+
+  StringSource(derived, derived.size(), true, new StringSink(*target));
+  *targetType = args->at(1).dataType;
+  *targetEncoding = ENCODING_HEX;
 }
 } // namespace rncryptopp::keyderivation

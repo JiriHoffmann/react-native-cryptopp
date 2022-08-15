@@ -14,24 +14,33 @@
 
 using namespace facebook;
 using namespace facebook::jsi::detail;
-using namespace CryptoPP;
+using namespace rncryptopp::jsiHelper;
+
+struct RSAKeyPair {
+  std::string n;
+  std::string p;
+  std::string q;
+  std::string d;
+  std::string e;
+  std::string public_key;
+  std::string private_key;
+};
 
 namespace rncryptopp::rsa {
-jsi::Value generateKeyPair(jsi::Runtime &rt, const jsi::Value &thisValue,
-                           const jsi::Value *args, size_t argCount);
+RSAKeyPair generateKeyPair(jsi::Runtime &rt, CppArgs *args);
 
-jsi::Value encrypt(jsi::Runtime &rt, const jsi::Value &thisValue,
-                   const jsi::Value *args, size_t argCount);
+void encrypt(jsi::Runtime &rt, CppArgs *args, std::string *target,
+             QuickDataType *targetType, StringEncoding *targetEncoding);
 
-jsi::Value decrypt(jsi::Runtime &rt, const jsi::Value &thisValue,
-                   const jsi::Value *args, size_t argCount);
+void decrypt(jsi::Runtime &rt, CppArgs *args, std::string *target,
+             QuickDataType *targetType);
 
-jsi::Value sign(jsi::Runtime &rt, const jsi::Value &thisValue,
-                const jsi::Value *args, size_t argCount);
+void sign(jsi::Runtime &rt, CppArgs *args, std::string *target,
+          QuickDataType *targetType, StringEncoding *targetEncoding);
 
-jsi::Value verify(jsi::Runtime &rt, const jsi::Value &thisValue,
-                  const jsi::Value *args, size_t argCount);
+void verify(jsi::Runtime &rt, CppArgs *args, bool *target,
+            QuickDataType *targetType);
 
-jsi::Value recover(jsi::Runtime &rt, const jsi::Value &thisValue,
-                   const jsi::Value *args, size_t argCount);
+void recover(jsi::Runtime &rt, CppArgs *args, std::string *target,
+             QuickDataType *targetType, StringEncoding *targetEncoding);
 } // namespace rncryptopp::rsa

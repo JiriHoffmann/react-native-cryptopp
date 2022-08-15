@@ -1,17 +1,18 @@
 package com.reactnativecryptopp;
 
 import androidx.annotation.NonNull;
+import android.util.Log;
 
+import com.facebook.jni.HybridData;
+import com.facebook.jni.annotations.DoNotStrip;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
+import com.facebook.react.turbomodule.core.CallInvokerHolderImpl;
 
-public class CryptoppModule extends ReactContextBaseJavaModule {
-  public static final String NAME = "Cryptopp";
-  private static native void initialize(long jsiPtr, String docDir);
-
-  public CryptoppModule(ReactApplicationContext reactContext) {
-    super(reactContext);
+class CryptoppModule extends ReactContextBaseJavaModule {
+  public CryptoppModule(ReactApplicationContext context) {
+    super(context);
   }
 
   @NonNull
@@ -24,14 +25,10 @@ public class CryptoppModule extends ReactContextBaseJavaModule {
   public boolean install() {
     try {
       System.loadLibrary("rncryptopp");
-
-      ReactApplicationContext context = getReactApplicationContext();
-      initialize(
-        context.getJavaScriptContextHolder().get(),
-        context.getFilesDir().getAbsolutePath()
-      );
+      CryptoppBridge.instance.install(getReactApplicationContext());
       return true;
     } catch (Exception exception) {
+      Log.e("RNCryptopp", "Failed to install JSI Bindings!", exception);
       return false;
     }
   }

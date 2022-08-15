@@ -2,7 +2,6 @@
 #import "RCTBridgeModule.h"
 #else
 #import <React/RCTBridgeModule.h>
-#import <React/RCTEventEmitter.h>
 #endif
 
 @interface Cryptopp : NSObject <RCTBridgeModule>

@@ -10,24 +10,25 @@
 using namespace facebook;
 using namespace facebook::jsi::detail;
 using namespace CryptoPP;
+using namespace rncryptopp::jsiHelper;
 
 namespace rncryptopp::utils {
-jsi::Value toBase64(jsi::Runtime &rt, const jsi::Value &thisValue,
-                    const jsi::Value *args, size_t argCount);
+void toBase64(jsi::Runtime &rt, CppArgs *args, std::string *target,
+              StringEncoding *targetEncoding);
 
-jsi::Value toBase64Url(jsi::Runtime &rt, const jsi::Value &thisValue,
-                       const jsi::Value *args, size_t argCount);
+void toBase64Url(jsi::Runtime &rt, CppArgs *args, std::string *target,
+                 StringEncoding *targetEncoding);
 
-jsi::Value toHex(jsi::Runtime &rt, const jsi::Value &thisValue,
-                 const jsi::Value *args, size_t argCount);
+void toHex(jsi::Runtime &rt, CppArgs *args, std::string *target,
+           StringEncoding *targetEncoding);
 
-jsi::Value toUtf8(jsi::Runtime &rt, const jsi::Value &thisValue,
-                  const jsi::Value *args, size_t argCount);
+void toUtf8(jsi::Runtime &rt, CppArgs *args, std::string *target,
+            StringEncoding *targetEncoding);
 
-jsi::Value randomBytes(jsi::Runtime &rt, const jsi::Value &thisValue,
-                       const jsi::Value *args, size_t argCount);
+void randomBytes(jsi::Runtime &rt, CppArgs *args, std::string *target,
+                 QuickDataType *targetType);
 
-jsi::Value stringToBytes(jsi::Runtime &rt, const jsi::Value &thisValue,
-                         const jsi::Value *args, size_t argCount);
+void stringToBytes(jsi::Runtime &rt, CppArgs *args, std::string *target,
+                   QuickDataType *targetType);
 
 } // namespace rncryptopp::utils

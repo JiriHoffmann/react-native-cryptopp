@@ -4,17 +4,21 @@
 #define THROW_EXCEPTION 16
 
 namespace rncryptopp::rsa {
-jsi::Value generateKeyPair(jsi::Runtime &rt, const jsi::Value &thisValue,
-                           const jsi::Value *args, size_t argCount) {
-  int size;
-  if (!valueToInt(args[0], &size))
+RSAKeyPair generateKeyPair(jsi::Runtime &rt, CppArgs *args) {
+  if (args->size() != 3)
+    throwJSError(rt,
+                 "RNCryptopp: RSA generateKeyPair invalid number of arguments");
+
+  if (!isDataInteger(args->at(1)))
     throwJSError(rt, "RNCryptopp: RSA generateKeyPair size is not a number");
 
-  int public_e;
-  if (!valueToInt(args[1], &public_e))
+  if (!isDataInteger(args->at(2)))
     throwJSError(
         rt,
         "RNCryptopp: RSA generateKeyPair public_e is not a number, use 65537");
+
+  int size = args->at(1).doubleOrIntValue;
+  int public_e = args->at(2).doubleOrIntValue;
 
   // Generate Parameters
   AutoSeededRandomPool rng;
@@ -53,32 +57,34 @@ jsi::Value generateKeyPair(jsi::Runtime &rt, const jsi::Value &thisValue,
   StringSink pem_private_sink(pem_private);
   PEM_Save(pem_private_sink, privateKey);
 
-  jsi::Object params = jsi::Object(rt);
-  params.setProperty(rt, "n", n_stream.str());
-  params.setProperty(rt, "p", p_stream.str());
-  params.setProperty(rt, "q", q_stream.str());
-  params.setProperty(rt, "d", d_stream.str());
-  params.setProperty(rt, "e", e_stream.str());
-
-  jsi::Object result = jsi::Object(rt);
-  result.setProperty(rt, "public", pem_public);
-  result.setProperty(rt, "private", pem_private);
-  result.setProperty(rt, "params", params);
-  return result;
+  return RSAKeyPair{
+      .n = n_stream.str(),
+      .p = p_stream.str(),
+      .q = q_stream.str(),
+      .d = d_stream.str(),
+      .e = e_stream.str(),
+      .public_key = pem_public,
+      .private_key = pem_private,
+  };
 }
 
-jsi::Value encrypt(jsi::Runtime &rt, const jsi::Value &thisValue,
-                   const jsi::Value *args, size_t argCount) {
-  std::string data, publicKeyString, encryptScheme, result;
-  auto dataInputType = binaryLikeValueToString(rt, args[0], &data);
-  if (dataInputType == INP_UNKNOWN)
+void encrypt(jsi::Runtime &rt, CppArgs *args, std::string *target,
+             QuickDataType *targetType, StringEncoding *targetEncoding) {
+  if (args->size() != 4)
+    throwJSError(rt, "RNCryptopp: RSA encrypt invalid number of arguments");
+
+  if (!isDataStringOrAB(args->at(1)))
     throwJSError(rt, "RNCryptopp: RSA encrypt data is not a string");
 
-  if (stringValueToString(rt, args[1], &publicKeyString) == INP_UNKNOWN)
+  if (!isDataString(args->at(2)))
     throwJSError(rt, "RNCryptopp: RSA encrypt publicKey is not a string");
 
-  if (stringValueToString(rt, args[2], &encryptScheme) == INP_UNKNOWN)
+  if (!isDataString(args->at(3)))
     throwJSError(rt, "RNCryptopp: RSA encrypt scheme is not a string");
+
+  std::string data = args->at(1).stringValue;
+  std::string publicKeyString = args->at(2).stringValue;
+  std::string encryptScheme = args->at(3).stringValue;
 
   StringSource PKeyStringSource(publicKeyString, true);
   CryptoPP::RSA::PublicKey publicKey;
@@ -89,50 +95,41 @@ jsi::Value encrypt(jsi::Runtime &rt, const jsi::Value &thisValue,
   if (encryptScheme == "OAEP_SHA1") {
     RSAES<OAEP<SHA1>>::Encryptor e(publicKey);
     StringSource(data, true,
-                 new PK_EncryptorFilter(rng, e, new StringSink(result)));
+                 new PK_EncryptorFilter(rng, e, new StringSink(*target)));
   } else if (encryptScheme == "OAEP_SHA256") {
     RSAES<OAEP<SHA256>>::Encryptor e(publicKey);
     StringSource(data, true,
-                 new PK_EncryptorFilter(rng, e, new StringSink(result)));
+                 new PK_EncryptorFilter(rng, e, new StringSink(*target)));
   } else if (encryptScheme == "PKCS1v15") {
     RSAES<PKCS1v15>::Encryptor e(publicKey);
     StringSource(data, true,
-                 new PK_EncryptorFilter(rng, e, new StringSink(result)));
+                 new PK_EncryptorFilter(rng, e, new StringSink(*target)));
   } else {
     throwJSError(rt, "RNCryptopp: RSA encrypt invalid scheme");
   }
 
-  // Return string
-  if (dataInputType == INP_STRING) {
-    std::string encoded;
-    encodeString(&result, &encoded, ENCODING_BASE64);
-    return jsi::String::createFromUtf8(rt, encoded);
-  }
-
-  // Return ArrayBuffer
-  int size = (int)result.size();
-  jsi::Function array_buffer_ctor =
-      rt.global().getPropertyAsFunction(rt, "ArrayBuffer");
-  jsi::Object obj = array_buffer_ctor.callAsConstructor(rt, size).getObject(rt);
-  jsi::ArrayBuffer buff = obj.getArrayBuffer(rt);
-  // FIXME: see https://github.com/facebook/hermes/issues/564.
-  memcpy(buff.data(rt), result.data(), size);
-  return obj;
+  *targetType = args->at(1).dataType;
+  *targetEncoding = ENCODING_BASE64;
 }
 
-jsi::Value decrypt(jsi::Runtime &rt, const jsi::Value &thisValue,
-                   const jsi::Value *args, size_t argCount) {
-  std::string data, privateKeyString, encryptScheme, result;
-  auto dataInputType =
-      binaryLikeValueToString(rt, args[0], &data, ENCODING_BASE64);
-  if (dataInputType == INP_UNKNOWN)
+void decrypt(jsi::Runtime &rt, CppArgs *args, std::string *target,
+             QuickDataType *targetType) {
+  if (args->size() != 4)
+    throwJSError(rt, "RNCryptopp: RSA decrypt invalid number of arguments");
+
+  if (!isDataStringOrAB(args->at(1)))
     throwJSError(rt, "RNCryptopp: RSA decrypt data is not a string");
 
-  if (stringValueToString(rt, args[1], &privateKeyString) == INP_UNKNOWN)
+  if (!isDataString(args->at(2)))
     throwJSError(rt, "RNCryptopp: RSA decrypt privateKey is not a string");
 
-  if (stringValueToString(rt, args[2], &encryptScheme) == INP_UNKNOWN)
+  if (!isDataString(args->at(3)))
     throwJSError(rt, "RNCryptopp: RSA decrypt scheme is not a string");
+
+  std::string privateKeyString = args->at(2).stringValue;
+  std::string encryptScheme = args->at(3).stringValue;
+  std::string data;
+  decodeJSIString(args->at(1), &data, ENCODING_BASE64);
 
   StringSource PKeyStringSource(privateKeyString, true);
   CryptoPP::RSA::PrivateKey privateKey;
@@ -143,33 +140,20 @@ jsi::Value decrypt(jsi::Runtime &rt, const jsi::Value &thisValue,
   if (encryptScheme == "OAEP_SHA1") {
     RSAES<OAEP<SHA1>>::Decryptor e(privateKey);
     StringSource(data, true,
-                 new PK_DecryptorFilter(rng, e, new StringSink(result)));
+                 new PK_DecryptorFilter(rng, e, new StringSink(*target)));
   } else if (encryptScheme == "OAEP_SHA256") {
     RSAES<OAEP<SHA256>>::Decryptor e(privateKey);
     StringSource ss1(data, true,
-                     new PK_DecryptorFilter(rng, e, new StringSink(result)));
+                     new PK_DecryptorFilter(rng, e, new StringSink(*target)));
   } else if (encryptScheme == "PKCS1v15") {
     RSAES<PKCS1v15>::Decryptor e(privateKey);
     StringSource(data, true,
-                 new PK_DecryptorFilter(rng, e, new StringSink(result)));
+                 new PK_DecryptorFilter(rng, e, new StringSink(*target)));
   } else {
     throwJSError(rt, "RNCryptopp: RSA encrypt invalid scheme");
   }
 
-  // Return string
-  if (dataInputType == INP_STRING) {
-    return jsi::String::createFromUtf8(rt, result);
-  }
-
-  // Return ArrayBuffer
-  int size = (int)result.size();
-  jsi::Function array_buffer_ctor =
-      rt.global().getPropertyAsFunction(rt, "ArrayBuffer");
-  jsi::Object obj = array_buffer_ctor.callAsConstructor(rt, size).getObject(rt);
-  jsi::ArrayBuffer buff = obj.getArrayBuffer(rt);
-  // FIXME: see https://github.com/facebook/hermes/issues/564.
-  memcpy(buff.data(rt), result.data(), size);
-  return obj;
+  *targetType = args->at(1).dataType;
 }
 
 template <class SCHEME>
@@ -183,78 +167,75 @@ void exec_sign(std::string *data, CryptoPP::RSA::PrivateKey *privateKey,
       new SignerFilter(rng, signer, new StringSink(*result), putMessage));
 }
 
-jsi::Value sign(jsi::Runtime &rt, const jsi::Value &thisValue,
-                const jsi::Value *args, size_t argCount) {
-  std::string data, privateKeyString, signScheme, result;
-  auto dataInputType = binaryLikeValueToString(rt, args[0], &data);
-  if (dataInputType == INP_UNKNOWN)
+void sign(jsi::Runtime &rt, CppArgs *args, std::string *target,
+          QuickDataType *targetType, StringEncoding *targetEncoding) {
+  if (args->size() != 4)
+    throwJSError(rt, "RNCryptopp: RSA sign invalid number of arguments");
+
+  if (!isDataStringOrAB(args->at(1)))
     throwJSError(rt, "RNCryptopp: RSA sign data is not a string");
 
-  if (stringValueToString(rt, args[1], &privateKeyString) == INP_UNKNOWN)
+  if (!isDataString(args->at(2)))
     throwJSError(rt, "RNCryptopp: RSA sign privateKey is not a string");
 
-  if (stringValueToString(rt, args[2], &signScheme) == INP_UNKNOWN)
+  if (!isDataString(args->at(3)))
     throwJSError(rt, "RNCryptopp: RSA decrypt scheme is not a string");
+
+  std::string data = args->at(1).stringValue;
+  std::string privateKeyString = args->at(2).stringValue;
+  std::string signScheme = args->at(3).stringValue;
 
   StringSource PKeyStringSource(privateKeyString, true);
   CryptoPP::RSA::PrivateKey privateKey;
   PEM_Load(PKeyStringSource, privateKey);
 
   if (signScheme == "PKCS1v15_SHA1")
-    exec_sign<RSASS<PKCS1v15, SHA1>>(&data, &privateKey, &result);
+    exec_sign<RSASS<PKCS1v15, SHA1>>(&data, &privateKey, target);
   else if (signScheme == "PKCS1v15_SHA256")
-    exec_sign<RSASS<PKCS1v15, SHA256>>(&data, &privateKey, &result);
+    exec_sign<RSASS<PKCS1v15, SHA256>>(&data, &privateKey, target);
   // PSSR
   else if (signScheme == "PSSR_SHA1")
-    exec_sign<RSASS<PSSR, SHA1>>(&data, &privateKey, &result, true);
+    exec_sign<RSASS<PSSR, SHA1>>(&data, &privateKey, target, true);
   else if (signScheme == "PSSR_SHA256")
-    exec_sign<RSASS<PSSR, SHA256>>(&data, &privateKey, &result, true);
+    exec_sign<RSASS<PSSR, SHA256>>(&data, &privateKey, target, true);
   else if (signScheme == "PSSR_Whirlpool")
-    exec_sign<RSASS<PSSR, Whirlpool>>(&data, &privateKey, &result, true);
+    exec_sign<RSASS<PSSR, Whirlpool>>(&data, &privateKey, target, true);
   // PSS
   else if (signScheme == "PSS_SHA1")
-    exec_sign<RSASS<PSS, SHA1>>(&data, &privateKey, &result);
+    exec_sign<RSASS<PSS, SHA1>>(&data, &privateKey, target);
   else if (signScheme == "PSS_SHA256")
-    exec_sign<RSASS<PSS, SHA256>>(&data, &privateKey, &result);
+    exec_sign<RSASS<PSS, SHA256>>(&data, &privateKey, target);
   else if (signScheme == "PSS_Whirlpool")
-    exec_sign<RSASS<PSS, Whirlpool>>(&data, &privateKey, &result);
+    exec_sign<RSASS<PSS, Whirlpool>>(&data, &privateKey, target);
   else
     throwJSError(rt, "RNCryptopp: RSA sign invalid scheme");
 
-  // Return string
-  if (dataInputType == INP_STRING) {
-    std::string encoded;
-    encodeString(&result, &encoded, ENCODING_BASE64);
-    return jsi::String::createFromUtf8(rt, encoded);
-  }
-
-  // Return ArrayBuffer
-  int size = (int)result.size();
-  jsi::Function array_buffer_ctor =
-      rt.global().getPropertyAsFunction(rt, "ArrayBuffer");
-  jsi::Object obj = array_buffer_ctor.callAsConstructor(rt, size).getObject(rt);
-  jsi::ArrayBuffer buff = obj.getArrayBuffer(rt);
-  // FIXME: see https://github.com/facebook/hermes/issues/564.
-  memcpy(buff.data(rt), result.data(), size);
-  return obj;
+  *targetType = args->at(1).dataType;
+  *targetEncoding = ENCODING_BASE64;
 }
 
-jsi::Value verify(jsi::Runtime &rt, const jsi::Value &thisValue,
-                  const jsi::Value *args, size_t argCount) {
-  std::string data, publicKeyString, signScheme, signature;
-  auto dataInputType = binaryLikeValueToString(rt, args[0], &data);
-  if (dataInputType == INP_UNKNOWN)
+void verify(jsi::Runtime &rt, CppArgs *args, bool *target,
+            QuickDataType *targetType) {
+  if (args->size() != 5)
+    throwJSError(rt, "RNCryptopp: RSA verify invalid number of arguments");
+
+  if (!isDataStringOrAB(args->at(1)))
     throwJSError(rt, "RNCryptopp: RSA verify data is not a string");
 
-  if (stringValueToString(rt, args[1], &publicKeyString) == INP_UNKNOWN)
+  if (!isDataString(args->at(2)))
     throwJSError(rt, "RNCryptopp: RSA verify publicKey is not a string");
 
-  if (stringValueToString(rt, args[2], &signScheme) == INP_UNKNOWN)
+  if (!isDataString(args->at(3)))
     throwJSError(rt, "RNCryptopp: RSA verify signature scheme is not a string");
 
-  if (binaryLikeValueToString(rt, args[3], &signature, ENCODING_BASE64) ==
-      INP_UNKNOWN)
+  if (!isDataString(args->at(4)))
     throwJSError(rt, "RNCryptopp: RSA verify signature is not a string");
+
+  std::string data = args->at(1).stringValue;
+  std::string publicKeyString = args->at(2).stringValue;
+  std::string signScheme = args->at(3).stringValue;
+  std::string signature;
+  decodeJSIString(args->at(4), &signature, ENCODING_BASE64);
 
   StringSource PKeyStringSource(publicKeyString, true);
   CryptoPP::RSA::PublicKey publicKey;
@@ -291,23 +272,31 @@ jsi::Value verify(jsi::Runtime &rt, const jsi::Value &thisValue,
   } else
     throwJSError(rt, "RNCryptopp: RSA verify invalid scheme");
 
-  return jsi::Value(result);
+  *target = result;
+  *targetType = jsiHelper::BOOLEAN;
 }
 
-jsi::Value recover(jsi::Runtime &rt, const jsi::Value &thisValue,
-                   const jsi::Value *args, size_t argCount) {
-  std::string signature, publicKeyString, signScheme, result;
-  auto dataInputType =
-      binaryLikeValueToString(rt, args[0], &signature, ENCODING_BASE64);
-  if (dataInputType == INP_UNKNOWN)
-    throwJSError(rt, "RNCryptopp: RSA recover signature is not a string");
+void recover(jsi::Runtime &rt, CppArgs *args, std::string *target,
+             QuickDataType *targetType, StringEncoding *targetEncoding) {
+  if (args->size() != 4)
+    throwJSError(rt, "RNCryptopp: RSA recover invalid number of arguments");
 
-  if (stringValueToString(rt, args[1], &publicKeyString) == INP_UNKNOWN)
+  if (!isDataStringOrAB(args->at(1)))
+    throwJSError(
+        rt,
+        "RNCryptopp: RSA recover signature is not a stringZ or ArrayBuffer");
+
+  if (!isDataString(args->at(2)))
     throwJSError(rt, "RNCryptopp: RSA recover publicKey is not a string");
 
-  if (stringValueToString(rt, args[2], &signScheme) == INP_UNKNOWN)
+  if (!isDataString(args->at(3)))
     throwJSError(rt,
                  "RNCryptopp: RSA recover signature scheme is not a string");
+
+  std::string publicKeyString = args->at(2).stringValue;
+  std::string signScheme = args->at(3).stringValue;
+  std::string signature;
+  decodeJSIString(args->at(1), &signature, ENCODING_BASE64);
 
   StringSource PKeyStringSource(publicKeyString, true);
   CryptoPP::RSA::PublicKey publicKey;
@@ -319,41 +308,29 @@ jsi::Value recover(jsi::Runtime &rt, const jsi::Value &thisValue,
       RSASS<PSSR, SHA1>::Verifier verifier(publicKey);
       StringSource(
           signature, true,
-          new SignatureVerificationFilter(verifier, new StringSink(result),
+          new SignatureVerificationFilter(verifier, new StringSink(*target),
                                           THROW_EXCEPTION | PUT_MESSAGE));
     } else if (signScheme == "PSSR_SHA256") {
       RSASS<PSSR, SHA256>::Verifier verifier(publicKey);
       StringSource(
           signature, true,
-          new SignatureVerificationFilter(verifier, new StringSink(result),
+          new SignatureVerificationFilter(verifier, new StringSink(*target),
                                           THROW_EXCEPTION | PUT_MESSAGE));
     } else if (signScheme == "PSSR_Whirlpool") {
       RSASS<PSSR, Whirlpool>::Verifier verifier(publicKey);
       StringSource(
           signature, true,
-          new SignatureVerificationFilter(verifier, new StringSink(result),
+          new SignatureVerificationFilter(verifier, new StringSink(*target),
                                           THROW_EXCEPTION | PUT_MESSAGE));
     } else {
-      // Will not be caught by std::exception &e
+      // Will not be caught by std::exception &e bellow
       throwJSError(rt, "RNCryptopp: RSA recover invalid scheme");
     }
   } catch (const std::exception &e) {
     throwJSError(rt, "RNCryptopp: RSA signatures do not match");
   }
 
-  // Return string
-  if (dataInputType == INP_STRING) {
-    return jsi::String::createFromUtf8(rt, result);
-  }
-
-  // Return ArrayBuffer
-  int size = (int)result.size();
-  jsi::Function array_buffer_ctor =
-      rt.global().getPropertyAsFunction(rt, "ArrayBuffer");
-  jsi::Object obj = array_buffer_ctor.callAsConstructor(rt, size).getObject(rt);
-  jsi::ArrayBuffer buff = obj.getArrayBuffer(rt);
-  // FIXME: see https://github.com/facebook/hermes/issues/564.
-  memcpy(buff.data(rt), result.data(), size);
-  return obj;
+  *targetType = args->at(1).dataType;
+  *targetEncoding = ENCODING_UTF8;
 }
 } // namespace rncryptopp::rsa

@@ -49,13 +49,14 @@
 #include "cryptopp/base64.h"
 #include "cryptopp/hex.h"
 
+#include "JSIHelper.h"
+
 using namespace facebook;
 using namespace facebook::jsi::detail;
 using namespace CryptoPP;
+using namespace rncryptopp::jsiHelper;
 
 namespace rncryptopp {
-
-enum InputType { INP_UNKNOWN, INP_STRING, INP_ARRAYBUFFER };
 
 enum StringEncoding {
   ENCODING_UTF8,
@@ -64,91 +65,86 @@ enum StringEncoding {
   ENCODING_BASE64URL
 };
 
-InputType stringValueToString(jsi::Runtime &rt, const jsi::Value &value,
-                              std::string *str,
-                              StringEncoding stringEncoding = ENCODING_UTF8);
-
-InputType
-binaryLikeValueToString(jsi::Runtime &rt, const jsi::Value &value,
-                        std::string *str,
-                        StringEncoding stringEncoding = ENCODING_UTF8);
-
-bool valueToInt(const jsi::Value &value, int *res);
-
-bool valueToDouble(const jsi::Value &value, double *res);
-
 void encodeString(std::string *in, std::string *out, StringEncoding encoding);
 
-void decodeString(std::string *in, std::string *out, StringEncoding encoding);
+void decodeJSIString(QuickValue &jsiValue, std::string *out,
+                     StringEncoding encoding);
 
-StringEncoding getEncodingFromArgs(jsi::Runtime &rt, const jsi::Value *args,
-                                   size_t argCount, int index,
+StringEncoding getEncodingFromArgs(jsi::Runtime &rt, CppArgs *args,
+                                   int argIndex,
                                    StringEncoding defaultValue = ENCODING_UTF8,
                                    bool allowUTF8 = true);
 
+jsi::Value returnStringOrArrayBuffer(jsi::Runtime &rt, std::string &input,
+                                     QuickDataType &ouputType,
+                                     StringEncoding &outputEncoding);
+
 template <template <typename> class F> struct invokeWithHash {
-  template <typename... R> bool operator()(std::string &hash, R... rest) const {
-    if (hash == "BLAKE2b")
-      F<BLAKE2b>()(rest...);
-    else if (hash == "BLAKE2s")
-      F<BLAKE2s>()(rest...);
-    else if (hash == "Keccak_224")
-      F<Keccak_224>()(rest...);
-    else if (hash == "Keccak_256")
-      F<Keccak_256>()(rest...);
-    else if (hash == "Keccak_384")
-      F<Keccak_384>()(rest...);
-    else if (hash == "Keccak_512")
-      F<Keccak_512>()(rest...);
-    else if (hash == "LSH224")
-      F<LSH224>()(rest...);
-    else if (hash == "LSH256")
-      F<LSH256>()(rest...);
-    else if (hash == "LSH384")
-      F<LSH384>()(rest...);
-    else if (hash == "LSH512")
-      F<LSH512>()(rest...);
-    else if (hash == "SHA1")
-      F<SHA1>()(rest...);
-    else if (hash == "SHA224")
-      F<SHA224>()(rest...);
-    else if (hash == "SHA256")
-      F<SHA256>()(rest...);
-    else if (hash == "SHA384")
-      F<SHA384>()(rest...);
-    else if (hash == "SHA512")
-      F<SHA512>()(rest...);
-    else if (hash == "SHA3_224")
-      F<SHA3_224>()(rest...);
-    else if (hash == "SHA3_256")
-      F<SHA3_256>()(rest...);
-    else if (hash == "SHA3_384")
-      F<SHA3_384>()(rest...);
-    else if (hash == "SHA3_512")
-      F<SHA3_512>()(rest...);
-    else if (hash == "SHAKE128")
-      F<SHAKE128>()(rest...);
-    else if (hash == "SHAKE256")
-      F<SHAKE256>()(rest...);
-    else if (hash == "SM3")
-      F<SM3>()(rest...);
-    else if (hash == "Tiger")
-      F<Tiger>()(rest...);
-    else if (hash == "RIPEMD128")
-      F<RIPEMD128>()(rest...);
-    else if (hash == "RIPEMD160")
-      F<RIPEMD160>()(rest...);
-    else if (hash == "RIPEMD256")
-      F<RIPEMD256>()(rest...);
-    else if (hash == "RIPEMD320")
-      F<RIPEMD320>()(rest...);
+  template <typename... R>
+  bool operator()(std::string &hash_type, R... functionParams) const {
+    if (hash_type == "BLAKE2b")
+      F<BLAKE2b>()(functionParams...);
+    else if (hash_type == "BLAKE2s")
+      F<BLAKE2s>()(functionParams...);
+    else if (hash_type == "Keccak224")
+      F<Keccak_224>()(functionParams...);
+    else if (hash_type == "Keccak256")
+      F<Keccak_256>()(functionParams...);
+    else if (hash_type == "Keccak384")
+      F<Keccak_384>()(functionParams...);
+    else if (hash_type == "Keccak512")
+      F<Keccak_512>()(functionParams...);
+    else if (hash_type == "LSH224")
+      F<LSH224>()(functionParams...);
+    else if (hash_type == "LSH256")
+      F<LSH256>()(functionParams...);
+    else if (hash_type == "LSH384")
+      F<LSH384>()(functionParams...);
+    else if (hash_type == "LSH512")
+      F<LSH512>()(functionParams...);
+    else if (hash_type == "SHA1")
+      F<SHA1>()(functionParams...);
+    else if (hash_type == "SHA224")
+      F<SHA224>()(functionParams...);
+    else if (hash_type == "SHA256")
+      F<SHA256>()(functionParams...);
+    else if (hash_type == "SHA384")
+      F<SHA384>()(functionParams...);
+    else if (hash_type == "SHA512")
+      F<SHA512>()(functionParams...);
+    else if (hash_type == "SHA3_224")
+      F<SHA3_224>()(functionParams...);
+    else if (hash_type == "SHA3_256")
+      F<SHA3_256>()(functionParams...);
+    else if (hash_type == "SHA3_384")
+      F<SHA3_384>()(functionParams...);
+    else if (hash_type == "SHA3_512")
+      F<SHA3_512>()(functionParams...);
+    else if (hash_type == "SHAKE128")
+      F<SHAKE128>()(functionParams...);
+    else if (hash_type == "SHAKE256")
+      F<SHAKE256>()(functionParams...);
+    else if (hash_type == "SM3")
+      F<SM3>()(functionParams...);
+    else if (hash_type == "Tiger")
+      F<Tiger>()(functionParams...);
+    else if (hash_type == "RIPEMD128")
+      F<RIPEMD128>()(functionParams...);
+    else if (hash_type == "RIPEMD160")
+      F<RIPEMD160>()(functionParams...);
+    else if (hash_type == "RIPEMD256")
+      F<RIPEMD256>()(functionParams...);
+    else if (hash_type == "RIPEMD320")
+      F<RIPEMD320>()(functionParams...);
+    else if (hash_type == "WHIRLPOOL")
+      F<Whirlpool>()(functionParams...);
     else
       return false;
     return true;
   }
 };
 
-template <template <typename T> class F> struct invokeWithBlockCipher {
+template <template <typename> class F> struct invokeWithBlockCipher {
   template <typename... R>
   bool operator()(std::string &cipher, bool allowAES, bool allowOther,
                   R... rest) const {

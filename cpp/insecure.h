@@ -13,14 +13,12 @@
 using namespace facebook;
 using namespace facebook::jsi::detail;
 using namespace CryptoPP;
+using namespace rncryptopp::jsiHelper;
 
 namespace rncryptopp::insecure {
-jsi::Value md2(jsi::Runtime &rt, const jsi::Value &thisValue,
-               const jsi::Value *args, size_t count);
+void md2(jsi::Runtime &rt, CppArgs *args, std::string &target);
 
-jsi::Value md4(jsi::Runtime &rt, const jsi::Value &thisValue,
-               const jsi::Value *args, size_t count);
+void md4(jsi::Runtime &rt, CppArgs *args, std::string &target);
 
-jsi::Value md5(jsi::Runtime &rt, const jsi::Value &thisValue,
-               const jsi::Value *args, size_t count);
+void md5(jsi::Runtime &rt, CppArgs *args, std::string &target);
 } // namespace rncryptopp::insecure

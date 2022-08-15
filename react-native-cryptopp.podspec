@@ -20,5 +20,7 @@ Pod::Spec.new do |s|
     'cpp/ios/libcryptopp.xcframework', 
   ]
 
+  s.dependency "React-callinvoker"
+  s.dependency "React"
   s.dependency "React-Core"
 end

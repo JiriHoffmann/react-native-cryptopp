@@ -4,7 +4,7 @@ namespace rncryptopp {
 
 template <class T_MAC>
 void runGenerate(std::string *key, std::string *data, std::string *result) {
-  T_MAC mac((const byte *)key->data(), key->size());
+  T_MAC mac((const CryptoPP::byte *)key->data(), key->size());
 
   StringSource _(*data, true,
                  new HashFilter(mac,
@@ -27,7 +27,7 @@ template <typename T> struct runGenerateWrapperCMAC {
 template <class T_MAC>
 void runVerify(std::string *key, std::string *dataAndMac, bool *result) {
   try {
-    T_MAC mac((const byte *)key->data(), key->size());
+    T_MAC mac((const CryptoPP::byte *)key->data(), key->size());
     const int flags = HashVerificationFilter::THROW_EXCEPTION |
                       HashVerificationFilter::HASH_AT_END;
 
@@ -53,143 +53,139 @@ template <typename T> struct runVerifyWrapperCMAC {
 };
 
 namespace hmac {
-jsi::Value generate(jsi::Runtime &rt, const jsi::Value &thisValue,
-                    const jsi::Value *args, size_t argCount) {
-  std::string data, key, hash, result;
+void generate(jsi::Runtime &rt, CppArgs *args, std::string *target,
+              QuickDataType *targetType, StringEncoding *targetEncoding) {
+  if (args->size() < 4)
+    throwJSError(rt, "RNCryptopp: HMAC generate invalid number of arguments");
 
-  auto dataInputType = binaryLikeValueToString(rt, args[0], &data);
-  if (dataInputType == INP_UNKNOWN)
+  if (!isDataStringOrAB(args->at(1)))
     throwJSError(
         rt, "RNCryptopp: HMAC generate, data is not a string or ArrayBuffer");
 
-  if (binaryLikeValueToString(rt, args[1], &key, ENCODING_HEX) == INP_UNKNOWN)
+  if (!isDataStringOrAB(args->at(2)))
     throwJSError(
         rt, "RNCryptopp: HMAC generate, key is not a string or ArrayBuffer");
 
-  if (stringValueToString(rt, args[2], &hash) == INP_UNKNOWN)
+  if (!isDataString(args->at(3)))
     throwJSError(rt, "RNCryptopp: HMAC generate, hash is not a string");
 
-  if (!invokeWithHash<runGenerateWrapperHMAC>()(hash, &key, &data, &result))
+  std::string data = args->at(1).stringValue;
+  std::string hash = args->at(3).stringValue;
+  std::string key;
+  decodeJSIString(args->at(2), &key, ENCODING_HEX);
+
+  if (!invokeWithHash<runGenerateWrapperHMAC>()(hash, &key, &data, target))
     throwJSError(rt, "RNCryptopp: HMAC generate, invalid hash value");
 
-  // Return string
-  if (dataInputType == INP_STRING) {
-    std::string encoded;
-    encodeString(&result, &encoded, ENCODING_HEX);
-    return jsi::String::createFromUtf8(rt, encoded);
-  }
-
-  // Return ArrayBuffer
-  int size = (int)result.size();
-  jsi::Function array_buffer_ctor =
-      rt.global().getPropertyAsFunction(rt, "ArrayBuffer");
-  jsi::Object obj = array_buffer_ctor.callAsConstructor(rt, size).getObject(rt);
-  jsi::ArrayBuffer buff = obj.getArrayBuffer(rt);
-  // FIXME: see https://github.com/facebook/hermes/issues/564.
-  memcpy(buff.data(rt), result.data(), size);
-
-  return obj;
+  *targetType = args->at(1).dataType;
+  *targetEncoding =
+      rncryptopp::getEncodingFromArgs(rt, args, 5, ENCODING_HEX, false);
 }
 
-jsi::Value verify(jsi::Runtime &rt, const jsi::Value &thisValue,
-                  const jsi::Value *args, size_t argCount) {
-  std::string data, key, hash, mac;
-  auto dataInputType = binaryLikeValueToString(rt, args[0], &data);
-  if (dataInputType == INP_UNKNOWN)
+void verify(jsi::Runtime &rt, CppArgs *args, bool *target,
+            QuickDataType *targetType) {
+  if (args->size() < 5)
+    throwJSError(rt, "RNCryptopp: HMAC verify invalid number of arguments");
+
+  if (!isDataStringOrAB(args->at(1)))
     throwJSError(
         rt, "RNCryptopp: HMAC verify, data is not a string or ArrayBuffer");
 
-  if (binaryLikeValueToString(rt, args[1], &key, ENCODING_HEX) == INP_UNKNOWN)
+  if (!isDataStringOrAB(args->at(2)))
     throwJSError(rt,
                  "RNCryptopp: HMAC verify, key is not a string or ArrayBuffer");
 
-  if (stringValueToString(rt, args[2], &hash) == INP_UNKNOWN)
+  if (!isDataString(args->at(3)))
     throwJSError(rt, "RNCryptopp: HMAC verify, hash is not a string");
 
-  auto macEncoding = rncryptopp::getEncodingFromArgs(rt, args, argCount, 4,
-                                                     ENCODING_HEX, false);
-
-  if (binaryLikeValueToString(rt, args[3], &mac, macEncoding) == INP_UNKNOWN)
+  if (!isDataStringOrAB(args->at(4)))
     throwJSError(rt,
                  "RNCryptopp: HMAC verify, mac is not a string or ArrayBuffer");
 
+  auto macEncoding =
+      rncryptopp::getEncodingFromArgs(rt, args, 5, ENCODING_HEX, false);
+
+  std::string data = args->at(1).stringValue;
+  std::string hash = args->at(3).stringValue;
+  std::string key, mac;
+  decodeJSIString(args->at(2), &key, ENCODING_HEX);
+  decodeJSIString(args->at(4), &mac, macEncoding);
+
   std::string dataAndMac = data + mac;
-  bool result;
-  if (!invokeWithHash<runVerifyWrapperHMAC>()(hash, &key, &dataAndMac, &result))
+  if (!invokeWithHash<runVerifyWrapperHMAC>()(hash, &key, &dataAndMac, target))
     throwJSError(rt, "RNCryptopp: HMAC verify, invalid hash value");
 
-  return jsi::Value(result);
+  *targetType = BOOLEAN;
 }
 } // namespace hmac
 
 namespace cmac {
-jsi::Value generate(jsi::Runtime &rt, const jsi::Value &thisValue,
-                    const jsi::Value *args, size_t argCount) {
-  std::string data, key, cipher, result;
-  auto dataInputType = binaryLikeValueToString(rt, args[0], &data);
-  if (dataInputType == INP_UNKNOWN)
+void generate(jsi::Runtime &rt, CppArgs *args, std::string *target,
+              QuickDataType *targetType, StringEncoding *targetEncoding) {
+  if (args->size() < 4)
+    throwJSError(rt, "RNCryptopp: CMAC generate invalid number of arguments");
+
+  if (!isDataStringOrAB(args->at(1)))
     throwJSError(
         rt, "RNCryptopp: CMAC generate, data is not a string or ArrayBuffer");
 
-  if (binaryLikeValueToString(rt, args[1], &key, ENCODING_HEX) == INP_UNKNOWN)
+  if (!isDataStringOrAB(args->at(2)))
     throwJSError(
         rt, "RNCryptopp: CMAC generate, key is not a string or ArrayBuffer");
 
-  if (!stringValueToString(rt, args[2], &cipher))
-    throwJSError(rt, "RNCryptopp: CMAC generate, hash is not a string");
+  if (!isDataString(args->at(3)))
+    throwJSError(rt, "RNCryptopp: CMAC generate, cipher is not a string");
+
+  std::string data = args->at(1).stringValue;
+  std::string cipher = args->at(3).stringValue;
+  std::string key;
+  decodeJSIString(args->at(2), &key, ENCODING_HEX);
 
   if (!invokeWithBlockCipher<runGenerateWrapperCMAC>()(cipher, true, true, &key,
-                                                       &data, &result))
+                                                       &data, target))
     throwJSError(rt, "RNCryptopp: CMAC generate, invalid hash value");
 
-  // Return string
-  if (dataInputType == INP_STRING) {
-    std::string encoded;
-    encodeString(&result, &encoded, ENCODING_HEX);
-    return jsi::String::createFromUtf8(rt, encoded);
-  }
-
-  // Return ArrayBuffer
-  int size = (int)result.size();
-  jsi::Function array_buffer_ctor =
-      rt.global().getPropertyAsFunction(rt, "ArrayBuffer");
-  jsi::Object obj = array_buffer_ctor.callAsConstructor(rt, size).getObject(rt);
-  jsi::ArrayBuffer buff = obj.getArrayBuffer(rt);
-  // FIXME: see https://github.com/facebook/hermes/issues/564.
-  memcpy(buff.data(rt), result.data(), size);
-
-  return obj;
+  *targetType = args->at(1).dataType;
+  *targetEncoding =
+      rncryptopp::getEncodingFromArgs(rt, args, 5, ENCODING_HEX, false);
 }
 
-jsi::Value verify(jsi::Runtime &rt, const jsi::Value &thisValue,
-                  const jsi::Value *args, size_t argCount) {
-  std::string data, key, cipher, mac;
-  auto dataInputType = binaryLikeValueToString(rt, args[0], &data);
-  if (dataInputType == INP_UNKNOWN)
+void verify(jsi::Runtime &rt, CppArgs *args, bool *target,
+            QuickDataType *targetType) {
+  if (args->size() < 5)
+    throwJSError(rt, "RNCryptopp: CMAC verify invalid number of arguments");
+
+  if (!isDataStringOrAB(args->at(1)))
     throwJSError(
         rt, "RNCryptopp: CMAC verify, data is not a string or ArrayBuffer");
 
-  if (binaryLikeValueToString(rt, args[1], &key, ENCODING_HEX) == INP_UNKNOWN)
+  if (!isDataStringOrAB(args->at(2)))
     throwJSError(rt,
                  "RNCryptopp: CMAC verify, key is not a string or ArrayBuffer");
 
-  if (stringValueToString(rt, args[2], &cipher) == INP_UNKNOWN)
-    throwJSError(rt, "RNCryptopp: CMAC verify, hash is not a string");
+  if (!isDataString(args->at(3)))
+    throwJSError(rt, "RNCryptopp: CMAC verify, cipher is not a string");
 
-  auto macEncoding = rncryptopp::getEncodingFromArgs(rt, args, argCount, 4,
-                                                     ENCODING_HEX, false);
-
-  if (binaryLikeValueToString(rt, args[3], &mac, macEncoding) == INP_UNKNOWN)
+  if (!isDataStringOrAB(args->at(4)))
     throwJSError(rt,
                  "RNCryptopp: CMAC verify, mac is not a string or ArrayBuffer");
 
+  auto macEncoding =
+      rncryptopp::getEncodingFromArgs(rt, args, 5, ENCODING_HEX, false);
+
+  std::string data = args->at(1).stringValue;
+  std::string cipher = args->at(3).stringValue;
+  std::string key, mac;
+  decodeJSIString(args->at(2), &key, ENCODING_HEX);
+  decodeJSIString(args->at(4), &mac, macEncoding);
+
   std::string dataAndMac = data + mac;
-  bool result;
+
   if (!invokeWithBlockCipher<runVerifyWrapperCMAC>()(cipher, true, true, &key,
-                                                     &dataAndMac, &result))
+                                                     &dataAndMac, target))
     throwJSError(rt, "RNCryptopp: CMAC verify, invalid hash value");
 
-  return jsi::Value(result);
+  *targetType = BOOLEAN;
 }
 } // namespace cmac
 } // namespace rncryptopp
