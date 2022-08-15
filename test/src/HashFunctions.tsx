@@ -9,51 +9,51 @@ const lsh_msg = 'abc';
 export const HashFunctions = () => {
   return (
     <>
-      <Text testID="BLAKE2b">{Cryptopp.hashFunctions.BLAKE2b(msg)}</Text>
-      <Text testID="BLAKE2s">{Cryptopp.hashFunctions.BLAKE2s(msg)}</Text>
-      <Text testID="Keccak_224">
-        {Cryptopp.hashFunctions.Keccak(msg, '224')}
+      <Text testID="BLAKE2b">{Cryptopp.hash.BLAKE2b(msg)}</Text>
+      <Text testID="BLAKE2s">{Cryptopp.hash.BLAKE2s(msg)}</Text>
+      <Text testID="Keccak224">
+        {Cryptopp.hash.Keccak224(msg)}
       </Text>
-      <Text testID="Keccak_256">
-        {Cryptopp.hashFunctions.Keccak(msg, '256')}
+      <Text testID="Keccak256">
+        {Cryptopp.hash.Keccak256(msg)}
       </Text>
-      <Text testID="Keccak_384">
-        {Cryptopp.hashFunctions.Keccak(msg, '384')}
+      <Text testID="Keccak384">
+        {Cryptopp.hash.Keccak384(msg)}
       </Text>
-      <Text testID="Keccak_512">
-        {Cryptopp.hashFunctions.Keccak(msg, '512')}
+      <Text testID="Keccak512">
+        {Cryptopp.hash.Keccak512(msg)}
       </Text>
-      <Text testID="SHA1">{Cryptopp.hashFunctions.SHA1(msg)}</Text>
-      <Text testID="SHA224">{Cryptopp.hashFunctions.SHA2(msg, '224')}</Text>
-      <Text testID="SHA256">{Cryptopp.hashFunctions.SHA2(msg, '256')}</Text>
-      <Text testID="SHA384">{Cryptopp.hashFunctions.SHA2(msg, '384')}</Text>
-      <Text testID="SHA512">{Cryptopp.hashFunctions.SHA2(msg, '512')}</Text>
-      <Text testID="SHA3_224">{Cryptopp.hashFunctions.SHA3(msg, '224')}</Text>
-      <Text testID="SHA3_256">{Cryptopp.hashFunctions.SHA3(msg, '256')}</Text>
-      <Text testID="SHA3_384">{Cryptopp.hashFunctions.SHA3(msg, '384')}</Text>
-      <Text testID="SHA3_512">{Cryptopp.hashFunctions.SHA3(msg, '512')}</Text>
-      <Text testID="SHAKE128">{Cryptopp.hashFunctions.SHAKE(msg, '128')}</Text>
-      <Text testID="SHAKE256">{Cryptopp.hashFunctions.SHAKE(msg, '256')}</Text>
-      <Text testID="SM3">{Cryptopp.hashFunctions.SM3(msg)}</Text>
-      <Text testID="Tiger">{Cryptopp.hashFunctions.Tiger(msg)}</Text>
+      <Text testID="SHA1">{Cryptopp.hash.SHA1(msg)}</Text>
+      <Text testID="SHA224">{Cryptopp.hash.SHA224(msg)}</Text>
+      <Text testID="SHA256">{Cryptopp.hash.SHA256(msg)}</Text>
+      <Text testID="SHA384">{Cryptopp.hash.SHA384(msg)}</Text>
+      <Text testID="SHA512">{Cryptopp.hash.SHA512(msg)}</Text>
+      <Text testID="SHA3_224">{Cryptopp.hash.SHA3_224(msg)}</Text>
+      <Text testID="SHA3_256">{Cryptopp.hash.SHA3_256(msg)}</Text>
+      <Text testID="SHA3_384">{Cryptopp.hash.SHA3_384(msg)}</Text>
+      <Text testID="SHA3_512">{Cryptopp.hash.SHA3_512(msg)}</Text>
+      <Text testID="SHAKE128">{Cryptopp.hash.SHAKE128(msg)}</Text>
+      <Text testID="SHAKE256">{Cryptopp.hash.SHAKE256(msg)}</Text>
+      <Text testID="SM3">{Cryptopp.hash.SM3(msg)}</Text>
+      <Text testID="Tiger">{Cryptopp.hash.Tiger(msg)}</Text>
       <Text testID="RIPEMD128">
-        {Cryptopp.hashFunctions.RIPEMD(msg, '128')}
+        {Cryptopp.hash.RIPEMD128(msg)}
       </Text>
       <Text testID="RIPEMD160">
-        {Cryptopp.hashFunctions.RIPEMD(msg, '160')}
+        {Cryptopp.hash.RIPEMD160(msg)}
       </Text>
       <Text testID="RIPEMD256">
-        {Cryptopp.hashFunctions.RIPEMD(msg, '256')}
+        {Cryptopp.hash.RIPEMD256(msg)}
       </Text>
       <Text testID="RIPEMD320">
-        {Cryptopp.hashFunctions.RIPEMD(msg, '320')}
+        {Cryptopp.hash.RIPEMD320(msg)}
       </Text>
 
       {/* LSH functions have a different input */}
-      <Text testID="LSH224">{Cryptopp.hashFunctions.LSH(lsh_msg, '224')}</Text>
-      <Text testID="LSH256">{Cryptopp.hashFunctions.LSH(lsh_msg, '256')}</Text>
-      <Text testID="LSH384">{Cryptopp.hashFunctions.LSH(lsh_msg, '384')}</Text>
-      <Text testID="LSH512">{Cryptopp.hashFunctions.LSH(lsh_msg, '512')}</Text>
+      <Text testID="LSH224">{Cryptopp.hash.LSH224(lsh_msg)}</Text>
+      <Text testID="LSH256">{Cryptopp.hash.LSH256(lsh_msg)}</Text>
+      <Text testID="LSH384">{Cryptopp.hash.LSH384(lsh_msg)}</Text>
+      <Text testID="LSH512">{Cryptopp.hash.LSH512(lsh_msg)}</Text>
     </>
   );
 };

@@ -6,7 +6,9 @@
     "android": "react-native run-android",
     "ios": "react-native run-ios",
     "start": "react-native start",
-    "test": "jest",
+    "postinstall": "cd ios && pod install && cd ..",
+    "build": "detox build",
+    "test": "detox test",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
   },
   "dependencies": {
@@ -23,6 +25,7 @@
     "@typescript-eslint/eslint-plugin": "^5.20.0",
     "@typescript-eslint/parser": "^5.20.0",
     "babel-jest": "^27.5.1",
+    "babel-plugin-module-resolver": "^4.1.0",
     "detox": "^19.6.5",
     "metro-react-native-babel-preset": "^0.70.2",
     "react-test-renderer": "17.0.2",

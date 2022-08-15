@@ -67,6 +67,7 @@ cpp/ios/libcryptopp.a
 example/yarn.lock
 example/package-lock.json
 test/yarn.lock
+test/.jest
 
 # Ignore compiled files
 cpp/android
