@@ -129,7 +129,6 @@ void decrypt(jsi::Runtime &rt, CppArgs *args, std::string *target, QuickDataType
                 rt, "RNCryptopp: aes & candidates decrypt mode is not a valid mode");
 
     *targetType = args->at(1).dataType;
-    *targetEncoding =
-                getEncodingFromArgs(rt, args, 5, ENCODING_UTF8, true);
+    *targetEncoding = ENCODING_UTF8;
  }
 } // namespace rncryptopp::aescandidates
