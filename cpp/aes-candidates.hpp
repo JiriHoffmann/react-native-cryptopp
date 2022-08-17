@@ -27,16 +27,25 @@ template <template <class> class T_Mode, class T_BlockCipher>
               std::string *result, ExecType execType) {
     if (execType == ENCRYPT) {
         typename T_Mode<T_BlockCipher>::Encryption e;
-        e.SetKeyWithIV(reinterpret_cast<const CryptoPP::byte *>(key->data()), key->size(),
-                       reinterpret_cast<const CryptoPP::byte *>(iv->data()), iv->size());
+        try{
+            e.SetKeyWithIV(reinterpret_cast<const CryptoPP::byte *>(key->data()), key->size(),
+                           reinterpret_cast<const CryptoPP::byte *>(iv->data()), iv->size());
+        } catch (std::exception err){
+            e.SetKey(reinterpret_cast<const CryptoPP::byte *>(key->data()), key->size());
+        }
+
         std::string encrypted;
         StringSource _(*data, true,
                        new StreamTransformationFilter(e, new StringSink(*result)));
     }
     if (execType == DECRYPT) {
         typename T_Mode<T_BlockCipher>::Decryption d;
+        try{
         d.SetKeyWithIV(reinterpret_cast<const CryptoPP::byte *>(key->data()), key->size(),
                        reinterpret_cast<const CryptoPP::byte *>(iv->data()), iv->size());
+        } catch (std::exception err){
+            d.SetKey(reinterpret_cast<const CryptoPP::byte *>(key->data()), key->size());
+        }
         StringSource s(*data, true,
                        new StreamTransformationFilter(d, new StringSink(*result)));
     }
@@ -70,7 +79,7 @@ void encrypt(jsi::Runtime &rt, CppArgs *args, std::string *target, QuickDataType
 
     if(!isDataStringOrAB(args->at(1)))
         throwJSError(rt, "RNCryptopp: aes & candidates encrypt data is not a string or ArrayBuffer");
-    
+
     if(!isDataStringOrAB(args->at(2)))
         throwJSError(rt, "RNCryptopp: aes & candidates encrypt key is not a string or ArrayBuffer");
 
