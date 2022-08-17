@@ -8,7 +8,7 @@ void encodeString(std::string *in, std::string *out, StringEncoding encoding) {
     StringSource(*in, true, new HexEncoder(new StringSink(*out)));
     break;
   case ENCODING_BASE64:
-    StringSource(*in, true, new Base64Encoder(new StringSink(*out)));
+    StringSource(*in, true, new Base64Encoder(new StringSink(*out), false));
     break;
   case ENCODING_BASE64URL:
     StringSource(*in, true, new Base64URLEncoder(new StringSink(*out)));
