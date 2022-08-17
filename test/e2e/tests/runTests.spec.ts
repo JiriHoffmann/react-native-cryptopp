@@ -1,5 +1,5 @@
 import { expect, element, by } from 'detox';
-// import { aesCandicatesTests } from './aesCandidates';
+import { aesCandicatesTests } from './aesCandidates';
 import { hashFunctionsTests } from './hashFunctions';
 
 describe('App', () => {
@@ -9,4 +9,4 @@ describe('App', () => {
 });
 
 hashFunctionsTests();
-// aesCandicatesTests();
+aesCandicatesTests();
