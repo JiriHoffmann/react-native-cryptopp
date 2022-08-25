@@ -79,7 +79,7 @@ void generate(jsi::Runtime &rt, CppArgs *args, std::string *target,
 
   *targetType = args->at(1).dataType;
   *targetEncoding =
-      rncryptopp::getEncodingFromArgs(rt, args, 5, ENCODING_HEX, false);
+      rncryptopp::getEncodingFromArgs(rt, args, 4, ENCODING_HEX, false);
 }
 
 void verify(jsi::Runtime &rt, CppArgs *args, bool *target,
@@ -147,7 +147,7 @@ void generate(jsi::Runtime &rt, CppArgs *args, std::string *target,
 
   *targetType = args->at(1).dataType;
   *targetEncoding =
-      rncryptopp::getEncodingFromArgs(rt, args, 5, ENCODING_HEX, false);
+      rncryptopp::getEncodingFromArgs(rt, args, 4, ENCODING_HEX, false);
 }
 
 void verify(jsi::Runtime &rt, CppArgs *args, bool *target,
