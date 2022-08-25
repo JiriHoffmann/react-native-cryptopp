@@ -41,7 +41,7 @@ export const aesCandicatesTests = async () => {
         await expect(element(by.id('AES_encrypted_b64'))).toHaveText(AES_B64);
       });
 
-    it(`Test AES_decrypted_b644`, async () => {
+    it(`Test AES_decrypted_b64`, async () => {
       await expect(element(by.id('AES_decrypted_b64'))).toHaveText(msg);
     });
   });
