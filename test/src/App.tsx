@@ -1,8 +1,8 @@
 import React from 'react';
 import { SafeAreaView } from 'react-native';
 import { AesCandidates } from './AesCandidates';
-
 import { HashFunctions } from './HashFunctions';
+import { KeyDerivation } from './KeyDerivation';
 
 const App = () => {
   return (
@@ -10,6 +10,7 @@ const App = () => {
     <SafeAreaView style={{ flex: 1 }}  testID={`container`}>
       <HashFunctions />
       <AesCandidates />
+      <KeyDerivation />
     </SafeAreaView>
   );
 };
