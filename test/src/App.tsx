@@ -3,6 +3,7 @@ import { SafeAreaView } from 'react-native';
 import { AesCandidates } from './AesCandidates';
 import { HashFunctions } from './HashFunctions';
 import { KeyDerivation } from './KeyDerivation';
+import { MessageAuthentication } from './MessageAuthentication';
 
 const App = () => {
   return (
@@ -11,6 +12,7 @@ const App = () => {
       <HashFunctions />
       <AesCandidates />
       <KeyDerivation />
+      <MessageAuthentication />
     </SafeAreaView>
   );
 };
