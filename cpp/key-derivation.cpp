@@ -231,7 +231,7 @@ void scrypt(jsi::Runtime &rt, CppArgs *args, std::string *target,
                    reinterpret_cast<const byte *>(salt.data()), salt.size(), N,
                    r, p);
 
-  StringSource(derived, derived.size(), true, new StringSink(*target));
+  StringSource(derived, int(dkLen / 4), true, new StringSink(*target));
   *targetType = args->at(1).dataType;
   *targetEncoding = ENCODING_HEX;
 }
