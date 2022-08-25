@@ -153,31 +153,31 @@ export default function App() {
 
       // Key padding
       const key_padding_start = PerformanceNow();
-      const pbkdf12 = Cryptopp.keyDerivation.pbkdf12(
+      const PKCS12_PBKDF = Cryptopp.keyDerivation.PKCS12_PBKDF(
         str,
         'salt',
         'SHA256',
         1024
       );
-      const pkbdf1 = Cryptopp.keyDerivation.pkcs5_pbkdf1(
+      const PKCS5_PBKDF1 = Cryptopp.keyDerivation.PKCS5_PBKDF1(
         str,
         'salt',
         'SHA256',
         1024
       );
-      const pkbdf2 = Cryptopp.keyDerivation.pkcs5_pbkdf2(
+      const PKCS5_PBKDF2 = Cryptopp.keyDerivation.PKCS5_PBKDF2(
         str,
         'salt',
         'SHA256',
         1024
       );
-      const hkdf = Cryptopp.keyDerivation.hkdf(
+      const HKDF = Cryptopp.keyDerivation.HKDF(
         str,
         'salt',
         'HKDF key derivation',
         'SHA1'
       );
-      const scrypt = Cryptopp.keyDerivation.scrypt(
+      const Scrypt = Cryptopp.keyDerivation.Scrypt(
         str,
         'NaCl',
         1024,
@@ -235,11 +235,11 @@ export default function App() {
         hexFromB64URL,
         hexFromUtf8,
         encoding_time,
-        pbkdf12,
-        pkbdf1,
-        pkbdf2,
-        hkdf,
-        scrypt,
+        PKCS12_PBKDF,
+        PKCS5_PBKDF1,
+        PKCS5_PBKDF2,
+        HKDF,
+        Scrypt,
         key_padding_time,
       };
     },
@@ -280,7 +280,7 @@ export default function App() {
         {Object.keys(result).map((key) => (
           <Text key={key} style={styles.result} numberOfLines={1}>
             {/* @ts-ignore */}
-            {key}: {result[key]}
+            {key}: {`|${result[key]}|`}
           </Text>
         ))}
       </ScrollView>

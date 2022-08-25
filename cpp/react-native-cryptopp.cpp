@@ -95,19 +95,19 @@ void execCppFunction(jsi::Runtime &rt, CppArgs *args, std::string &fnName,
   /*
    * Public Key Derivation Functions
    */
-  else if (fnName == "key_derivation_hkdf")
+  else if (fnName == "key_derivation_HKDF")
     rncryptopp::keyderivation::hkdf(rt, args, stringTarget, targetType,
                                     targetEncoding);
-  else if (fnName == "key_derivation_pbkdf12")
+  else if (fnName == "key_derivation_PKCS12_PBKDF")
     rncryptopp::keyderivation::pbkdf12(rt, args, stringTarget, targetType,
                                        targetEncoding);
-  else if (fnName == "key_derivation_pkcs5_pbkdf1")
+  else if (fnName == "key_derivation_PKCS5_PBKDF1")
     rncryptopp::keyderivation::pkcs5_pbkdf1(rt, args, stringTarget, targetType,
                                             targetEncoding);
-  else if (fnName == "key_derivation_pkcs5_pbkdf2")
+  else if (fnName == "key_derivation_PKCS5_PBKDF2")
     rncryptopp::keyderivation::pkcs5_pbkdf2(rt, args, stringTarget, targetType,
                                             targetEncoding);
-  else if (fnName == "key_derivation_scrypt")
+  else if (fnName == "key_derivation_Scrypt")
     rncryptopp::keyderivation::scrypt(rt, args, stringTarget, targetType,
                                       targetEncoding);
 

@@ -71,4 +71,4 @@ export const BLOCK_CIPHERS = [
   'DES_EDE3',
   'TEA',
   'XTEA',
-];
+] as const;

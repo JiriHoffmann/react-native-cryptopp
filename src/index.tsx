@@ -100,18 +100,18 @@ CryptoppModule.async.utils = {
 
 // // Key Derivation
 CryptoppModule.keyDerivation = {
-  hkdf: (...p: any) => exec('key_derivation_hkdf', ...p),
-  pbkdf12: (...p: any) => exec('key_derivation_pbkdf12', ...p),
-  pkcs5_pbkdf1: (...p: any) => exec('key_derivation_pkcs5_pbkdf1', ...p),
-  pkcs5_pbkdf2: (...p: any) => exec('key_derivation_pkcs5_pbkdf2', ...p),
-  scrypt: (...p: any) => exec('key_derivation_scrypt', ...p),
+  HKDF: (...p: any) => exec('key_derivation_HKDF', ...p),
+  PKCS12_PBKDF: (...p: any) => exec('key_derivation_PKCS12_PBKDF', ...p),
+  PKCS5_PBKDF1: (...p: any) => exec('key_derivation_PKCS5_PBKDF1', ...p),
+  PKCS5_PBKDF2: (...p: any) => exec('key_derivation_PKCS5_PBKDF2', ...p),
+  Scrypt: (...p: any) => exec('key_derivation_Scrypt', ...p),
 };
 CryptoppModule.async.keyDerivation = {
-  hkdf: (...p: any) => execAsync('key_derivation_hkdf', ...p),
-  pbkdf12: (...p: any) => execAsync('key_derivation_pbkdf12', ...p),
-  pkcs5_pbkdf1: (...p: any) => execAsync('key_derivation_pkcs5_pbkdf1', ...p),
-  pkcs5_pbkdf2: (...p: any) => execAsync('key_derivation_pkcs5_pbkdf2', ...p),
-  scrypt: (...p: any) => execAsync('key_derivation_scrypt', ...p),
+  HKDF: (...p: any) => execAsync('key_derivation_HKDF', ...p),
+  PKCS12_PBKDF: (...p: any) => execAsync('key_derivation_PKCS12_PBKDF', ...p),
+  PKCS5_PBKDF1: (...p: any) => execAsync('key_derivation_PKCS5_PBKDF1', ...p),
+  PKCS5_PBKDF2: (...p: any) => execAsync('key_derivation_PKCS5_PBKDF2', ...p),
+  Scrypt: (...p: any) => execAsync('key_derivation_Scrypt', ...p),
 };
 
 // // Public-key

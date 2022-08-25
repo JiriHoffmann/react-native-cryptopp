@@ -141,31 +141,31 @@ declare interface RSA {
 }
 
 declare interface KeyDerivation {
-  pbkdf12: <T extends BinaryLike>(
-    password: T,
-    salt: BinaryLike,
-    hash: CipherAndDerivationHashName,
-    iterations: number
-  ) => T;
-  pkcs5_pbkdf1: <T extends BinaryLike>(
-    password: T,
-    salt: BinaryLike,
-    hash: CipherAndDerivationHashName,
-    iterations: number
-  ) => T;
-  pkcs5_pbkdf2: <T extends BinaryLike>(
-    password: T,
-    salf: BinaryLike,
-    hash: CipherAndDerivationHashName,
-    iterations: number
-  ) => T;
-  hkdf: <T extends BinaryLike>(
+  HKDF: <T extends BinaryLike>(
     password: T,
     salt: BinaryLike,
     info: BinaryLike,
     hash: CipherAndDerivationHashName
   ) => T;
-  scrypt: <T extends BinaryLike>(
+  PKCS12_PBKDF: <T extends BinaryLike>(
+    password: T,
+    salt: BinaryLike,
+    hash: CipherAndDerivationHashName,
+    iterations: number
+  ) => T;
+  PKCS5_PBKDF1: <T extends BinaryLike>(
+    password: T,
+    salt: BinaryLike,
+    hash: CipherAndDerivationHashName,
+    iterations: number
+  ) => T;
+  PKCS5_PBKDF2: <T extends BinaryLike>(
+    password: T,
+    salf: BinaryLike,
+    hash: CipherAndDerivationHashName,
+    iterations: number
+  ) => T;
+  Scrypt: <T extends BinaryLike>(
     password: T,
     salt: BinaryLike,
     N: number,
