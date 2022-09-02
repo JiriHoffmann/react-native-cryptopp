@@ -1,16 +1,24 @@
 import type { AES_BLOCK_CIPHERS, BLOCK_CIPHERS, HASHES } from './constants';
 import type { Hash } from './HostObjects';
 
-type PromisifyFunction<T extends (...args: any) => any> = T extends (
-  ...args: infer A
-) => infer R
-  ? (...args: A) => Promise<R>
-  : any;
+type List<A = any> = ReadonlyArray<A>;
 
-export type Promisify<T> = {
-  [P in keyof T]: T[P] extends (...args: any) => any
-    ? PromisifyFunction<T[P]>
-    : any;
+type Return<F extends Function> = F extends (...args: List) => infer R
+  ? R
+  : never;
+
+type Parameters<F extends Function> = F extends (...args: infer L) => any
+  ? L
+  : never;
+
+type Function<P extends List = any, R extends any = any> = (...args: P) => R;
+
+type Promisify<F extends Function> = (
+  ...args: Parameters<F>
+) => Promise<Return<F>>;
+
+type PromisifyObject<T> = {
+  [P in keyof T]: T[P] extends (...args: any) => any ? Promisify<T[P]> : any;
 };
 
 export type HashName = typeof HASHES[number];
@@ -49,29 +57,29 @@ export type RSA_PSSR = 'PSSR_SHA1' | 'PSSR_SHA256' | 'PSSR_Whirlpool';
 export type RSA_SignatureScheme = RSA_SSA | RSA_PSS | RSA_PSSR;
 
 declare interface AES_and_Candidates {
-  encrypt: <T extends BinaryLike>(
+  encrypt: <T extends string | ArrayBuffer>(
     data: T,
     key: BinaryLike,
     iv: BinaryLike,
     mode: AES_Modes,
     encodeTo?: BinaryLikeEncodingOutput
-  ) => T;
-  decrypt: <T extends BinaryLike>(
+  ) => T extends string ? string : ArrayBuffer;
+  decrypt: <T extends string | ArrayBuffer>(
     data: T,
     key: BinaryLike,
     iv: BinaryLike,
     mode: AES_Modes,
     dataStringEncoding?: BinaryLikeEncodingInput
-  ) => T;
+  ) => T extends string ? string : ArrayBuffer;
 }
 
 declare interface CMAC {
-  generate: <T extends BinaryLike>(
+  generate: <T extends string | ArrayBuffer>(
     data: T,
     key: BinaryLike,
     cipher: AESBlockCipherName | BlockCiphers,
     encodeTo?: BinaryLikeEncodingOutput
-  ) => T;
+  ) => T extends string ? string : ArrayBuffer;
   verify: (
     data: BinaryLike,
     key: BinaryLike,
@@ -82,12 +90,12 @@ declare interface CMAC {
 }
 
 declare interface HMAC {
-  generate: <T extends BinaryLike>(
+  generate: <T extends string | ArrayBuffer>(
     data: T,
     key: BinaryLike,
     hash: CipherAndDerivationHashName,
     encodeTo?: BinaryLikeEncodingOutput
-  ) => T;
+  ) => T extends string ? string : ArrayBuffer;
   verify: (
     data: BinaryLike,
     key: BinaryLike,
@@ -112,17 +120,17 @@ declare interface RSA {
       e: string;
     };
   };
-  encrypt: <T extends BinaryLike>(
-    data: BinaryLike,
+  encrypt: <T extends string | ArrayBuffer>(
+    data: T,
     publicKey: string,
     encryptionScheme: RSA_EncryptionScheme
-  ) => T;
-  decrypt: <T extends BinaryLike>(
+  ) => T extends string ? string : ArrayBuffer;
+  decrypt: <T extends string | ArrayBuffer>(
     data: T,
     privateKey: string,
     encryptionScheme: RSA_EncryptionScheme
-  ) => T;
-  sign: <T extends BinaryLike>(
+  ) => T extends string ? string : ArrayBuffer;
+  sign: <T extends string | ArrayBuffer>(
     data: T,
     privateKey: string,
     signatureScheme: RSA_SignatureScheme
@@ -133,46 +141,46 @@ declare interface RSA {
     signatureScheme: RSA_SSA | RSA_PSS,
     signature: string
   ) => boolean;
-  recover: <T extends BinaryLike>(
+  recover: <T extends string | ArrayBuffer>(
     signature: T,
     publicKey: string,
     signatureScheme: RSA_PSSR
-  ) => T;
+  ) => T extends string ? string : ArrayBuffer;
 }
 
 declare interface KeyDerivation {
-  HKDF: <T extends BinaryLike>(
+  HKDF: <T extends string | ArrayBuffer>(
     password: T,
     salt: BinaryLike,
     info: BinaryLike,
     hash: CipherAndDerivationHashName
-  ) => T;
-  PKCS12_PBKDF: <T extends BinaryLike>(
+  ) => T extends string ? string : ArrayBuffer;
+  PKCS12_PBKDF: <T extends string | ArrayBuffer>(
     password: T,
     salt: BinaryLike,
     hash: CipherAndDerivationHashName,
     iterations: number
-  ) => T;
-  PKCS5_PBKDF1: <T extends BinaryLike>(
+  ) => T extends string ? string : ArrayBuffer;
+  PKCS5_PBKDF1: <T extends string | ArrayBuffer>(
     password: T,
     salt: BinaryLike,
     hash: CipherAndDerivationHashName,
     iterations: number
-  ) => T;
-  PKCS5_PBKDF2: <T extends BinaryLike>(
+  ) => T extends string ? string : ArrayBuffer;
+  PKCS5_PBKDF2: <T extends string | ArrayBuffer>(
     password: T,
     salf: BinaryLike,
     hash: CipherAndDerivationHashName,
     iterations: number
-  ) => T;
-  Scrypt: <T extends BinaryLike>(
+  ) => T extends string ? string : ArrayBuffer;
+  Scrypt: <T extends string | ArrayBuffer>(
     password: T,
     salt: BinaryLike,
     N: number,
     r: number,
     p: number,
     dkLen: number
-  ) => T;
+  ) => T extends string ? string : ArrayBuffer;
 }
 
 declare interface Insecure {
@@ -222,18 +230,18 @@ export declare interface Cryptopp {
   utils: Utils;
   // Async functionality
   async: {
-    AES: Promisify<AES_and_Candidates>;
-    RC6: Promisify<AES_and_Candidates>;
-    MARS: Promisify<AES_and_Candidates>;
-    Twofish: Promisify<AES_and_Candidates>;
-    Serpent: Promisify<AES_and_Candidates>;
-    CAST256: Promisify<AES_and_Candidates>;
-    CMAC: Promisify<CMAC>;
-    HMAC: Promisify<HMAC>;
-    hash: Promisify<HashFunctions>;
-    RSA: Promisify<RSA>;
-    keyDerivation: Promisify<KeyDerivation>;
-    insecure: Promisify<Insecure>;
-    utils: Promisify<Utils>;
+    AES: PromisifyObject<AES_and_Candidates>;
+    RC6: PromisifyObject<AES_and_Candidates>;
+    MARS: PromisifyObject<AES_and_Candidates>;
+    Twofish: PromisifyObject<AES_and_Candidates>;
+    Serpent: PromisifyObject<AES_and_Candidates>;
+    CAST256: PromisifyObject<AES_and_Candidates>;
+    CMAC: PromisifyObject<CMAC>;
+    HMAC: PromisifyObject<HMAC>;
+    hash: PromisifyObject<HashFunctions>;
+    RSA: PromisifyObject<RSA>;
+    keyDerivation: PromisifyObject<KeyDerivation>;
+    insecure: PromisifyObject<Insecure>;
+    utils: PromisifyObject<Utils>;
   };
 }
