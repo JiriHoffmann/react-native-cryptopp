@@ -268,6 +268,7 @@ void rncryptopp_install(jsi::Runtime &jsiRuntime,
                               resolve->asObject(rt).asFunction(rt).call(rt,
                                                                         result);
                             });
+                            return;
                           }
 
                           // All other functionality executed here:
