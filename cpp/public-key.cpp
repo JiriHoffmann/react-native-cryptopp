@@ -136,21 +136,24 @@ void decrypt(jsi::Runtime &rt, CppArgs *args, std::string *target,
   PEM_Load(PKeyStringSource, privateKey);
 
   AutoSeededRandomPool rng;
-
-  if (encryptScheme == "OAEP_SHA1") {
-    RSAES<OAEP<SHA1>>::Decryptor e(privateKey);
-    StringSource(data, true,
-                 new PK_DecryptorFilter(rng, e, new StringSink(*target)));
-  } else if (encryptScheme == "OAEP_SHA256") {
-    RSAES<OAEP<SHA256>>::Decryptor e(privateKey);
-    StringSource ss1(data, true,
-                     new PK_DecryptorFilter(rng, e, new StringSink(*target)));
-  } else if (encryptScheme == "PKCS1v15") {
-    RSAES<PKCS1v15>::Decryptor e(privateKey);
-    StringSource(data, true,
-                 new PK_DecryptorFilter(rng, e, new StringSink(*target)));
-  } else {
-    throwJSError(rt, "RNCryptopp: RSA encrypt invalid scheme");
+  try {
+    if (encryptScheme == "OAEP_SHA1") {
+      RSAES<OAEP<SHA1>>::Decryptor e(privateKey);
+      StringSource(data, true,
+                   new PK_DecryptorFilter(rng, e, new StringSink(*target)));
+    } else if (encryptScheme == "OAEP_SHA256") {
+      RSAES<OAEP<SHA256>>::Decryptor e(privateKey);
+      StringSource ss1(data, true,
+                       new PK_DecryptorFilter(rng, e, new StringSink(*target)));
+    } else if (encryptScheme == "PKCS1v15") {
+      RSAES<PKCS1v15>::Decryptor e(privateKey);
+      StringSource(data, true,
+                   new PK_DecryptorFilter(rng, e, new StringSink(*target)));
+    } else {
+      throwJSError(rt, "RNCryptopp: RSA decrypt invalid scheme");
+    }
+  } catch (const std::exception &e) {
+    throwJSError(rt, "RNCryptopp: RSA decryption failed");
   }
 
   *targetType = args->at(1).dataType;
