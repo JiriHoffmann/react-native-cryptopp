@@ -1,5 +1,4 @@
-/* eslint-disable no-undef */
-import { expect, device, element, by } from 'detox';
+import { expect, element, by } from 'detox';
 
 const results = {
   HKDF: '4FF891CB129EC9F2B4CF715897B3FC5A0F58C61EC2CD59D71C635C75810EC04763E8C36BAC7462D58820734B8B09A4FCB956743CDD6FA6976B26B1A1C00E0786',
@@ -14,9 +13,6 @@ const results = {
 
 export const keyDerivationTests = async () => {
   describe('Key Derivation', () => {
-    beforeAll(async () => {
-      await device.launchApp();
-    });
 
     for (const val in results) {
       it(`Test ${val}`, async () => {

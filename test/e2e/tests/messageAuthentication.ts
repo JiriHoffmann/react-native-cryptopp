@@ -1,5 +1,4 @@
-/* eslint-disable no-undef */
-import { expect, device, element, by } from 'detox';
+import { expect, element, by, waitFor } from 'detox';
 
 const results = {
   HMAC_generate:
@@ -11,9 +10,6 @@ const results = {
 
 export const messageAuthenticationTests = async () => {
   describe('Message Authentication', () => {
-    beforeAll(async () => {
-      await device.launchApp();
-    });
 
     for (const val in results) {
       it(`Test ${val}`, async () => {
@@ -28,6 +24,28 @@ export const messageAuthenticationTests = async () => {
         await expect(element(by.id(`${val}_ab2`))).toHaveText(results[val]);
       });
     }
+
+    // Base 64
+    it(`Test HMAC_verify_b64`, async () => {
+      await expect(element(by.id(`HMAC_verify_b64`))).toHaveText('true');
+    });
+
+    it(`Test CMAC_verify_b64`, async () => {
+      await expect(element(by.id(`CMAC_verify_b64`))).toHaveText('true');
+    });
+
+    // Async
+    it(`Test HMAC_verify_async`, async () => {
+      await waitFor(element(by.id(`HMAC_verify_async`)))
+        .toHaveText('true')
+        .withTimeout(1000);
+    });
+
+    it(`Test CMAC_verify_async`, async () => {
+      await waitFor(element(by.id(`CMAC_verify_async`)))
+        .toHaveText('true')
+        .withTimeout(1000);
+    });
   });
 };
 

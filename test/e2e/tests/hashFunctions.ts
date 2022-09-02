@@ -1,5 +1,4 @@
-/* eslint-disable no-undef */
-import { expect, device, element, by } from 'detox';
+import { expect, element, by } from 'detox';
 
 // Input: 'Yoda said, Do or do not. There is no try.'
 const hashes = {
@@ -51,9 +50,6 @@ const lshHashes = {
 
 export const hashFunctionsTests = async () => {
   describe('HashFunctions', () => {
-    beforeAll(async () => {
-      await device.launchApp();
-    });
 
     for (const val in hashes) {
       it(`Test ${val}`, async () => {

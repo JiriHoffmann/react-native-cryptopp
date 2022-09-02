@@ -1,4 +1,3 @@
-/* eslint-disable no-undef */
 import { expect, element, by } from 'detox';
 
 const msg = 'CBC Mode Test';

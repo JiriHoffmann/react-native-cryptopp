@@ -4,6 +4,7 @@ import { AesCandidates } from './AesCandidates';
 import { HashFunctions } from './HashFunctions';
 import { KeyDerivation } from './KeyDerivation';
 import { MessageAuthentication } from './MessageAuthentication';
+import { PublicKey } from './publicKey';
 
 const App = () => {
   return (
@@ -13,6 +14,7 @@ const App = () => {
       <AesCandidates />
       <KeyDerivation />
       <MessageAuthentication />
+      <PublicKey />
     </SafeAreaView>
   );
 };

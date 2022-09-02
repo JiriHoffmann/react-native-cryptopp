@@ -3,6 +3,7 @@ import { aesCandicatesTests } from './aesCandidates';
 import { hashFunctionsTests } from './hashFunctions';
 import { keyDerivationTests } from './keyDerivation';
 import { messageAuthenticationTests } from './messageAuthentication';
+import { publicKeyTests } from './publicKey';
 
 describe('App', () => {
   it(`Test app start`, async () => {
@@ -14,3 +15,4 @@ hashFunctionsTests();
 aesCandicatesTests();
 keyDerivationTests();
 messageAuthenticationTests();
+publicKeyTests();
