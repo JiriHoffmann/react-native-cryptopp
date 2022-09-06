@@ -32,7 +32,7 @@ npx pod install
 ```js
 import Cryptopp from 'react-native-cryptopp';
 
-const hash = Cryptopp.hashFunctions.SHA1('Hello World');
+const hash = Cryptopp.hash.SHA1('Hello World');
 ```
 
 ## TODOs:
