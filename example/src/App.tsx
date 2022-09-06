@@ -94,7 +94,7 @@ export default function App() {
       }
 
       const cmac_start = PerformanceNow();
-      // AES encrypt and decrypt
+      // CMAC
       const cmac = Cryptopp.CMAC.generate(str, key, 'AES', 'hex');
       const cmac_verify = Cryptopp.CMAC.verify(
         str,
@@ -106,7 +106,7 @@ export default function App() {
       const cmac_time = timeDelta(cmac_start, PerformanceNow());
 
       const hmac_start = PerformanceNow();
-      // AES encrypt and decrypt
+      // HMAC
       const hmac = Cryptopp.HMAC.generate(str, key, 'SHA256');
       const hmac_verify = Cryptopp.HMAC.verify(
         str,
