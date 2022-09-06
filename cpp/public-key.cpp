@@ -286,8 +286,7 @@ void recover(jsi::Runtime &rt, CppArgs *args, std::string *target,
 
   if (!isDataStringOrAB(args->at(1)))
     throwJSError(
-        rt,
-        "RNCryptopp: RSA recover signature is not a stringZ or ArrayBuffer");
+        rt, "RNCryptopp: RSA recover signature is not a string or ArrayBuffer");
 
   if (!isDataString(args->at(2)))
     throwJSError(rt, "RNCryptopp: RSA recover publicKey is not a string");
