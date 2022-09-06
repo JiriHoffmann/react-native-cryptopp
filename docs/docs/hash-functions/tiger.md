@@ -1,11 +1,11 @@
 ---
-sidebar_position: 9
+sidebar_position: 10
 ---
 
 # Tiger
 
 ```js
-Cryptopp.hashFunctions.Tiger(data);
+Cryptopp.hash.Tiger(data);
 ```
 
 #### Parameters
@@ -14,4 +14,5 @@ Cryptopp.hashFunctions.Tiger(data);
 | --------- | ---------------------------- | -------- |
 | data      | `string` <br/> `ArrayBuffer` | ✅       |
 
-#### Returns: `string`
+#### Returns: `string` 
+

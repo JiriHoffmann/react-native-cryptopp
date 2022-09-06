@@ -41,7 +41,7 @@ Cryptopp.AES.encrypt(message, key, iv, 'cbc');
 | mode      | `"ecb"` <br/> `"cbc"` <br/> `"cbc_cts"` <br/> `"cfb"` <br/> `"ofb"` <br/> `"ctr"` <br/> `"xts"` | ✅       |
 | encodeTo  | `"hex"` <br/> `"base64"` <br/> `"base64url"`                                                    | ❌       | `"base64"` |
 
-#### Returns: `encoded string`, base64 by default
+#### Returns: Based on `data` input type: `ArrayBuffer` or `encoded string` - base64 by default
 
 ## Decrypt
 
@@ -59,4 +59,5 @@ Cryptopp.AES.decrypt(encrypted_message, key, iv, 'cbc');
 | mode         | `ecb` <br/> `cbc` <br/> `cfb` <br/> `ofb` <br/> `ctr` | ✅       |          |
 | dataEncoding | `utf8` <br/> `hex` <br/> `base64` <br/> `base64url`   | ❌       | `base64` |
 
-#### Returns: `string`
+#### Returns: Based on `data` input type: `ArrayBuffer` or `utf8 string`
+

@@ -54,8 +54,7 @@ const encrypted = Cryptopp.RSA.encrypt(data, publicKey, 'OAEP_SHA1');
 | data             | `string` <br/> `ArrayBuffer`                           | ✅       |
 | publicKey        | `string`                                               | ✅       |
 | encryptionScheme | `"OAEP_SHA1"` <br/> `"OAEP_SHA256"` <br/> `"PKCS1v15"` | ✅       |
-
-#### Returns: `base64-encoded string`
+#### Returns: Based on `data` input type: `ArrayBuffer` or `base64-encoded string`
 
 ## Decrypt
 
@@ -74,7 +73,7 @@ const encryptedData = Cryptopp.RSA.encrypt(data, rsa_keypair.private, 'OAEP_SHA1
 | privateKey       | `string`                                               | ✅       |
 | encryptionScheme | `"OAEP_SHA1"` <br/> `"OAEP_SHA256"` <br/> `"PKCS1v15"` | ✅       |
 
-#### Returns: `string`
+#### Returns: Based on `data` input type: `ArrayBuffer` or `string`
 
 ## Sign
 
@@ -91,7 +90,7 @@ const signedData = Cryptopp.RSA.sign(encryptedData, rsa_keypair.private, 'PKCS1v
 | ---------------- | ------------------------------------------------ | -------- |
 | data             | `string` <br/> `ArrayBuffer`                         | ✅       |
 | privateKey       | `string`                                         | ✅       |
-| signatureScheme  | `"PKCS1v15_SHA1"`  <br/> `"PKCS1v15_SHA256"`  <br/> `"PSSR_SHA1"`   <br/> `"PSSR_SHA256"`  <br/> `"PSSR_Whirlpool"`| ✅       |
+| signatureScheme  | `"PKCS1v15_SHA1"`  <br/> `"PKCS1v15_SHA256"`  <br/> `"PSSR_SHA1"`   <br/> `"PSSR_SHA256"`  <br/> `"PSSR_Whirlpool"`  <br/> `"PSS_SHA1"`  <br/> `"PSS_SHA256"`  <br/> `"PSS_Whirlpool"`| ✅       |
 
 `Note:` Crypto++ supports two broad categories of digital signatures: Signature Schemes with Appendix (PKCS1v15_SHA1 and PKCS1v15_SHA256) and Signature Schemes with Recovery (PSSR_SHA1, PSSR_SHA256, and PSSR_Whirlpool).
 
@@ -99,7 +98,7 @@ A signature scheme with appendix requires the verifier to have three items: the 
 
 A signature scheme with recovery requires only the public key and signature - the message is recovered from the signature. Can be recovered using the `Cryptopp.RSA.recover` function.
 
-#### Returns: `base64-encoded string`
+#### Returns: Based on `data` input type: `ArrayBuffer` or `base64-encoded string`
 
 ## Verify
 
@@ -118,8 +117,8 @@ const isSignatureValid = Cryptopp.RSA.verify(signedData, publicKey, 'PKCS1v15_SH
 | --------------- | ------------------------------------------- | -------- |
 | data            | `base64-encoded string` <br/> `ArrayBuffer` | ✅       |
 | publicKey       | `string`                                    | ✅       |
-| signatureScheme | `"PKCS1v15_SHA1"` <br/> `"PKCS1v15_SHA256"` | ✅       |
-
+| signatureScheme | `"PKCS1v15_SHA1"` <br/> `"PKCS1v15_SHA256"` <br/> `"PSS_SHA1"` <br/> `"PSS_SHA256"` <br/> `"PSS_Whirlpool"` | ✅       |
+| signature       | `base64-encoded string` <br/> `ArrayBuffer` | ✅       |
 #### Returns: `true` if the signature is valid, `false` otherwise.
 
 ## Recover
@@ -149,6 +148,6 @@ try {
 | publicKey       | `string`                                                     | ✅       |
 | signatureScheme | `"PSSR_SHA1"` <br/> `"PSSR_SHA256"` <br/> `"PSSR_Whirlpool"` | ✅       |
 
-#### Returns: `string`
+#### Returns: Based on `data` input type: `ArrayBuffer` or `string`
 
 #### Throws error if the signature doesn't match the key

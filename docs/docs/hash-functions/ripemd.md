@@ -1,18 +1,21 @@
 ---
-sidebar_position: 4
+sidebar_position: 5
 ---
 
 # RIPEMD
 
 ```js
-Cryptopp.hashFunctions.RIPEMD(data, '256');
+Cryptopp.hash.RIPEMD128(data);
+Cryptopp.hash.RIPEMD160(data);
+Cryptopp.hash.RIPEMD256(data);
+Cryptopp.hash.RIPEMD320(data);
 ```
 
 #### Parameters
 
-| Parameter | Type                                              | Required |
-| --------- | ------------------------------------------------- | -------- |
-| data      | `string` <br/> `ArrayBuffer`                      | ✅       |
-| size      | `"128"` <br/> `"160"` <br/> `"256"` <br/> `"320"` | ✅       |
+| Parameter | Type                         | Required |
+| --------- | ---------------------------- | -------- |
+| data      | `string` <br/> `ArrayBuffer` | ✅       |
 
-#### Returns: `string`
+#### Returns: `string` 
+

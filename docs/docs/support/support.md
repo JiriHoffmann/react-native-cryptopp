@@ -34,37 +34,37 @@ Here is the list of all Crypto++ algorithms supported in React Native. It will b
 | Name           | Supported |
 | -------------- | --------- |
 | AES (Rijndael) | ✅        |
-| RC6            | ❌        |
-| MARS           | ❌        |
-| Twofish        | ❌        |
-| Serpent        | ❌        |
-| CAST-256       | ❌        |
+| RC6            | ✅        |
+| MARS           | ✅        |
+| Twofish        | ✅        |
+| Serpent        | ✅        |
+| CAST-256       | ✅        |
 
 #### Other block ciphers
 
 | Name                               | Supported |
 | ---------------------------------- | --------- |
-| ARIA                               | ❌        |
-| Blowfish                           | ❌        |
-| Camellia                           | ❌        |
-| CHAM                               | ❌        |
-| HIGHT                              | ❌        |
-| IDEA                               | ❌        |
-| Kalyna (128/256/512)               | ❌        |
-| LEA                                | ❌        |
-| SEED                               | ❌        |
-| RC5                                | ❌        |
-| SHACAL-2                           | ❌        |
-| SIMECK                             | ❌        |
-| SIMON (64/128)                     | ❌        |
-| Skipjack                           | ❌        |
-| SPECK (64/128)                     | ❌        |
-| Simeck                             | ❌        |
-| SM4                                | ❌        |
-| Threefish (256/512/1024)           | ❌        |
-| Triple-DES (DES-EDE2 and DES-EDE3) | ❌        |
-| TEA                                | ❌        |
-| XTEA                               | ❌        |
+| ARIA                               | ✅        |
+| Blowfish                           | ✅        |
+| Camellia                           | ✅        |
+| CHAM                               | ✅        |
+| HIGHT                              | ✅        |
+| IDEA                               | ✅        |
+| Kalyna (128/256/512)               | ✅        |
+| LEA                                | ✅        |
+| SEED                               | ✅        |
+| RC5                                | ✅        |
+| SHACAL-2                           | ✅        |
+| SIMECK                             | ✅        |
+| SIMON (64/128)                     | ✅        |
+| Skipjack                           | ✅        |
+| SPECK (64/128)                     | ✅        |
+| Simeck                             | ✅        |
+| SM4                                | ✅        |
+| Threefish (256/512/1024)           | ✅        |
+| Triple-DES (DES-EDE2 and DES-EDE3) | ✅        |
+| TEA                                | ✅        |
+| XTEA                               | ✅        |
 
 #### Block cipher modes of operation
 
@@ -84,11 +84,11 @@ Here is the list of all Crypto++ algorithms supported in React Native. It will b
 | ------------- | --------- |
 | BLAKE2s       | ❌        |
 | BLAKE2b       | ❌        |
-| CMAC          | ❌        |
+| CMAC          | ✅       |
 | CBC-MAC       | ❌        |
 | DMAC          | ❌        |
 | GMAC (GCM)    | ❌        |
-| HMAC          | ❌        |
+| HMAC          | ✅        |
 | Poly1305      | ❌        |
 | SipHash       | ❌        |
 | Two-Track-MAC | ❌        |

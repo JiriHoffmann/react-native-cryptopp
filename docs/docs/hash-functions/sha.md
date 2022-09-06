@@ -1,5 +1,5 @@
 ---
-sidebar_position: 5
+sidebar_position: 6
 title: 'SHA/SHA2/SHA3'
 ---
 
@@ -8,7 +8,7 @@ title: 'SHA/SHA2/SHA3'
 # SHA
 
 ```js
-Cryptopp.hashFunctions.SHA1(data);
+Cryptopp.hash.SHA1(data);
 ```
 
 #### Parameters
@@ -17,34 +17,39 @@ Cryptopp.hashFunctions.SHA1(data);
 | --------- | ---------------------------- | -------- |
 | data      | `string` <br/> `ArrayBuffer` | ✅       |
 
-#### Returns: `string`
+#### Returns: `string` or `ArrayBuffer` based on the input type
 
 # SHA2
 
 ```js
-Cryptopp.hashFunctions.SHA2(data, '512');
+Cryptopp.hash.SHA224(data);
+Cryptopp.hash.SHA256(data);
+Cryptopp.hash.SHA384(data);
+Cryptopp.hash.SHA512(data);
 ```
 
 #### Parameters
 
-| Parameter | Type                                            | Required |
-| --------- | ----------------------------------------------- | -------- |
-| data      | `string` <br/> `ArrayBuffer`                    | ✅       |
-| size      | `"224"` <br/> `"256"` <br/>`"384"` <br/>`"512"` | ✅       |
+| Parameter | Type                         | Required |
+| --------- | ---------------------------- | -------- |
+| data      | `string` <br/> `ArrayBuffer` | ✅       |
 
-#### Returns: `string`
+#### Returns: `string` 
 
 # SHA3
 
 ```js
-Cryptopp.hashFunctions.SHA3(data, '512');
+Cryptopp.hash.SHA3_224(data);
+Cryptopp.hash.SHA3_256(data);
+Cryptopp.hash.SHA3_384(data);
+Cryptopp.hash.SHA3_512(data);
 ```
 
 #### Parameters
 
-| Parameter | Type                                             | Required |
-| --------- | ------------------------------------------------ | -------- |
-| data      | `string` <br/> `ArrayBuffer`                     | ✅       |
-| size      | `"224"` <br/> `"256"` <br/>`"384"` <br/> `"512"` | ✅       |
+| Parameter | Type                         | Required |
+| --------- | ---------------------------- | -------- |
+| data      | `string` <br/> `ArrayBuffer` | ✅       |
 
-#### Returns: `string`
+#### Returns: `string` 
+

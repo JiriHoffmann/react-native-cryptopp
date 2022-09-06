@@ -1,12 +1,11 @@
 ---
-sidebar_position: 7
+sidebar_position: 12
 ---
 
-# SHAKE
+# WHIRLPOOL
 
 ```js
-Cryptopp.hash.SHAKE128(data);
-Cryptopp.hash.SHAKE256(data);
+Cryptopp.hash.CRC32(data);
 ```
 
 #### Parameters
@@ -16,4 +15,3 @@ Cryptopp.hash.SHAKE256(data);
 | data      | `string` <br/> `ArrayBuffer` | ✅       |
 
 #### Returns: `string` 
-

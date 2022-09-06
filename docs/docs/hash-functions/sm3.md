@@ -1,11 +1,11 @@
 ---
-sidebar_position: 8
+sidebar_position: 9
 ---
 
 # SM3
 
 ```js
-Cryptopp.hashFunctions.SM3(data);
+Cryptopp.hash.SM3(data);
 ```
 
 #### Parameters
@@ -14,4 +14,5 @@ Cryptopp.hashFunctions.SM3(data);
 | --------- | ---------------------------- | -------- |
 | data      | `string` <br/> `ArrayBuffer` | ✅       |
 
-#### Returns: `string`
+#### Returns: `string` 
+

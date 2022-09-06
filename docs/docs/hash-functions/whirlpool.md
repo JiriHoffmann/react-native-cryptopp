@@ -1,11 +1,11 @@
 ---
-sidebar_position: 10
+sidebar_position: 11
 ---
 
 # WHIRLPOOL
 
 ```js
-Cryptopp.hashFunctions.WHIRLPOOL(data);
+Cryptopp.hash.WHIRLPOOL(data);
 ```
 
 #### Parameters
@@ -14,4 +14,4 @@ Cryptopp.hashFunctions.WHIRLPOOL(data);
 | --------- | ---------------------------- | -------- |
 | data      | `string` <br/> `ArrayBuffer` | ✅       |
 
-#### Returns: `string`
+#### Returns: `string` 

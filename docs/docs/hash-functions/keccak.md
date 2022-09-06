@@ -1,18 +1,21 @@
 ---
-sidebar_position: 2
+sidebar_position: 3
 ---
 
 # Keccak
 
 ```js
-Cryptopp.hashFunctions.Keccak(data, '512');
+Cryptopp.hash.Keccak224(data);
+Cryptopp.hash.Keccak256(data);
+Cryptopp.hash.Keccak384(data);
+Cryptopp.hash.Keccak512(data);
 ```
 
 #### Parameters
 
-| Parameter | Type                                              | Required |
-| --------- | ------------------------------------------------- | -------- |
-| data      | `string` <br/> `ArrayBuffer`                      | ✅       |
-| size      | `"224"` <br/> `"256"` <br/> `"384"` <br/> `"512"` | ✅       |
+| Parameter | Type                         | Required |
+| --------- | ---------------------------- | -------- |
+| data      | `string` <br/> `ArrayBuffer` | ✅       |
 
-#### Returns: `string`
+#### Returns: `string` 
+

@@ -1,18 +1,20 @@
 ---
-sidebar_position: 3
+sidebar_position: 4
 ---
 
 # LSH
 
 ```js
-Cryptopp.hashFunctions.LSH(data, '512');
+Cryptopp.hash.LSH224(data);
+Cryptopp.hash.LSH256(data);
+Cryptopp.hash.LSH384(data);
+Cryptopp.hash.LSH512(data);
 ```
 
 #### Parameters
 
-| Parameter | Type                                              | Required |
-| --------- | ------------------------------------------------- | -------- |
-| data      | `string` <br/> `ArrayBuffer`                      | ✅       |
-| size      | `"224"` <br/> `"256"` <br/> `"384"` <br/> `"512"` | ✅       |
+| Parameter | Type                         | Required |
+| --------- | ---------------------------- | -------- |
+| data      | `string` <br/> `ArrayBuffer` | ✅       |
 
-#### Returns: `string`
+#### Returns: `string` 

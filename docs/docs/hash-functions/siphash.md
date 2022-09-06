@@ -1,11 +1,12 @@
 ---
-sidebar_position: 7
+sidebar_position: 8
 ---
 
 # SipHash
 
 ```js
-Cryptopp.hashFunctions.SipHash(data, '4_8_128');
+Cryptopp.hash.SipHash_2_4_64(data);
+Cryptopp.hash.SipHash_4_8_128(data);
 ```
 
 #### Parameters
@@ -13,6 +14,5 @@ Cryptopp.hashFunctions.SipHash(data, '4_8_128');
 | Parameter | Type                         | Required |
 | --------- | ---------------------------- | -------- |
 | data      | `string` <br/> `ArrayBuffer` | ✅       |
-| type      | `"2_4_64"` <br/> `"4_8_128"` | ✅       |
 
-#### Returns: `string`
+#### Returns: `string` 
