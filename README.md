@@ -39,8 +39,9 @@ const hash = Cryptopp.hash.SHA1('Hello World');
 
 - [ ] Implement remaining functionality
 - [X] Use GitHub Actions to pre-compile Crypto++ for iOS and Android
-- [ ] Async multi-threaded version of each function
-- [ ] Tests, tests, tests... and more tests!
+- [X] Async multi-threaded version of each function
+- [X] Tests ...
+- [ ] ..., tests, tests... and more tests!
 
 ## Contributing
 
