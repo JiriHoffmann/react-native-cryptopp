@@ -38,9 +38,9 @@
     "prepare": "bob build",
     "release": "release-it",
     "clang-format": "find cpp/ -iname *.h -o -iname *.cpp | xargs clang-format -i",
-    "compile_cryptopp": "yarn node scripts/compile_cryptopp.js",
-    "get_cryptopp_version": "yarn node scripts/get_cryptopp_version.js",
-    "download_cryptopp": "yarn node scripts/download_cryptopp.js"
+    "compile_cryptopp": "npx node scripts/compile_cryptopp.js",
+    "get_cryptopp_version": "npx node scripts/get_cryptopp_version.js",
+    "download_cryptopp": "npx node scripts/download_cryptopp.js"
   },
   "keywords": [
     "react-native",
