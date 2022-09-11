@@ -1,6 +1,6 @@
 {
   "name": "react-native-cryptopp",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "cryptoppVersion": "8.6.0xcframework",
   "description": "React Native Cryptopp",
   "main": "lib/commonjs/index",
