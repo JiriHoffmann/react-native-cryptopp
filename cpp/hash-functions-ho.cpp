@@ -1,23 +1,20 @@
 #include "hash-functions-ho.h"
 
-namespace rncryptopp::HostObjects {
-template <class T_hash> HashHostObject<T_hash>::HashHostObject() {
-  T_hash hash;
-  hashInstance = hash;
-}
+#include <utility>
 
-template <class T_hash>
+namespace rncryptopp::HostObjects {
+HashHostObject::HashHostObject(std::string name) { hashName = std::move(name); }
+
 std::vector<jsi::PropNameID>
-HashHostObject<T_hash>::getPropertyNames(jsi::Runtime &rt) {
+HashHostObject::getPropertyNames(jsi::Runtime &rt) {
   std::vector<jsi::PropNameID> result;
   result.push_back(jsi::PropNameID::forUtf8(rt, std::string("update")));
   result.push_back(jsi::PropNameID::forUtf8(rt, std::string("finalize")));
   return result;
 }
 
-template <class T_hash>
-jsi::Value HashHostObject<T_hash>::get(jsi::Runtime &runtime,
-                                       const jsi::PropNameID &propNameId) {
+jsi::Value HashHostObject::get(jsi::Runtime &runtime,
+                               const jsi::PropNameID &propNameId) {
   auto propName = propNameId.utf8(runtime);
   auto funcName = "RNCryptopp.hash." + propName;
 
@@ -29,14 +26,18 @@ jsi::Value HashHostObject<T_hash>::get(jsi::Runtime &runtime,
           CppArgs args;
           parseJSIArgs(rt, functionArgs, count, &args);
 
-          if (args.size() < 1 || args.at(0).dataType != STRING)
+          if (args.empty())
             throw jsi::JSError(rt,
                                "RNCryptopp: update() expects 1 argument: data");
 
-          std::string data = args.at(0).stringValue;
+          if (args.at(0).dataType != STRING &&
+              args.at(0).dataType != ARRAY_BUFFER)
+            throw jsi::JSError(rt, "RNCryptopp: update() first argument must "
+                                   "be a string or ArrayBuffer");
 
-          hashInstance.Update((const CryptoPP::byte *)data.data(), data.size());
-          return jsi::Value(0);
+          std::string newData = args.at(0).stringValue;
+          hashData = hashData + newData;
+          return jsi::Value();
         });
   }
 
@@ -45,145 +46,53 @@ jsi::Value HashHostObject<T_hash>::get(jsi::Runtime &runtime,
         runtime, jsi::PropNameID::forAscii(runtime, funcName), 0,
         [this](jsi::Runtime &rt, const jsi::Value &thisVal,
                const jsi::Value *args, size_t count) -> jsi::Value {
-          if (hashInstance.AlgorithmName() == "CRC32") {
+          std::string result;
+          if (hashName == "SipHash_2_4_64") {
+            SipHash<2, 4, false> hash;
+            StringSource(
+                hashData, true,
+                new HashFilter(hash, new HexEncoder(new StringSink(result))));
+          } else if (hashName == "SipHash_4_8_128") {
+            SipHash<4, 8, true> hash;
+            StringSource(
+                hashData, true,
+                new HashFilter(hash, new HexEncoder(new StringSink(result))));
+
+          } else if (hashName == "CRC32") {
             CRC32 hash;
-            word32 digestW32 = 0;
-            hashInstance.Final((CryptoPP::byte *)&digestW32);
+            word32 digest = 0;
+            hash.CalculateDigest(
+                reinterpret_cast<CryptoPP::byte *>(&digest),
+                reinterpret_cast<CryptoPP::byte const *>(hashData.data()),
+                hashData.size());
             std::stringstream ss;
-            ss << std::hex << digestW32;
-            return jsi::String::createFromUtf8(rt, ss.str());
+            ss << std::hex << digest;
+            result = ss.str();
+          } else {
+            auto hasResult = invokeWithHash<rncryptopp::hash::calculate_hash>()(
+                hashName, &hashData, &result);
+            if (!hasResult)
+              throwJSError(rt, "RNCryptopp: hash - invalid hash name.");
           }
-          std::string digest, encoded;
-          digest.resize(hashInstance.DigestSize());
-          hashInstance.Final((CryptoPP::byte *)&digest[0]);
-          encodeString(&digest, &encoded, ENCODING_HEX);
-          return jsi::String::createFromUtf8(rt, encoded);
+          hashData = "";
+          return jsi::String::createFromUtf8(rt, result);
         });
   }
   return jsi::Value::undefined();
 }
 
-// TODO: clean-up
 jsi::Value createHashHostObject(jsi::Runtime &rt, const jsi::Value &thisValue,
                                 const jsi::Value *functionArgs, size_t count) {
   CppArgs args;
   parseJSIArgs(rt, functionArgs, count, &args);
 
-  if (args.size() < 1 || args.at(0).dataType != STRING)
+  if (args.empty() || args.at(0).dataType != STRING)
     throw jsi::JSError(rt, "RNCryptopp: create() expects 1 argument: name");
 
   std::string hash = args.at(0).stringValue;
 
-  if (hash == "BLAKE2b") {
-    auto instance =
-        std::make_shared<rncryptopp::HostObjects::HashHostObject<BLAKE2b>>();
-    return jsi::Object::createFromHostObject(rt, instance);
-  } else if (hash == "BLAKE2s") {
-    auto instance =
-        std::make_shared<rncryptopp::HostObjects::HashHostObject<BLAKE2s>>();
-    return jsi::Object::createFromHostObject(rt, instance);
-  } else if (hash == "Keccak256") {
-    auto instance =
-        std::make_shared<rncryptopp::HostObjects::HashHostObject<Keccak_256>>();
-    return jsi::Object::createFromHostObject(rt, instance);
-  } else if (hash == "Keccak384") {
-    auto instance =
-        std::make_shared<rncryptopp::HostObjects::HashHostObject<Keccak_384>>();
-    return jsi::Object::createFromHostObject(rt, instance);
-  } else if (hash == "Keccak512") {
-    auto instance =
-        std::make_shared<rncryptopp::HostObjects::HashHostObject<Keccak_512>>();
-    return jsi::Object::createFromHostObject(rt, instance);
-  } else if (hash == "LSH224") {
-    auto instance =
-        std::make_shared<rncryptopp::HostObjects::HashHostObject<LSH224>>();
-    return jsi::Object::createFromHostObject(rt, instance);
-  } else if (hash == "LSH256") {
-    auto instance =
-        std::make_shared<rncryptopp::HostObjects::HashHostObject<LSH256>>();
-    return jsi::Object::createFromHostObject(rt, instance);
-  } else if (hash == "LSH384") {
-    auto instance =
-        std::make_shared<rncryptopp::HostObjects::HashHostObject<LSH384>>();
-    return jsi::Object::createFromHostObject(rt, instance);
-  } else if (hash == "LSH512") {
-    auto instance =
-        std::make_shared<rncryptopp::HostObjects::HashHostObject<LSH512>>();
-    return jsi::Object::createFromHostObject(rt, instance);
-  } else if (hash == "SHA1") {
-    auto instance =
-        std::make_shared<rncryptopp::HostObjects::HashHostObject<SHA1>>();
-    return jsi::Object::createFromHostObject(rt, instance);
-  } else if (hash == "SHA224") {
-    auto instance =
-        std::make_shared<rncryptopp::HostObjects::HashHostObject<SHA224>>();
-    return jsi::Object::createFromHostObject(rt, instance);
-  } else if (hash == "SHA256") {
-    auto instance =
-        std::make_shared<rncryptopp::HostObjects::HashHostObject<SHA256>>();
-    return jsi::Object::createFromHostObject(rt, instance);
-  } else if (hash == "SHA384") {
-    auto instance =
-        std::make_shared<rncryptopp::HostObjects::HashHostObject<SHA384>>();
-    return jsi::Object::createFromHostObject(rt, instance);
-  } else if (hash == "SHA512") {
-    auto instance =
-        std::make_shared<rncryptopp::HostObjects::HashHostObject<SHA512>>();
-    return jsi::Object::createFromHostObject(rt, instance);
-  } else if (hash == "SHA3_224") {
-    auto instance =
-        std::make_shared<rncryptopp::HostObjects::HashHostObject<SHA3_224>>();
-    return jsi::Object::createFromHostObject(rt, instance);
-  } else if (hash == "SHA3_256") {
-    auto instance =
-        std::make_shared<rncryptopp::HostObjects::HashHostObject<SHA3_256>>();
-    return jsi::Object::createFromHostObject(rt, instance);
-  } else if (hash == "SHA3_384") {
-    auto instance =
-        std::make_shared<rncryptopp::HostObjects::HashHostObject<SHA3_384>>();
-    return jsi::Object::createFromHostObject(rt, instance);
-  } else if (hash == "SHA3_512") {
-    auto instance =
-        std::make_shared<rncryptopp::HostObjects::HashHostObject<SHA3_512>>();
-    return jsi::Object::createFromHostObject(rt, instance);
-  } else if (hash == "SHAKE128") {
-    auto instance =
-        std::make_shared<rncryptopp::HostObjects::HashHostObject<SHAKE128>>();
-    return jsi::Object::createFromHostObject(rt, instance);
-  } else if (hash == "SHAKE256") {
-    auto instance =
-        std::make_shared<rncryptopp::HostObjects::HashHostObject<SHAKE256>>();
-    return jsi::Object::createFromHostObject(rt, instance);
-  } else if (hash == "SM3") {
-    auto instance =
-        std::make_shared<rncryptopp::HostObjects::HashHostObject<SM3>>();
-    return jsi::Object::createFromHostObject(rt, instance);
-  } else if (hash == "Tiger") {
-    auto instance =
-        std::make_shared<rncryptopp::HostObjects::HashHostObject<Tiger>>();
-    return jsi::Object::createFromHostObject(rt, instance);
-  } else if (hash == "RIPEMD128") {
-    auto instance =
-        std::make_shared<rncryptopp::HostObjects::HashHostObject<RIPEMD128>>();
-    return jsi::Object::createFromHostObject(rt, instance);
-  } else if (hash == "RIPEMD160") {
-    auto instance =
-        std::make_shared<rncryptopp::HostObjects::HashHostObject<RIPEMD160>>();
-    return jsi::Object::createFromHostObject(rt, instance);
-  } else if (hash == "RIPEMD256") {
-    auto instance =
-        std::make_shared<rncryptopp::HostObjects::HashHostObject<RIPEMD256>>();
-    return jsi::Object::createFromHostObject(rt, instance);
-  } else if (hash == "RIPEMD320") {
-    auto instance =
-        std::make_shared<rncryptopp::HostObjects::HashHostObject<RIPEMD320>>();
-    return jsi::Object::createFromHostObject(rt, instance);
-  } else if (hash == "CRC32") {
-    auto instance =
-        std::make_shared<rncryptopp::HostObjects::HashHostObject<CRC32>>();
-    return jsi::Object::createFromHostObject(rt, instance);
-  }
-  throwJSError(rt, "RNCryptopp: Hash name is not valid");
-  return jsi::Value::undefined();
+  auto instance =
+      std::make_shared<rncryptopp::HostObjects::HashHostObject>(hash);
+  return jsi::Object::createFromHostObject(rt, instance);
 }
 } // namespace rncryptopp::HostObjects

@@ -20,22 +20,23 @@
 #include "cryptopp/tiger.h"
 #include "cryptopp/whrlpool.h"
 
+#include "hash-functions.h"
 #include "helpers.h"
 
 using namespace facebook;
 using namespace rncryptopp::jsiHelper;
 
 namespace rncryptopp::HostObjects {
-template <class T_hash>
 class JSI_EXPORT HashHostObject : public jsi::HostObject {
 public:
-  HashHostObject();
+  HashHostObject(std::string name);
 
   jsi::Value get(jsi::Runtime &, const jsi::PropNameID &name) override;
   std::vector<jsi::PropNameID> getPropertyNames(jsi::Runtime &rt) override;
 
 private:
-  T_hash hashInstance;
+  std::string hashName;
+  std::string hashData;
 };
 
 jsi::Value createHashHostObject(jsi::Runtime &rt, const jsi::Value &thisValue,

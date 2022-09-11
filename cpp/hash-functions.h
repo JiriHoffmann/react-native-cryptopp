@@ -30,5 +30,13 @@ using namespace CryptoPP;
 using namespace rncryptopp::jsiHelper;
 
 namespace rncryptopp::hash {
+template <typename H> struct calculate_hash {
+  void operator()(std::string *data, std::string *result) const {
+    H hash;
+    StringSource(*data, true,
+                 new HashFilter(hash, new HexEncoder(new StringSink(*result))));
+  }
+};
+
 void hash(jsi::Runtime &rt, CppArgs *args, std::string *result);
 } // namespace rncryptopp::hash

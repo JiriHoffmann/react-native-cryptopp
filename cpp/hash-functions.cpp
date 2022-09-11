@@ -2,14 +2,6 @@
 
 namespace rncryptopp::hash {
 
-template <typename H> struct calculate_hash {
-  void operator()(std::string *data, std::string *result) const {
-    H hash;
-    StringSource(*data, true,
-                 new HashFilter(hash, new HexEncoder(new StringSink(*result))));
-  }
-};
-
 void hash(jsi::Runtime &rt, CppArgs *args, std::string *result) {
   if (args->size() != 3)
     throwJSError(rt, "RNCryptopp: hash invalid number of arguments");
@@ -24,14 +16,12 @@ void hash(jsi::Runtime &rt, CppArgs *args, std::string *result) {
     StringSource(data.stringValue, true,
                  new HashFilter(hash, new HexEncoder(new StringSink(*result))));
     return;
-  }
-  if (hash_type == "SipHash_4_8_128") {
+  } else if (hash_type == "SipHash_4_8_128") {
     SipHash<4, 8, true> hash;
     StringSource(data.stringValue, true,
                  new HashFilter(hash, new HexEncoder(new StringSink(*result))));
     return;
-  }
-  if (hash_type == "CRC32") {
+  } else if (hash_type == "CRC32") {
     CRC32 hash;
     word32 digest = 0;
     hash.CalculateDigest(
@@ -42,8 +32,11 @@ void hash(jsi::Runtime &rt, CppArgs *args, std::string *result) {
     ss << std::hex << digest;
     *result = ss.str();
     return;
+  } else {
+    auto hasResult = invokeWithHash<rncryptopp::hash::calculate_hash>()(
+        hash_type, &data.stringValue, result);
+    if (!hasResult)
+      throwJSError(rt, "RNCryptopp: hash - invalid hash name.");
   }
-
-  invokeWithHash<calculate_hash>()(hash_type, &data.stringValue, result);
 }
 } // namespace rncryptopp::hash
