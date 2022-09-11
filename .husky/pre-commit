@@ -1,5 +1,5 @@
 #!/bin/sh
 . "$(dirname "$0")/_/husky.sh"
 
-yarn lint && yarn typescript
-yarn clang-format
+npm run lint && npm run typescript
+npm run clang-format
